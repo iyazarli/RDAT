@@ -45,6 +45,20 @@
         eyebrow: 'Hakkimizda',
         title: 'Sahada koordinasyon ve guvenlige odakli, butik bir airsoft ekibiyiz.',
         text: "Reddevil; cesitli saha tiplerinde (CQB, woodland, endustriyel) duzenli olarak oynayan, fair-play kurallarina sadik, guvenligi onceleyen bir takimdi. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
+        pills: [
+          'Ekipman rehberi',
+          'Senaryo brifing',
+          'Video/Fotograf arsivi',
+          'After-action review',
+        ],
+        criteriaTitle: 'Katilim Kriterleri',
+        criteriaItems: [
+          '18+ yas (18 alti icin veli onayi sart)',
+          'ANSI Z87.1+ gozluk veya tam yuz maskesi',
+          'Alan hakem ve kural brifinglerine uyum',
+          'Kendi ulasimini saglayabilmek',
+        ],
+        criteriaNote: 'Kendi ekipmani olmayanlar icin sinirli yedek set mevcut.',
       },
       highlights: {
         eyebrow: 'Ne Sunuyoruz',
@@ -136,6 +150,11 @@
         blurb: 'Guvenli, disiplinli ve eglenceli airsoft deneyimi. Basvurular inceleme sonrasi e-posta ile yanitlanir.',
         instagram: '@reddevil.airsoft',
         email: 'team@reddevil.local',
+        quickTags: [
+          'Guvenlik odakli',
+          'Duzenli etkinlik',
+          'Acik basvuru',
+        ],
       },
     },
     categories: [
@@ -155,12 +174,14 @@
             title: 'Takim Felsefesi',
             text: 'Fair-play, guvenlik ve iletisim protokolu oyunun merkezindedir.',
             tag: 'Kultur',
+            imageUrl: 'https://images.unsplash.com/photo-1520975878803-a3b0f5f58f92?auto=format&fit=crop&w=1400&q=80',
           },
           {
             id: 'cat_about_block_2',
             title: 'Ogrenme Ortami',
             text: 'Yeni oyuncular orientation ve mentor destegi ile sahaya adapte edilir.',
             tag: 'Egitim',
+            imageUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1400&q=80',
           },
         ],
       },
@@ -180,12 +201,14 @@
             title: 'Rol Drillleri',
             text: 'Rifleman, DMR, destek ve medic rollerinde mini senaryo calismalari.',
             tag: 'Taktik',
+            imageUrl: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=1400&q=80',
           },
           {
             id: 'cat_highlights_block_2',
             title: 'Ekipman Mentorlugu',
             text: 'Bütceye uygun setup secimi, kronograf ve bakim destegi.',
             tag: 'Setup',
+            imageUrl: 'https://images.unsplash.com/photo-1563213126-a4273aed2016?auto=format&fit=crop&w=1400&q=80',
           },
         ],
       },
@@ -205,12 +228,14 @@
             title: 'Liderlik',
             text: 'Senaryo, saha planlamasi ve frekans koordinasyonu lider ekip tarafindan yonetilir.',
             tag: 'Komuta',
+            imageUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1400&q=80',
           },
           {
             id: 'cat_team_block_2',
             title: 'Safety Officer',
             text: 'Her etkinlikte guvenlik protokollerini denetleyen sorumlu bulunur.',
             tag: 'Safety',
+            imageUrl: 'https://images.unsplash.com/photo-1582719478170-5f6895d2f5f4?auto=format&fit=crop&w=1400&q=80',
           },
         ],
       },
@@ -230,12 +255,14 @@
             title: 'Woodland Operasyonlari',
             text: 'Aylik duzende woodland agirlikli oyunlar ile uzun mesafe koordinasyon calisilir.',
             tag: 'Outdoor',
+            imageUrl: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=80',
           },
           {
             id: 'cat_field_block_2',
             title: 'CQB ve Gece Oyunu',
             text: 'Yakın mesafe refleks, iletişim ve takım hareketi odakli etkinlikler yapilir.',
             tag: 'CQB',
+            imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80',
           },
         ],
       },
@@ -255,12 +282,14 @@
             title: 'Ekipman',
             text: 'Yedek ekipman sinirli sayida mevcuttur; temel goz koruma zorunludur.',
             tag: 'Hazirlik',
+            imageUrl: 'https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1400&q=80',
           },
           {
             id: 'cat_faq_block_2',
             title: 'Yas ve Kurallar',
             text: '18+ onceliklidir; tum oyuncular guvenlik brifingine katilmak zorundadir.',
             tag: 'Kurallar',
+            imageUrl: 'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1400&q=80',
           },
         ],
       },
@@ -281,6 +310,11 @@
             text: 'Sabah sisli sahada 4 takimli bayrak senaryosu oynandi. 32 oyuncu katildi.',
             tag: 'Woodland',
             imageUrl: 'https://images.unsplash.com/photo-1504039268625-5f3f6f7f2f53?auto=format&fit=crop&w=1600&q=80',
+            gallery: [
+              'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1600&q=80',
+              'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1600&q=80',
+              'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1600&q=80',
+            ],
           },
           {
             id: 'cat_events_block_2',
@@ -288,6 +322,11 @@
             text: 'Kapali alanda dusuk isikta role dayali mini-milsim gorevleri uygulandi.',
             tag: 'CQB',
             imageUrl: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1600&q=80',
+            gallery: [
+              'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1600&q=80',
+              'https://images.unsplash.com/photo-1509824227185-9c5a01ceba0d?auto=format&fit=crop&w=1600&q=80',
+              'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80',
+            ],
           },
           {
             id: 'cat_events_block_3',
@@ -295,6 +334,11 @@
             text: 'Telsiz disiplin, stack giris ve medic tahliye protokolleri tekrarlandi.',
             tag: 'Atolye',
             imageUrl: 'https://images.unsplash.com/photo-1529651737248-dad5e287768e?auto=format&fit=crop&w=1600&q=80',
+            gallery: [
+              'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1600&q=80',
+              'https://images.unsplash.com/photo-1485217988980-11786ced9454?auto=format&fit=crop&w=1600&q=80',
+              'https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=1600&q=80',
+            ],
           },
           {
             id: 'cat_events_block_4',
@@ -302,6 +346,11 @@
             text: 'Uzun mesafe devriye ve lojistik gorevleri iceren 6 saatlik oyun oturumu.',
             tag: 'MilSim',
             imageUrl: 'https://images.unsplash.com/photo-1519669417670-68775a50919c?auto=format&fit=crop&w=1600&q=80',
+            gallery: [
+              'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80',
+              'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1600&q=80',
+              'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80',
+            ],
           },
         ],
       },
@@ -434,6 +483,8 @@
   }
 
   function normalizeCategoryBlock(item, index = 0) {
+    const rawGallery = Array.isArray(item && item.gallery) ? item.gallery : [];
+    const gallery = rawGallery.map((entry) => text(entry, '')).filter(Boolean);
     return {
       id: text(item && item.id, `block_${index + 1}`),
       title: text(item && item.title, `Blok ${index + 1}`),
@@ -441,6 +492,7 @@
       tag: text(item && item.tag, ''),
       imageUrl: text(item && item.imageUrl, ''),
       url: text(item && item.url, ''),
+      gallery,
     };
   }
 
@@ -485,11 +537,15 @@
     const faqItemsSource = Array.isArray(faq.items) ? faq.items : base.home.faq.items;
     const fieldScheduleSource = Array.isArray(field.schedule) ? field.schedule : base.home.field.schedule;
     const fieldChecklistSource = Array.isArray(field.checklist) ? field.checklist : base.home.field.checklist;
+    const aboutPillsSource = Array.isArray(about.pills) ? about.pills : base.home.about.pills;
+    const aboutCriteriaItemsSource = Array.isArray(about.criteriaItems) ? about.criteriaItems : base.home.about.criteriaItems;
+    const footerQuickTagsSource = Array.isArray(footer.quickTags) ? footer.quickTags : base.home.footer.quickTags;
 
     const categoriesSource = Array.isArray(source.categories) ? source.categories : base.categories;
     const normalizedCategories = categoriesSource.map((category, index) => normalizeCategory(category, index));
 
-    ['events', 'sponsors'].forEach((slug) => {
+    const defaultCategorySlugs = base.categories.map((item) => item.slug);
+    defaultCategorySlugs.forEach((slug) => {
       const defaultCategorySource = base.categories.find((item) => item.slug === slug);
       if (!defaultCategorySource) return;
 
@@ -505,7 +561,7 @@
       const currentBlocks = Array.isArray(category.blocks) ? category.blocks : [];
       const defaultBlocks = Array.isArray(defaultCategory.blocks) ? defaultCategory.blocks : [];
       const hasMeaningfulContent = currentBlocks.some(
-        (block) => text(block.title, '') || text(block.text, '') || text(block.imageUrl, ''),
+        (block) => text(block.title, '') || text(block.text, '') || text(block.imageUrl, '') || (Array.isArray(block.gallery) && block.gallery.length > 0),
       );
 
       let mergedBlocks = currentBlocks;
@@ -513,21 +569,30 @@
         mergedBlocks = defaultBlocks.map((block, blockIndex) => normalizeCategoryBlock(block, blockIndex));
       } else if (defaultBlocks.length > 0) {
         mergedBlocks = currentBlocks.map((block, blockIndex) => {
+          const blockId = text(block && block.id, '');
           const blockTitleKey = plainKey(block && block.title);
-          const matchedBlock = slug === 'sponsors' && blockTitleKey
-            ? defaultBlocks.find((item) => {
-              const itemKey = plainKey(item && item.title);
-              return itemKey && (itemKey === blockTitleKey || itemKey.includes(blockTitleKey) || blockTitleKey.includes(itemKey));
-            })
-            : null;
+          const matchedBlock = defaultBlocks.find((item) => {
+            const itemId = text(item && item.id, '');
+            if (blockId && itemId && blockId === itemId) return true;
+            const itemKey = plainKey(item && item.title);
+            if (!blockTitleKey || !itemKey) return false;
+            return itemKey === blockTitleKey || itemKey.includes(blockTitleKey) || blockTitleKey.includes(itemKey);
+          });
           const fallbackBlock = matchedBlock || defaultBlocks[Math.min(blockIndex, defaultBlocks.length - 1)] || {};
           const fallbackImage = text(fallbackBlock.imageUrl, '');
           const fallbackUrl = text(fallbackBlock.url, '');
+          const fallbackGallery = Array.isArray(fallbackBlock.gallery)
+            ? fallbackBlock.gallery.map((entry) => text(entry, '')).filter(Boolean)
+            : [];
+          const currentGallery = Array.isArray(block && block.gallery)
+            ? block.gallery.map((entry) => text(entry, '')).filter(Boolean)
+            : [];
           return normalizeCategoryBlock(
             {
               ...block,
               imageUrl: text(block.imageUrl, '') || fallbackImage,
               url: text(block.url, '') || fallbackUrl,
+              gallery: currentGallery.length > 0 ? currentGallery : fallbackGallery,
             },
             blockIndex,
           );
@@ -574,6 +639,10 @@
           eyebrow: text(about.eyebrow, base.home.about.eyebrow),
           title: text(about.title, base.home.about.title),
           text: text(about.text, base.home.about.text),
+          pills: aboutPillsSource.map((item) => text(item, '')).filter(Boolean),
+          criteriaTitle: text(about.criteriaTitle, base.home.about.criteriaTitle),
+          criteriaItems: aboutCriteriaItemsSource.map((item) => text(item, '')).filter(Boolean),
+          criteriaNote: text(about.criteriaNote, base.home.about.criteriaNote),
         },
         highlights: {
           eyebrow: text(highlights.eyebrow, base.home.highlights.eyebrow),
@@ -610,6 +679,7 @@
           blurb: text(footer.blurb, base.home.footer.blurb),
           instagram: text(footer.instagram, base.home.footer.instagram),
           email: text(footer.email, base.home.footer.email),
+          quickTags: footerQuickTagsSource.map((item) => text(item, '')).filter(Boolean),
         },
       },
       categories: normalizedCategories,
@@ -633,6 +703,14 @@
       base.home.about.eyebrow = text(legacy.about.eyebrow, base.home.about.eyebrow);
       base.home.about.title = text(legacy.about.title, base.home.about.title);
       base.home.about.text = text(legacy.about.text, base.home.about.text);
+      if (Array.isArray(legacy.about.pills) && legacy.about.pills.length > 0) {
+        base.home.about.pills = legacy.about.pills.map((item) => text(item, '')).filter(Boolean);
+      }
+      base.home.about.criteriaTitle = text(legacy.about.criteriaTitle, base.home.about.criteriaTitle);
+      if (Array.isArray(legacy.about.criteriaItems) && legacy.about.criteriaItems.length > 0) {
+        base.home.about.criteriaItems = legacy.about.criteriaItems.map((item) => text(item, '')).filter(Boolean);
+      }
+      base.home.about.criteriaNote = text(legacy.about.criteriaNote, base.home.about.criteriaNote);
     }
 
     if (legacy.highlights && typeof legacy.highlights === 'object') {
@@ -656,6 +734,9 @@
       base.home.footer.blurb = text(legacy.footer.blurb, base.home.footer.blurb);
       base.home.footer.instagram = text(legacy.footer.instagram, base.home.footer.instagram);
       base.home.footer.email = text(legacy.footer.email, base.home.footer.email);
+      if (Array.isArray(legacy.footer.quickTags) && legacy.footer.quickTags.length > 0) {
+        base.home.footer.quickTags = legacy.footer.quickTags.map((item) => text(item, '')).filter(Boolean);
+      }
     }
 
     return normalize(base);

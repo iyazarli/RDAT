@@ -91,6 +91,7 @@ function renderCategory(config) {
   const slug = getSlugParam();
   const category = config.categories.find((item) => item.slug === slug) || config.categories[0];
   const isSponsorCategory = category.slug === 'sponsors';
+  const isEventsCategory = category.slug === 'events';
 
   setText('category-eyebrow', category.eyebrow);
   setText('category-title', category.title);
@@ -138,14 +139,28 @@ function renderCategory(config) {
     } else {
       blockGrid.classList.remove('category-block-grid--sponsors');
       blockGrid.innerHTML = category.blocks
-        .map((block) => `
-          <article class="category-block">
-            ${block.imageUrl ? `<img class="category-block-media" src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.title)}">` : ''}
-            <h3>${escapeHtml(block.title)}</h3>
-            <p>${escapeHtml(block.text)}</p>
-            ${block.tag ? `<span class="category-badge">${escapeHtml(block.tag)}</span>` : ''}
-          </article>
-        `)
+        .map((block) => {
+          const card = `
+            <article class="category-block${isEventsCategory ? ' category-block--event' : ''}">
+              ${block.imageUrl ? `<img class="category-block-media" src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.title)}">` : ''}
+              <h3>${escapeHtml(block.title)}</h3>
+              <p>${escapeHtml(block.text)}</p>
+              ${block.tag ? `<span class="category-badge">${escapeHtml(block.tag)}</span>` : ''}
+            </article>
+          `;
+
+          if (isEventsCategory) {
+            return `<a class="category-event-link" href="event.html?slug=${encodeURIComponent(category.slug)}&event=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} etkinlik detayina git">${card}</a>`;
+          }
+
+          const blockUrl = text(block?.url, '');
+          if (blockUrl) {
+            const isExternal = /^https?:\/\//i.test(blockUrl);
+            return `<a class="category-event-link" href="${escapeHtml(blockUrl)}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} aria-label="${escapeHtml(block.title)} baglantisina git">${card}</a>`;
+          }
+
+          return card;
+        })
         .join('');
     }
   }
@@ -177,6 +192,12 @@ function renderFooter(config) {
   setText('category-footer-blurb', config.home.footer.blurb);
   setText('category-footer-instagram', config.home.footer.instagram);
   setText('category-footer-email', config.home.footer.email);
+
+  const tagsContainer = document.querySelector('#category-footer-mini-tags');
+  if (tagsContainer) {
+    const tags = Array.isArray(config.home.footer.quickTags) ? config.home.footer.quickTags : [];
+    tagsContainer.innerHTML = tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join('');
+  }
 }
 
 function init() {

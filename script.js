@@ -209,6 +209,10 @@ function renderFaqItems(items) {
 function renderFieldSchedule(schedule) {
   const container = document.querySelector('#field-schedule');
   if (!container) return;
+  if (!Array.isArray(schedule)) {
+    container.innerHTML = '';
+    return;
+  }
 
   container.innerHTML = schedule
     .map((item) => `
@@ -220,11 +224,36 @@ function renderFieldSchedule(schedule) {
     .join('');
 }
 
-function renderFieldChecklist(list) {
-  const container = document.querySelector('#field-checklist');
+function renderChecklistById(containerId, list) {
+  const container = document.querySelector(`#${containerId}`);
   if (!container) return;
+  if (!Array.isArray(list)) {
+    container.innerHTML = '';
+    return;
+  }
 
   container.innerHTML = list.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+}
+
+function renderFieldChecklist(list) {
+  renderChecklistById('field-checklist', list);
+}
+
+function renderPillRow(containerId, items, className = 'pill') {
+  const container = document.querySelector(`#${containerId}`);
+  if (!container) return;
+  if (!Array.isArray(items)) {
+    container.innerHTML = '';
+    return;
+  }
+  const classAttr = className ? ` class="${escapeHtml(className)}"` : '';
+  container.innerHTML = items
+    .map((item) => `<span${classAttr}>${escapeHtml(item)}</span>`)
+    .join('');
+}
+
+function renderFooterQuickTags(tags) {
+  renderPillRow('footer-mini-tags', tags, '');
 }
 
 function stopSponsorTicker() {
@@ -396,6 +425,10 @@ function renderHomeContent(config) {
   setText('about-eyebrow', home.about.eyebrow);
   setText('about-title', home.about.title);
   setText('about-text', home.about.text);
+  renderPillRow('about-pills', home.about.pills || [], 'pill');
+  setText('about-criteria-title', home.about.criteriaTitle);
+  renderChecklistById('about-criteria-items', home.about.criteriaItems || []);
+  setText('about-criteria-note', home.about.criteriaNote);
 
   setText('highlights-eyebrow', home.highlights.eyebrow);
   setText('highlights-title', home.highlights.title);
@@ -426,6 +459,7 @@ function renderHomeContent(config) {
   setText('footer-blurb', home.footer.blurb);
   setText('footer-instagram', home.footer.instagram);
   setText('footer-email', home.footer.email);
+  renderFooterQuickTags(home.footer.quickTags || []);
 
   renderSponsorsSection(config);
 }

@@ -142,9 +142,17 @@ const el = {
   contentHeroCtaPrimaryHref: document.querySelector('#content-hero-cta-primary-href'),
   contentHeroCtaSecondary: document.querySelector('#content-hero-cta-secondary'),
   contentHeroCtaSecondaryHref: document.querySelector('#content-hero-cta-secondary-href'),
+  contentHeroMetrics: document.querySelector('#content-hero-metrics'),
+  contentOperationTitle: document.querySelector('#content-operation-title'),
+  contentOperationItems: document.querySelector('#content-operation-items'),
+  contentOperationTag: document.querySelector('#content-operation-tag'),
   contentAboutEyebrow: document.querySelector('#content-about-eyebrow'),
   contentAboutTitle: document.querySelector('#content-about-title'),
   contentAboutText: document.querySelector('#content-about-text'),
+  contentAboutPills: document.querySelector('#content-about-pills'),
+  contentAboutCriteriaTitle: document.querySelector('#content-about-criteria-title'),
+  contentAboutCriteriaItems: document.querySelector('#content-about-criteria-items'),
+  contentAboutCriteriaNote: document.querySelector('#content-about-criteria-note'),
   contentHighlightsEyebrow: document.querySelector('#content-highlights-eyebrow'),
   contentHighlightsTitle: document.querySelector('#content-highlights-title'),
   contentHighlightsSubtitle: document.querySelector('#content-highlights-subtitle'),
@@ -157,7 +165,9 @@ const el = {
   contentFieldTitle: document.querySelector('#content-field-title'),
   contentFieldSubtitle: document.querySelector('#content-field-subtitle'),
   contentFieldNote: document.querySelector('#content-field-note'),
+  contentFieldSchedule: document.querySelector('#content-field-schedule'),
   contentFieldChecklistTitle: document.querySelector('#content-field-checklist-title'),
+  contentFieldChecklistItems: document.querySelector('#content-field-checklist-items'),
   contentFieldChecklistNote: document.querySelector('#content-field-checklist-note'),
   contentApplyEyebrow: document.querySelector('#content-apply-eyebrow'),
   contentApplyTitle: document.querySelector('#content-apply-title'),
@@ -165,6 +175,7 @@ const el = {
   contentFooterBlurb: document.querySelector('#content-footer-blurb'),
   contentFooterInstagram: document.querySelector('#content-footer-instagram'),
   contentFooterEmail: document.querySelector('#content-footer-email'),
+  contentFooterQuickTags: document.querySelector('#content-footer-quick-tags'),
   contentStatus: document.querySelector('#content-status'),
 
   highlightForm: document.querySelector('#highlight-form'),
@@ -215,6 +226,8 @@ const el = {
   categoryBlockText: document.querySelector('#category-block-text'),
   categoryBlockTag: document.querySelector('#category-block-tag'),
   categoryBlockImage: document.querySelector('#category-block-image'),
+  categoryBlockUrl: document.querySelector('#category-block-url'),
+  categoryBlockGallery: document.querySelector('#category-block-gallery'),
   categoryBlockImageFile: document.querySelector('#category-block-image-file'),
   clearCategoryBlockForm: document.querySelector('#clear-category-block-form'),
   categoryBlockStatus: document.querySelector('#category-block-status'),
@@ -252,6 +265,74 @@ function text(value, fallback = '') {
   if (typeof value !== 'string') return fallback;
   const trimmed = value.trim();
   return trimmed || fallback;
+}
+
+function parseLineList(rawValue) {
+  return String(rawValue || '')
+    .split('\n')
+    .map((line) => text(line, ''))
+    .filter(Boolean);
+}
+
+function formatLineList(items) {
+  if (!Array.isArray(items)) return '';
+  return items.map((item) => text(item, '')).filter(Boolean).join('\n');
+}
+
+function parseMetricLines(rawValue, fallback = []) {
+  const lines = parseLineList(rawValue);
+  if (lines.length === 0) return [];
+  const parsed = lines
+    .map((line, index) => {
+      const [valuePart, ...labelParts] = line.split('|');
+      const value = text(valuePart, '');
+      const label = text(labelParts.join('|'), '');
+      if (!value || !label) return null;
+      return {
+        id: text(fallback[index] && fallback[index].id, uid('metric')),
+        value,
+        label,
+      };
+    })
+    .filter(Boolean);
+
+  return parsed.length > 0 ? parsed : fallback;
+}
+
+function formatMetricLines(metrics) {
+  if (!Array.isArray(metrics)) return '';
+  return metrics
+    .map((item) => `${text(item && item.value, '')} | ${text(item && item.label, '')}`)
+    .filter((line) => line.replace('|', '').trim().length > 0)
+    .join('\n');
+}
+
+function parseLabelValueLines(rawValue, fallback = [], idPrefix = 'item') {
+  const lines = parseLineList(rawValue);
+  if (lines.length === 0) return [];
+  const parsed = lines
+    .map((line, index) => {
+      const [labelPart, ...valueParts] = line.split('|');
+      const label = text(labelPart, '');
+      const value = text(valueParts.join('|'), '');
+      if (!label || !value) return null;
+      return {
+        id: text(fallback[index] && fallback[index].id, uid(idPrefix)),
+        label,
+        value,
+      };
+    })
+    .filter(Boolean);
+
+  return parsed.length > 0 ? parsed : fallback;
+}
+
+function formatLabelValueLines(items) {
+  if (!Array.isArray(items)) return '';
+  return items
+    .map((item) => `${text(item && item.label, '')} | ${text(item && item.value, '')}`)
+    .filter((line) => line.replace('|', '').trim().length > 0)
+    .join('\n');
 }
 
 function toDate(value) {
@@ -372,13 +453,23 @@ function loadSiteConfig() {
       nav: { applyLabel: 'Basvur', applyHref: '#apply' },
       home: {
         hero: { eyebrow: '', titleMain: '', titleAccent: '', lede: '', ctaPrimaryText: '', ctaPrimaryHref: '', ctaSecondaryText: '', ctaSecondaryHref: '' },
-        about: { eyebrow: '', title: '', text: '' },
+        metrics: [],
+        operation: { title: '', items: [], tag: '' },
+        about: {
+          eyebrow: '',
+          title: '',
+          text: '',
+          pills: [],
+          criteriaTitle: '',
+          criteriaItems: [],
+          criteriaNote: '',
+        },
         highlights: { eyebrow: '', title: '', subtitle: '', cards: [] },
         team: { eyebrow: '', title: '', subtitle: '' },
         field: { eyebrow: '', title: '', subtitle: '', schedule: [], note: '', checklistTitle: '', checklist: [], checklistNote: '' },
         faq: { eyebrow: '', title: '', items: [] },
         apply: { eyebrow: '', title: '', subtitle: '' },
-        footer: { blurb: '', instagram: '', email: '' },
+        footer: { blurb: '', instagram: '', email: '', quickTags: [] },
       },
       categories: [],
     };
@@ -781,10 +872,18 @@ function fillContentTextForm() {
   el.contentHeroCtaPrimaryHref.value = home.hero.ctaPrimaryHref;
   el.contentHeroCtaSecondary.value = home.hero.ctaSecondaryText;
   el.contentHeroCtaSecondaryHref.value = home.hero.ctaSecondaryHref;
+  el.contentHeroMetrics.value = formatMetricLines(home.metrics);
+  el.contentOperationTitle.value = home.operation.title;
+  el.contentOperationItems.value = formatLabelValueLines(home.operation.items);
+  el.contentOperationTag.value = home.operation.tag;
 
   el.contentAboutEyebrow.value = home.about.eyebrow;
   el.contentAboutTitle.value = home.about.title;
   el.contentAboutText.value = home.about.text;
+  el.contentAboutPills.value = formatLineList(home.about.pills);
+  el.contentAboutCriteriaTitle.value = home.about.criteriaTitle;
+  el.contentAboutCriteriaItems.value = formatLineList(home.about.criteriaItems);
+  el.contentAboutCriteriaNote.value = home.about.criteriaNote;
 
   el.contentHighlightsEyebrow.value = home.highlights.eyebrow;
   el.contentHighlightsTitle.value = home.highlights.title;
@@ -801,7 +900,9 @@ function fillContentTextForm() {
   el.contentFieldTitle.value = home.field.title;
   el.contentFieldSubtitle.value = home.field.subtitle;
   el.contentFieldNote.value = home.field.note;
+  el.contentFieldSchedule.value = formatLabelValueLines(home.field.schedule);
   el.contentFieldChecklistTitle.value = home.field.checklistTitle;
+  el.contentFieldChecklistItems.value = formatLineList(home.field.checklist);
   el.contentFieldChecklistNote.value = home.field.checklistNote;
 
   el.contentApplyEyebrow.value = home.apply.eyebrow;
@@ -811,9 +912,26 @@ function fillContentTextForm() {
   el.contentFooterBlurb.value = home.footer.blurb;
   el.contentFooterInstagram.value = home.footer.instagram;
   el.contentFooterEmail.value = home.footer.email;
+  el.contentFooterQuickTags.value = formatLineList(home.footer.quickTags);
 }
 
 function collectContentTextForm() {
+  const parsedMetrics = parseMetricLines(el.contentHeroMetrics.value, state.siteConfig.home.metrics);
+  const parsedOperationItems = parseLabelValueLines(
+    el.contentOperationItems.value,
+    state.siteConfig.home.operation.items,
+    'op',
+  );
+  const parsedSchedule = parseLabelValueLines(
+    el.contentFieldSchedule.value,
+    state.siteConfig.home.field.schedule,
+    'sch',
+  );
+  const aboutPills = parseLineList(el.contentAboutPills.value);
+  const aboutCriteriaItems = parseLineList(el.contentAboutCriteriaItems.value);
+  const fieldChecklistItems = parseLineList(el.contentFieldChecklistItems.value);
+  const footerQuickTags = parseLineList(el.contentFooterQuickTags.value);
+
   const next = {
     ...state.siteConfig,
     home: {
@@ -829,11 +947,22 @@ function collectContentTextForm() {
         ctaSecondaryText: el.contentHeroCtaSecondary.value,
         ctaSecondaryHref: el.contentHeroCtaSecondaryHref.value,
       },
+      metrics: parsedMetrics,
+      operation: {
+        ...state.siteConfig.home.operation,
+        title: el.contentOperationTitle.value,
+        items: parsedOperationItems,
+        tag: el.contentOperationTag.value,
+      },
       about: {
         ...state.siteConfig.home.about,
         eyebrow: el.contentAboutEyebrow.value,
         title: el.contentAboutTitle.value,
         text: el.contentAboutText.value,
+        pills: aboutPills,
+        criteriaTitle: el.contentAboutCriteriaTitle.value,
+        criteriaItems: aboutCriteriaItems,
+        criteriaNote: el.contentAboutCriteriaNote.value,
       },
       highlights: {
         ...state.siteConfig.home.highlights,
@@ -858,7 +987,9 @@ function collectContentTextForm() {
         title: el.contentFieldTitle.value,
         subtitle: el.contentFieldSubtitle.value,
         note: el.contentFieldNote.value,
+        schedule: parsedSchedule,
         checklistTitle: el.contentFieldChecklistTitle.value,
+        checklist: fieldChecklistItems,
         checklistNote: el.contentFieldChecklistNote.value,
       },
       apply: {
@@ -872,6 +1003,7 @@ function collectContentTextForm() {
         blurb: el.contentFooterBlurb.value,
         instagram: el.contentFooterInstagram.value,
         email: el.contentFooterEmail.value,
+        quickTags: footerQuickTags,
       },
     },
   };
@@ -1164,6 +1296,8 @@ function clearCategoryBlockForm() {
   el.categoryBlockText.value = '';
   el.categoryBlockTag.value = '';
   el.categoryBlockImage.value = '';
+  el.categoryBlockUrl.value = '';
+  el.categoryBlockGallery.value = '';
   if (el.categoryBlockImageFile) {
     el.categoryBlockImageFile.value = '';
   }
@@ -1177,6 +1311,8 @@ function fillCategoryBlockForm(block, categoryId) {
   el.categoryBlockText.value = block.text;
   el.categoryBlockTag.value = block.tag;
   el.categoryBlockImage.value = text(block.imageUrl, '');
+  el.categoryBlockUrl.value = text(block.url, '');
+  el.categoryBlockGallery.value = formatLineList(block.gallery);
   if (el.categoryBlockImageFile) {
     el.categoryBlockImageFile.value = '';
   }
@@ -1189,6 +1325,8 @@ function collectCategoryBlockForm() {
     text: text(el.categoryBlockText.value, ''),
     tag: text(el.categoryBlockTag.value, ''),
     imageUrl: text(el.categoryBlockImage.value, ''),
+    url: text(el.categoryBlockUrl.value, ''),
+    gallery: parseLineList(el.categoryBlockGallery.value),
   };
 }
 
@@ -1217,7 +1355,7 @@ function renderCategoryBlockList() {
           </div>
         </div>
         <p>${escapeHtml(block.text)}</p>
-        <small class="helper-note">Etiket: ${escapeHtml(block.tag || '-')}</small>
+        <small class="helper-note">Etiket: ${escapeHtml(block.tag || '-')} | Link: ${escapeHtml(block.url || '-')} | Galeri: ${Array.isArray(block.gallery) ? block.gallery.length : 0}</small>
       </article>
     `)
     .join('');

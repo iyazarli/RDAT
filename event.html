@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reddevil Kategori</title>
+  <title>Etkinlik Detayi | Reddevil</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=General+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=20260305-2">
-  <link rel="stylesheet" href="category.css?v=20260305-2">
+  <link rel="stylesheet" href="event.css?v=20260305-2">
 </head>
 <body>
   <div class="background-veil"></div>
@@ -21,23 +21,26 @@
       </div>
     </a>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
-    <nav class="nav-links" id="category-nav-links" aria-label="Ana menu"></nav>
+    <nav class="nav-links" id="event-nav-links" aria-label="Ana menu"></nav>
   </header>
 
   <main>
-    <section class="section category-hero">
-      <p class="eyebrow" id="category-eyebrow">Kategori</p>
-      <h1 id="category-title">Kategori Basligi</h1>
-      <p class="muted" id="category-intro">Kategori aciklamasi</p>
-      <div class="category-cta-row">
-        <a class="btn primary" id="category-cta" href="index.html#apply">Basvuruya Git</a>
-        <a class="btn ghost" href="index.html">Ana Sayfa</a>
+    <section class="section event-hero">
+      <p class="eyebrow" id="event-eyebrow">Etkinlik</p>
+      <h1 id="event-title">Etkinlik Basligi</h1>
+      <p class="muted" id="event-summary">Etkinlik aciklamasi</p>
+      <div class="event-meta-row">
+        <span class="category-badge" id="event-tag" hidden></span>
+      </div>
+      <div class="event-actions">
+        <a class="btn primary" id="event-back-category" href="category.html?slug=events">Etkinliklere Don</a>
+        <a class="btn ghost" href="index.html#apply">Basvuruya Gec</a>
       </div>
     </section>
 
     <section class="section">
-      <div class="category-block-grid" id="category-block-grid"></div>
-      <div class="category-empty" id="category-empty" hidden>Bu kategori icin icerik bulunamadi.</div>
+      <div class="event-gallery-grid" id="event-gallery-grid"></div>
+      <div class="category-empty" id="event-gallery-empty" hidden>Bu etkinlik icin fotograf bulunamadi.</div>
     </section>
   </main>
 
@@ -51,8 +54,8 @@
             <small data-brand-tagline>Airsoft Team</small>
           </div>
         </div>
-        <p class="muted" id="category-footer-blurb">Guvenli, disiplinli ve eglenceli airsoft deneyimi.</p>
-        <div class="footer-mini-tags" id="category-footer-mini-tags">
+        <p class="muted" id="event-footer-blurb">Guvenli, disiplinli ve eglenceli airsoft deneyimi.</p>
+        <div class="footer-mini-tags" id="event-footer-mini-tags">
           <span>Guvenlik odakli</span>
           <span>Duzenli etkinlik</span>
           <span>Acik basvuru</span>
@@ -61,16 +64,17 @@
 
       <section class="footer-card footer-contact-card">
         <h4>Iletisim</h4>
-        <p class="footer-contact-line">Instagram: <span id="category-footer-instagram">@reddevil.airsoft</span></p>
-        <p class="footer-contact-line">E-posta: <span id="category-footer-email">team@reddevil.local</span></p>
+        <p class="footer-contact-line">Instagram: <span id="event-footer-instagram">@reddevil.airsoft</span></p>
+        <p class="footer-contact-line">E-posta: <span id="event-footer-email">team@reddevil.local</span></p>
       </section>
 
       <section class="footer-card footer-links-card">
         <h4>Hizli erisim</h4>
         <div class="footer-link-cloud">
           <a class="footer-pill" href="index.html">Ana Sayfa</a>
+          <a class="footer-pill" href="category.html?slug=events">Etkinlikler</a>
           <a class="footer-pill" href="index.html#apply">Basvuru</a>
-          <div id="category-footer-links" class="footer-dynamic-links"></div>
+          <div id="event-footer-links" class="footer-dynamic-links"></div>
         </div>
       </section>
     </div>
@@ -80,6 +84,6 @@
   </footer>
 
   <script src="site-config.js?v=20260305-4"></script>
-  <script src="category.js?v=20260305-4"></script>
+  <script src="event.js?v=20260305-4"></script>
 </body>
 </html>

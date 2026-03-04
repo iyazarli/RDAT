@@ -289,6 +289,18 @@
               <label>Hero CTA 2 Link
                 <input id="content-hero-cta-secondary-href" type="text" required>
               </label>
+              <label>Hero Metrikleri (Satir: Deger | Etiket)
+                <textarea id="content-hero-metrics" rows="4" placeholder="30+ | Aktif oyuncu&#10;12 | Aylik saha gunu"></textarea>
+              </label>
+              <label>Operasyon Karti Basligi
+                <input id="content-operation-title" type="text" required>
+              </label>
+              <label>Operasyon Karti Satirlari (Satir: Baslik | Deger)
+                <textarea id="content-operation-items" rows="5" placeholder="Oyun tipi | MilSim / SpeedQB karma"></textarea>
+              </label>
+              <label>Operasyon Etiketi
+                <input id="content-operation-tag" type="text" required>
+              </label>
               <label>About Eyebrow
                 <input id="content-about-eyebrow" type="text" required>
               </label>
@@ -297,6 +309,18 @@
               </label>
               <label>About Aciklama
                 <textarea id="content-about-text" rows="3" required></textarea>
+              </label>
+              <label>About Etiketleri (Satir bazli)
+                <textarea id="content-about-pills" rows="4" placeholder="Ekipman rehberi&#10;Senaryo brifing"></textarea>
+              </label>
+              <label>Katilim Kriterleri Baslik
+                <input id="content-about-criteria-title" type="text" required>
+              </label>
+              <label>Katilim Kriterleri Maddeleri (Satir bazli)
+                <textarea id="content-about-criteria-items" rows="4" placeholder="18+ yas&#10;Koruyucu gozluk zorunlu"></textarea>
+              </label>
+              <label>Katilim Kriterleri Notu
+                <textarea id="content-about-criteria-note" rows="2" required></textarea>
               </label>
               <label>Highlights Eyebrow
                 <input id="content-highlights-eyebrow" type="text" required>
@@ -334,8 +358,14 @@
               <label>Field Not
                 <textarea id="content-field-note" rows="2" required></textarea>
               </label>
+              <label>Field Takvim Satirlari (Satir: Baslik | Deger)
+                <textarea id="content-field-schedule" rows="4" placeholder="Toplanma | 07:30 - 08:00"></textarea>
+              </label>
               <label>Checklist Baslik
                 <input id="content-field-checklist-title" type="text" required>
+              </label>
+              <label>Checklist Maddeleri (Satir bazli)
+                <textarea id="content-field-checklist-items" rows="4" placeholder="Chrono limiti...&#10;Yedek gozluk"></textarea>
               </label>
               <label>Checklist Not
                 <textarea id="content-field-checklist-note" rows="2" required></textarea>
@@ -357,6 +387,9 @@
               </label>
               <label>Footer E-posta
                 <input id="content-footer-email" type="email" required>
+              </label>
+              <label>Footer Mini Etiketleri (Satir bazli)
+                <textarea id="content-footer-quick-tags" rows="3" placeholder="Guvenlik odakli&#10;Duzenli etkinlik"></textarea>
               </label>
 
               <div class="detail-actions">
@@ -516,6 +549,12 @@
               </label>
               <label>Gorsel URL
                 <input id="category-block-image" type="url" placeholder="https://... veya bos">
+              </label>
+              <label>Blok Link URL (Opsiyonel)
+                <input id="category-block-url" type="text" placeholder="https://... veya /sayfa">
+              </label>
+              <label>Galeri Gorselleri (Satir bazli URL)
+                <textarea id="category-block-gallery" rows="4" placeholder="https://...&#10;https://..."></textarea>
               </label>
               <label>Dosyadan Gorsel Yukle
                 <input id="category-block-image-file" type="file" accept="image/*">
