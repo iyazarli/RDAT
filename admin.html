@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reddevil Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <a class="brand-block" href="index.html" aria-label="Ana sayfaya don">
+        <div class="brand-mark">RD</div>
+        <div>
+          <strong>Reddevil Ops</strong>
+          <small>Admin Console</small>
+        </div>
+      </a>
+
+      <nav class="sidebar-nav" aria-label="Admin bolumleri">
+        <button class="nav-item active" data-panel-target="dashboard">Dashboard</button>
+        <button class="nav-item" data-panel-target="applications">Basvurular</button>
+        <button class="nav-item" data-panel-target="team">Takim Kartlari</button>
+        <button class="nav-item" data-panel-target="content">Icerik CMS</button>
+        <button class="nav-item" data-panel-target="settings">Ayarlar</button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <a href="index.html">Siteye Don</a>
+      </div>
+    </aside>
+
+    <main class="main-view">
+      <header class="topbar">
+        <div>
+          <h1>Airsoft Admin Panel</h1>
+          <p>Basvurulari, takim kartlarini ve site iceriklerini yonet.</p>
+        </div>
+        <div class="topbar-actions">
+          <button id="logout-btn" class="ghost-btn">Oturumu Kapat</button>
+          <a class="primary-btn" href="index.html">Canli Site</a>
+        </div>
+      </header>
+
+      <section id="lock-screen" class="lock-screen">
+        <div class="lock-card">
+          <h2>Yonetici Girisi</h2>
+          <p>Bu panel localStorage verisini yonetir. Gercek guvenlik icin backend auth gerekir.</p>
+          <form id="login-form" class="stack-form">
+            <label>Sifre
+              <input id="admin-pass" type="password" autocomplete="current-password" required placeholder="Varsayilan: reddevil-admin">
+            </label>
+            <button type="submit" class="primary-btn full">Panele Gir</button>
+            <div id="login-status" class="inline-status" aria-live="polite"></div>
+          </form>
+        </div>
+      </section>
+
+      <div id="admin-content" hidden>
+        <section class="panel active" data-panel="dashboard">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <h3>Toplam Basvuru</h3>
+              <strong id="metric-total">0</strong>
+            </article>
+            <article class="metric-card">
+              <h3>Yeni</h3>
+              <strong id="metric-new">0</strong>
+            </article>
+            <article class="metric-card">
+              <h3>Onaylanan</h3>
+              <strong id="metric-approved">0</strong>
+            </article>
+            <article class="metric-card">
+              <h3>Reddedilen</h3>
+              <strong id="metric-rejected">0</strong>
+            </article>
+          </div>
+
+          <div class="panel-grid">
+            <article class="soft-card">
+              <header>
+                <h3>Rol Dagilimi</h3>
+              </header>
+              <div id="role-chart" class="chart-list"></div>
+            </article>
+
+            <article class="soft-card">
+              <header>
+                <h3>Deneyim Dagilimi</h3>
+              </header>
+              <div id="experience-chart" class="chart-list"></div>
+            </article>
+
+            <article class="soft-card full-width">
+              <header>
+                <h3>Son Hareketler</h3>
+              </header>
+              <ul id="recent-activity" class="activity-list"></ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="applications">
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Basvuru Yonetimi</h3>
+              <div class="header-actions">
+                <button id="seed-samples-btn" class="ghost-btn">Ornek Veri Yukle</button>
+                <button id="export-csv-btn" class="ghost-btn">CSV Indir</button>
+                <button id="export-json-btn" class="ghost-btn">JSON Indir</button>
+                <button id="import-apps-trigger" class="ghost-btn">JSON Yukle</button>
+                <input id="import-apps-input" type="file" accept="application/json" hidden>
+              </div>
+            </header>
+
+            <div class="filters">
+              <label>Ara
+                <input id="search-input" type="search" placeholder="Ad, e-posta, telefon, rol">
+              </label>
+              <label>Durum
+                <select id="status-filter">
+                  <option value="all">Tum Durumlar</option>
+                  <option value="new">Yeni</option>
+                  <option value="reviewing">Inceleniyor</option>
+                  <option value="approved">Onaylandi</option>
+                  <option value="rejected">Reddedildi</option>
+                </select>
+              </label>
+              <label>Deneyim
+                <select id="experience-filter">
+                  <option value="all">Tum Seviyeler</option>
+                  <option value="Yeni Baslayan">Yeni Baslayan</option>
+                  <option value="Orta">Orta</option>
+                  <option value="Deneyimli">Deneyimli</option>
+                </select>
+              </label>
+              <button id="delete-all-btn" class="danger-btn">Tumunu Temizle</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ad</th>
+                    <th>Iletisim</th>
+                    <th>Rol</th>
+                    <th>Deneyim</th>
+                    <th>Durum</th>
+                    <th>Tarih</th>
+                    <th>Islem</th>
+                  </tr>
+                </thead>
+                <tbody id="applications-body"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="soft-card detail-card">
+            <header class="card-header">
+              <h3>Basvuru Detayi</h3>
+            </header>
+
+            <form id="application-detail-form" class="stack-form">
+              <label>Ad Soyad
+                <input id="detail-name" type="text" readonly>
+              </label>
+              <label>E-posta
+                <input id="detail-email" type="text" readonly>
+              </label>
+              <label>Telefon
+                <input id="detail-phone" type="text" readonly>
+              </label>
+              <label>Bolge
+                <input id="detail-region" type="text" readonly>
+              </label>
+              <label>Mesaj
+                <textarea id="detail-message" rows="3" readonly></textarea>
+              </label>
+              <label>Durum
+                <select id="detail-status">
+                  <option value="new">Yeni</option>
+                  <option value="reviewing">Inceleniyor</option>
+                  <option value="approved">Onaylandi</option>
+                  <option value="rejected">Reddedildi</option>
+                </select>
+              </label>
+              <label>Admin Notu
+                <textarea id="detail-admin-notes" rows="3" placeholder="Muzakere notu, tarih, ekipman durumu vb."></textarea>
+              </label>
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">Kaydet</button>
+                <button id="delete-selected-btn" type="button" class="danger-btn">Basvuruyu Sil</button>
+              </div>
+              <div id="detail-status-text" class="inline-status"></div>
+            </form>
+          </article>
+        </section>
+
+        <section class="panel" data-panel="team">
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Takim Karti Yonetimi</h3>
+              <div class="header-actions">
+                <button id="reset-team-defaults" class="ghost-btn">Varsayilanlari Yukle</button>
+              </div>
+            </header>
+
+            <form id="team-form" class="team-form">
+              <input id="team-id" type="hidden">
+              <label>Ad
+                <input id="team-name" type="text" required>
+              </label>
+              <label>Cagri Adi
+                <input id="team-callsign" type="text" required>
+              </label>
+              <label>Gorev Basligi
+                <input id="team-title" type="text" required>
+              </label>
+              <label>Badge
+                <input id="team-badge" type="text" placeholder="Lider, Safety, Tech..." required>
+              </label>
+              <label>Foto URL
+                <input id="team-photo" type="url" required placeholder="https://...">
+              </label>
+              <label>Kisa Biyografi
+                <textarea id="team-bio" rows="3" required></textarea>
+              </label>
+              <label>Uzmanlik
+                <input id="team-expertise" type="text" required>
+              </label>
+              <label>Takimda (sezon)
+                <input id="team-seasons" type="text" required>
+              </label>
+              <label>Favori Setup
+                <input id="team-setup" type="text" required>
+              </label>
+
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">Kaydet</button>
+                <button id="clear-team-form" type="button" class="ghost-btn">Formu Temizle</button>
+              </div>
+              <div id="team-status" class="inline-status"></div>
+            </form>
+          </article>
+
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Mevcut Takim Kartlari</h3>
+            </header>
+            <div id="team-list" class="team-list"></div>
+          </article>
+        </section>
+
+        <section class="panel" data-panel="content">
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Ana Metinler</h3>
+              <div class="header-actions">
+                <button id="reset-content-defaults" class="ghost-btn" type="button">Varsayilanlari Yukle</button>
+              </div>
+            </header>
+
+            <form id="content-text-form" class="content-form">
+              <label>Hero Eyebrow
+                <input id="content-hero-eyebrow" type="text" required>
+              </label>
+              <label>Hero Baslik (Ana)
+                <input id="content-hero-title-main" type="text" required>
+              </label>
+              <label>Hero Baslik (Vurgu)
+                <input id="content-hero-title-accent" type="text" required>
+              </label>
+              <label>Hero Aciklama
+                <textarea id="content-hero-lede" rows="3" required></textarea>
+              </label>
+              <label>Hero CTA 1
+                <input id="content-hero-cta-primary" type="text" required>
+              </label>
+              <label>Hero CTA 1 Link
+                <input id="content-hero-cta-primary-href" type="text" required>
+              </label>
+              <label>Hero CTA 2
+                <input id="content-hero-cta-secondary" type="text" required>
+              </label>
+              <label>Hero CTA 2 Link
+                <input id="content-hero-cta-secondary-href" type="text" required>
+              </label>
+              <label>Hero Metrikleri (Satir: Deger | Etiket)
+                <textarea id="content-hero-metrics" rows="4" placeholder="30+ | Aktif oyuncu&#10;12 | Aylik saha gunu"></textarea>
+              </label>
+              <label>Operasyon Karti Basligi
+                <input id="content-operation-title" type="text" required>
+              </label>
+              <label>Operasyon Karti Satirlari (Satir: Baslik | Deger)
+                <textarea id="content-operation-items" rows="5" placeholder="Oyun tipi | MilSim / SpeedQB karma"></textarea>
+              </label>
+              <label>Operasyon Etiketi
+                <input id="content-operation-tag" type="text" required>
+              </label>
+              <label>About Eyebrow
+                <input id="content-about-eyebrow" type="text" required>
+              </label>
+              <label>About Baslik
+                <textarea id="content-about-title" rows="2" required></textarea>
+              </label>
+              <label>About Aciklama
+                <textarea id="content-about-text" rows="3" required></textarea>
+              </label>
+              <label>About Etiketleri (Satir bazli)
+                <textarea id="content-about-pills" rows="4" placeholder="Ekipman rehberi&#10;Senaryo brifing"></textarea>
+              </label>
+              <label>Katilim Kriterleri Baslik
+                <input id="content-about-criteria-title" type="text" required>
+              </label>
+              <label>Katilim Kriterleri Maddeleri (Satir bazli)
+                <textarea id="content-about-criteria-items" rows="4" placeholder="18+ yas&#10;Koruyucu gozluk zorunlu"></textarea>
+              </label>
+              <label>Katilim Kriterleri Notu
+                <textarea id="content-about-criteria-note" rows="2" required></textarea>
+              </label>
+              <label>Highlights Eyebrow
+                <input id="content-highlights-eyebrow" type="text" required>
+              </label>
+              <label>Highlights Baslik
+                <textarea id="content-highlights-title" rows="2" required></textarea>
+              </label>
+              <label>Highlights Alt Baslik
+                <textarea id="content-highlights-subtitle" rows="3" required></textarea>
+              </label>
+              <label>FAQ Eyebrow
+                <input id="content-faq-eyebrow" type="text" required>
+              </label>
+              <label>FAQ Baslik
+                <input id="content-faq-title" type="text" required>
+              </label>
+              <label>Team Eyebrow
+                <input id="content-team-eyebrow" type="text" required>
+              </label>
+              <label>Team Baslik
+                <input id="content-team-title" type="text" required>
+              </label>
+              <label>Team Alt Baslik
+                <textarea id="content-team-subtitle" rows="2" required></textarea>
+              </label>
+              <label>Field Eyebrow
+                <input id="content-field-eyebrow" type="text" required>
+              </label>
+              <label>Field Baslik
+                <textarea id="content-field-title" rows="2" required></textarea>
+              </label>
+              <label>Field Alt Baslik
+                <textarea id="content-field-subtitle" rows="2" required></textarea>
+              </label>
+              <label>Field Not
+                <textarea id="content-field-note" rows="2" required></textarea>
+              </label>
+              <label>Field Takvim Satirlari (Satir: Baslik | Deger)
+                <textarea id="content-field-schedule" rows="4" placeholder="Toplanma | 07:30 - 08:00"></textarea>
+              </label>
+              <label>Checklist Baslik
+                <input id="content-field-checklist-title" type="text" required>
+              </label>
+              <label>Checklist Maddeleri (Satir bazli)
+                <textarea id="content-field-checklist-items" rows="4" placeholder="Chrono limiti...&#10;Yedek gozluk"></textarea>
+              </label>
+              <label>Checklist Not
+                <textarea id="content-field-checklist-note" rows="2" required></textarea>
+              </label>
+              <label>Apply Eyebrow
+                <input id="content-apply-eyebrow" type="text" required>
+              </label>
+              <label>Apply Baslik
+                <input id="content-apply-title" type="text" required>
+              </label>
+              <label>Apply Alt Baslik
+                <textarea id="content-apply-subtitle" rows="2" required></textarea>
+              </label>
+              <label>Footer Aciklama
+                <textarea id="content-footer-blurb" rows="2" required></textarea>
+              </label>
+              <label>Footer Instagram
+                <input id="content-footer-instagram" type="text" required>
+              </label>
+              <label>Footer E-posta
+                <input id="content-footer-email" type="email" required>
+              </label>
+              <label>Footer Mini Etiketleri (Satir bazli)
+                <textarea id="content-footer-quick-tags" rows="3" placeholder="Guvenlik odakli&#10;Duzenli etkinlik"></textarea>
+              </label>
+
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">Metinleri Kaydet</button>
+              </div>
+              <div id="content-status" class="inline-status"></div>
+            </form>
+          </article>
+
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Highlights Kartlari</h3>
+            </header>
+
+            <form id="highlight-form" class="stack-form">
+              <input id="highlight-id" type="hidden">
+              <label>Kart Basligi
+                <input id="highlight-title" type="text" required>
+              </label>
+              <label>Kart Aciklamasi
+                <textarea id="highlight-description" rows="2" required></textarea>
+              </label>
+              <label>Chip Etiketi
+                <input id="highlight-chip" type="text" required>
+              </label>
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">Kart Kaydet</button>
+                <button id="clear-highlight-form" type="button" class="ghost-btn">Formu Temizle</button>
+              </div>
+              <div id="highlight-status" class="inline-status"></div>
+            </form>
+
+            <div id="highlight-list" class="mini-list"></div>
+          </article>
+
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>SSS Yonetimi</h3>
+            </header>
+
+            <form id="faq-form-admin" class="stack-form">
+              <input id="faq-id" type="hidden">
+              <label>Soru
+                <input id="faq-question-input" type="text" required>
+              </label>
+              <label>Cevap
+                <textarea id="faq-answer-input" rows="3" required></textarea>
+              </label>
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">SSS Kaydet</button>
+                <button id="clear-faq-form" type="button" class="ghost-btn">Formu Temizle</button>
+              </div>
+              <div id="faq-status" class="inline-status"></div>
+            </form>
+
+            <div id="faq-admin-list" class="mini-list"></div>
+          </article>
+
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Logo ve Navigasyon</h3>
+            </header>
+
+            <form id="brand-form" class="content-form">
+              <label>Logo Modu
+                <select id="brand-logo-mode">
+                  <option value="text">Metin Logo</option>
+                  <option value="image">Gorsel Logo</option>
+                </select>
+              </label>
+              <label>Logo Kutusu Metni
+                <input id="brand-mark-text" type="text" required>
+              </label>
+              <label>Marka Adi
+                <input id="brand-name" type="text" required>
+              </label>
+              <label>Marka Alt Metin
+                <input id="brand-tagline" type="text" required>
+              </label>
+              <label>Logo Gorsel URL
+                <input id="brand-logo-url" type="url" placeholder="https://...">
+              </label>
+              <label>Nav Basvuru Butonu
+                <input id="nav-apply-label" type="text" required>
+              </label>
+              <label>Nav Basvuru Linki
+                <input id="nav-apply-href" type="text" required>
+              </label>
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">Logo/Navigasyon Kaydet</button>
+              </div>
+              <div id="brand-status" class="inline-status"></div>
+            </form>
+          </article>
+
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Kategori Sayfalari</h3>
+            </header>
+
+            <form id="category-form" class="stack-form">
+              <input id="category-id" type="hidden">
+              <label>Kategori Adi (Menu)
+                <input id="category-label" type="text" required>
+              </label>
+              <label>Slug
+                <input id="category-slug" type="text" required placeholder="ornek: highlights">
+              </label>
+              <label>Kategori Eyebrow
+                <input id="category-eyebrow" type="text" required>
+              </label>
+              <label>Kategori Baslik
+                <input id="category-title" type="text" required>
+              </label>
+              <label>Kategori Giris Metni
+                <textarea id="category-intro" rows="3" required></textarea>
+              </label>
+              <label>CTA Metni
+                <input id="category-cta-label" type="text" required>
+              </label>
+              <label>CTA Linki
+                <input id="category-cta-href" type="text" required>
+              </label>
+              <label class="checkbox">
+                <input id="category-show-menu" type="checkbox" checked>
+                <span>Menude goster</span>
+              </label>
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">Kategori Kaydet</button>
+                <button id="clear-category-form" type="button" class="ghost-btn">Formu Temizle</button>
+              </div>
+              <div id="category-status" class="inline-status"></div>
+            </form>
+
+            <div id="category-list" class="mini-list"></div>
+          </article>
+
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Kategori Bloklari</h3>
+            </header>
+            <p class="helper-note">Blok eklemek icin once bir kategori sec.</p>
+
+            <form id="category-block-form" class="stack-form">
+              <input id="category-block-id" type="hidden">
+              <label>Bagli Kategori
+                <select id="category-block-category"></select>
+              </label>
+              <label>Blok Basligi
+                <input id="category-block-title" type="text" required>
+              </label>
+              <label>Blok Aciklamasi
+                <textarea id="category-block-text" rows="3" required></textarea>
+              </label>
+              <label>Blok Etiketi
+                <input id="category-block-tag" type="text">
+              </label>
+              <label>Gorsel URL
+                <input id="category-block-image" type="url" placeholder="https://... veya bos">
+              </label>
+              <label>Blok Link URL (Opsiyonel)
+                <input id="category-block-url" type="text" placeholder="https://... veya /sayfa">
+              </label>
+              <label>Galeri Gorselleri (Satir bazli URL)
+                <textarea id="category-block-gallery" rows="4" placeholder="https://...&#10;https://..."></textarea>
+              </label>
+              <label>Dosyadan Gorsel Yukle
+                <input id="category-block-image-file" type="file" accept="image/*">
+              </label>
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">Blok Kaydet</button>
+                <button id="clear-category-block-form" type="button" class="ghost-btn">Formu Temizle</button>
+              </div>
+              <div id="category-block-status" class="inline-status"></div>
+            </form>
+
+            <div id="category-block-list" class="mini-list"></div>
+          </article>
+
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Gelişmis JSON Editor</h3>
+            </header>
+            <p class="helper-note">Sitedeki tum alanlari tek seferde duzenlemek icin tum konfigu JSON olarak guncellenebilir.</p>
+            <form id="site-config-json-form" class="stack-form">
+              <label>Site Konfig JSON
+                <textarea id="site-config-json" rows="16"></textarea>
+              </label>
+              <div class="detail-actions">
+                <button type="submit" class="primary-btn">JSON Uygula</button>
+                <button id="reload-site-config-json" type="button" class="ghost-btn">JSON Yenile</button>
+              </div>
+              <div id="site-config-json-status" class="inline-status"></div>
+            </form>
+          </article>
+        </section>
+
+        <section class="panel" data-panel="settings">
+          <article class="soft-card">
+            <header class="card-header">
+              <h3>Panel Ayarlari</h3>
+            </header>
+
+            <form id="passcode-form" class="stack-form">
+              <label>Yeni Panel Sifresi
+                <input id="new-passcode" type="password" minlength="6" required placeholder="En az 6 karakter">
+              </label>
+              <button type="submit" class="primary-btn">Sifreyi Guncelle</button>
+            </form>
+
+            <div class="backup-actions">
+              <button id="export-all-btn" class="ghost-btn">Tum Veriyi Yedekle (JSON)</button>
+              <button id="import-all-trigger" class="ghost-btn">Yedekten Geri Yukle</button>
+              <input id="import-all-input" type="file" accept="application/json" hidden>
+            </div>
+
+            <p class="helper-note">Not: Bu admin panel localStorage tabanlidir. Farkli cihaz/tarayicida veriler senkron olmaz.</p>
+            <div id="settings-status" class="inline-status"></div>
+          </article>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="site-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
