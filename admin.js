@@ -5,6 +5,8 @@ const KEYS = {
   session: 'reddevil_admin_session',
 };
 
+const DEFAULT_BRAND_LOGO_URL = 'assets/brand/reddevil-logo.svg';
+
 const STATUS_LABELS = {
   new: 'Yeni',
   reviewing: 'Inceleniyor',
@@ -131,6 +133,7 @@ const el = {
   adminPass: document.querySelector('#admin-pass'),
   loginStatus: document.querySelector('#login-status'),
   logoutBtn: document.querySelector('#logout-btn'),
+  adminBrandMarks: document.querySelectorAll('[data-admin-brand-mark]'),
   panelNavButtons: document.querySelectorAll('[data-panel-target]'),
   panels: document.querySelectorAll('.panel'),
 
@@ -497,7 +500,7 @@ function saveTeamProfiles() {
 function loadSiteConfig() {
   if (!window.SiteConfig) {
     return {
-      brand: { logoMode: 'text', markText: 'RD', name: 'Reddevil', tagline: 'Airsoft Team', logoUrl: '' },
+      brand: { logoMode: 'image', markText: 'RD', name: 'Reddevil', tagline: 'Airsoft Team', logoUrl: DEFAULT_BRAND_LOGO_URL },
       nav: { applyLabel: 'Basvur', applyHref: '#apply' },
       home: {
         hero: { eyebrow: '', titleMain: '', titleAccent: '', lede: '', ctaPrimaryText: '', ctaPrimaryHref: '', ctaSecondaryText: '', ctaSecondaryHref: '' },
@@ -558,6 +561,31 @@ function toggleAdminLock(isLocked) {
   }
   el.lockScreen.hidden = true;
   el.adminContent.hidden = false;
+}
+
+function renderAdminBrand() {
+  const brand = state.siteConfig && state.siteConfig.brand ? state.siteConfig.brand : null;
+  if (!brand) return;
+
+  el.adminBrandMarks.forEach((node) => {
+    const logoUrl = brand.logoUrl || DEFAULT_BRAND_LOGO_URL;
+    if (brand.logoMode === 'image' && logoUrl) {
+      node.classList.add('logo-image');
+      node.textContent = '';
+      node.style.backgroundImage = `url(${logoUrl})`;
+      node.style.backgroundSize = 'contain';
+      node.style.backgroundPosition = 'center';
+      node.style.backgroundRepeat = 'no-repeat';
+      return;
+    }
+
+    node.classList.remove('logo-image');
+    node.style.backgroundImage = '';
+    node.style.backgroundSize = '';
+    node.style.backgroundPosition = '';
+    node.style.backgroundRepeat = '';
+    node.textContent = brand.markText || 'RD';
+  });
 }
 
 function countBy(list, field) {
@@ -1493,6 +1521,7 @@ function renderContentManager() {
   renderHighlightList();
   renderFaqList();
   fillBrandForm();
+  renderAdminBrand();
   renderCategoryManager();
 }
 
@@ -1816,6 +1845,7 @@ function bindEvents() {
   el.brandForm?.addEventListener('submit', (event) => {
     event.preventDefault();
     collectBrandForm();
+    renderAdminBrand();
     fillSiteConfigJson();
     setInlineStatus(el.brandStatus, 'Logo ve navigasyon ayarlari kaydedildi.', 'success');
   });

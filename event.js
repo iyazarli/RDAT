@@ -51,13 +51,17 @@ function renderBrand(config) {
       node.classList.add('logo-image');
       node.textContent = '';
       node.style.backgroundImage = `url(${brand.logoUrl})`;
-      node.style.backgroundSize = 'cover';
+      node.style.backgroundSize = 'contain';
       node.style.backgroundPosition = 'center';
+      node.style.backgroundRepeat = 'no-repeat';
       return;
     }
 
     node.classList.remove('logo-image');
     node.style.backgroundImage = '';
+    node.style.backgroundSize = '';
+    node.style.backgroundPosition = '';
+    node.style.backgroundRepeat = '';
     node.textContent = brand.markText;
   });
 }

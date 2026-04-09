@@ -5,11 +5,11 @@
   const DEFAULT_SITE_CONFIG = {
     version: 2,
     brand: {
-      logoMode: 'text',
+      logoMode: 'image',
       markText: 'RD',
       name: 'Reddevil',
       tagline: 'Airsoft Team',
-      logoUrl: '',
+      logoUrl: 'assets/brand/reddevil-logo.svg',
     },
     nav: {
       applyLabel: 'Basvur',
@@ -605,14 +605,24 @@
       };
     });
 
+    const providedLogoMode = text(brand.logoMode, '');
+    const providedMarkText = text(brand.markText, '');
+    const providedLogoUrl = text(brand.logoUrl, '');
+    const shouldMigrateLegacyBrand = providedLogoMode === 'text'
+      && !providedLogoUrl
+      && (!providedMarkText || providedMarkText.toUpperCase() === 'RD');
+    const resolvedLogoMode = providedLogoMode === 'image' || shouldMigrateLegacyBrand || !providedLogoMode
+      ? 'image'
+      : 'text';
+
     return {
       version: 2,
       brand: {
-        logoMode: text(brand.logoMode, base.brand.logoMode) === 'image' ? 'image' : 'text',
+        logoMode: resolvedLogoMode,
         markText: text(brand.markText, base.brand.markText),
         name: text(brand.name, base.brand.name),
         tagline: text(brand.tagline, base.brand.tagline),
-        logoUrl: text(brand.logoUrl, base.brand.logoUrl),
+        logoUrl: providedLogoUrl || base.brand.logoUrl,
       },
       nav: {
         applyLabel: text(nav.applyLabel, base.nav.applyLabel),
