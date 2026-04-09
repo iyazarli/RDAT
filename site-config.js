@@ -144,12 +144,12 @@
       apply: {
         eyebrow: 'Basvuru',
         title: 'Takima katilmak icin formu doldur',
-        subtitle: 'Form verisi varsayilan olarak tarayiciya kaydedilir. Gercek teslim icin script.js icindeki FORM_ENDPOINT degerini kendi webhook/e-posta form hizmetinle guncelle.',
+        subtitle: 'Basvurunuz incelendikten sonra e-posta veya Instagram uzerinden sizinle iletisime gecilecektir.',
       },
       footer: {
         blurb: 'Guvenli, disiplinli ve eglenceli airsoft deneyimi. Basvurular inceleme sonrasi e-posta ile yanitlanir.',
         instagram: '@reddevil.airsoft',
-        email: 'team@reddevil.local',
+        email: 'team@reddevilairsoft.com',
         quickTags: [
           'Guvenlik odakli',
           'Duzenli etkinlik',

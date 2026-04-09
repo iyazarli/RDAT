@@ -1,3 +1,162 @@
+const TEAM_STORAGE_KEY = 'reddevil_team_profiles';
+
+const DEFAULT_TEAM_PROFILES = [
+  {
+    id: 'team_ghost',
+    name: 'Kagan',
+    callsign: 'Ghost',
+    title: 'Takim lideri | Oyun kurgu',
+    badge: 'Lider',
+    bio: 'Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.',
+    expertise: 'Komuta & Entry',
+    seasons: '5. sezon',
+    setup: 'M4 + red dot',
+    photo: 'https://images.unsplash.com/photo-1608064229007-dca149d32c4f?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'team_mamba',
+    name: 'Selin',
+    callsign: 'Mamba',
+    title: 'Safety Officer | Medic egitimi',
+    badge: 'Safety',
+    bio: 'Guvenlik brifingi, ilk yardim kiti ve saha ici risk kontrolunu yonetir.',
+    expertise: 'Medic & Safety',
+    seasons: '4. sezon',
+    setup: 'SMG + sidearm',
+    photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'team_forge',
+    name: 'Emir',
+    callsign: 'Forge',
+    title: 'Ekipman mentoru',
+    badge: 'Tech',
+    bio: 'Kronograf, bakim, yedek ekipman ve butce dostu setup onerileri sunar.',
+    expertise: 'Tech & DMR',
+    seasons: '6. sezon',
+    setup: 'DMR 1.64J',
+    photo: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'team_spark',
+    name: 'Deniz',
+    callsign: 'Spark',
+    title: 'Medya | After Action',
+    badge: 'Media',
+    bio: 'Oyun goruntuleri, highlight montajlari ve AAR notlarinin paylasimini yapar.',
+    expertise: 'Recon & Media',
+    seasons: '3. sezon',
+    setup: 'Carbine + action cam',
+    photo: 'https://images.unsplash.com/photo-1522556189639-b150c3a2e10f?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'team_placeholder_5',
+    name: 'Ad',
+    callsign: 'Callsign',
+    title: 'Rol — Guncelleniyor',
+    badge: 'Member',
+    bio: 'Oyuncu bilgileri yakin zamanda eklenecek.',
+    expertise: '—',
+    seasons: '—',
+    setup: '—',
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'team_placeholder_6',
+    name: 'Ad',
+    callsign: 'Callsign',
+    title: 'Rol — Guncelleniyor',
+    badge: 'Member',
+    bio: 'Oyuncu bilgileri yakin zamanda eklenecek.',
+    expertise: '—',
+    seasons: '—',
+    setup: '—',
+    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'team_placeholder_7',
+    name: 'Ad',
+    callsign: 'Callsign',
+    title: 'Rol — Guncelleniyor',
+    badge: 'Member',
+    bio: 'Oyuncu bilgileri yakin zamanda eklenecek.',
+    expertise: '—',
+    seasons: '—',
+    setup: '—',
+    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80',
+  },
+  {
+    id: 'team_placeholder_8',
+    name: 'Ad',
+    callsign: 'Callsign',
+    title: 'Rol — Guncelleniyor',
+    badge: 'Member',
+    bio: 'Oyuncu bilgileri yakin zamanda eklenecek.',
+    expertise: '—',
+    seasons: '—',
+    setup: '—',
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80',
+  },
+];
+
+function loadTeamProfiles() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(TEAM_STORAGE_KEY));
+    if (Array.isArray(raw) && raw.length > 0) return raw;
+  } catch {}
+  return DEFAULT_TEAM_PROFILES;
+}
+
+function renderTeamCategory(config) {
+  const category = config.categories.find((c) => c.slug === 'team') || {};
+  setText('category-eyebrow', category.eyebrow || 'Ekip');
+  setText('category-title', category.title || 'Takim Kadrosu');
+  setText('category-intro', category.intro || '');
+
+  const cta = document.querySelector('#category-cta');
+  if (cta) {
+    cta.textContent = category.ctaLabel || 'Basvuruya Git';
+    const href = category.ctaHref || 'index.html#apply';
+    cta.href = href.startsWith('#') ? `index.html${href}` : href;
+  }
+
+  const blockGrid = document.querySelector('#category-block-grid');
+  const emptyNode = document.querySelector('#category-empty');
+  if (!blockGrid) return;
+
+  const profiles = loadTeamProfiles();
+
+  if (!profiles.length) {
+    if (emptyNode) emptyNode.hidden = false;
+    return;
+  }
+
+  if (emptyNode) emptyNode.hidden = true;
+  blockGrid.className = 'category-team-grid';
+  blockGrid.innerHTML = profiles.map((p) => `
+    <article class="category-person-card">
+      <img class="category-person-photo" loading="lazy" src="${escapeHtml(p.photo || '')}" alt="${escapeHtml(p.name)} ${escapeHtml(p.callsign)} portresi">
+      <div class="category-person-body">
+        <header class="category-person-header">
+          <div>
+            <h3>${escapeHtml(p.name)} &ldquo;${escapeHtml(p.callsign)}&rdquo;</h3>
+            <small>${escapeHtml(p.title)}</small>
+          </div>
+          <span class="category-role-badge">${escapeHtml(p.badge)}</span>
+        </header>
+        <p>${escapeHtml(p.bio)}</p>
+        <ul class="category-person-meta">
+          <li><span>Uzmanlik</span><strong>${escapeHtml(p.expertise)}</strong></li>
+          <li><span>Takimda</span><strong>${escapeHtml(p.seasons)}</strong></li>
+          <li><span>Favori setup</span><strong>${escapeHtml(p.setup)}</strong></li>
+        </ul>
+      </div>
+    </article>
+  `).join('');
+
+  document.title = `${category.label || 'Ekip'} | ${config.brand.name}`;
+}
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
@@ -89,6 +248,12 @@ function renderNavigation(config) {
 
 function renderCategory(config) {
   const slug = getSlugParam();
+
+  if (slug === 'team') {
+    renderTeamCategory(config);
+    return;
+  }
+
   const category = config.categories.find((item) => item.slug === slug) || config.categories[0];
   const isSponsorCategory = category.slug === 'sponsors';
   const isEventsCategory = category.slug === 'events';
