@@ -1,6 +1,7 @@
 const { requireAdmin } = require('../_lib/admin-auth');
 const { sendJson, methodNotAllowed, readJsonBody } = require('../_lib/http');
 const { loadState, saveState } = require('../_lib/store');
+const { syncStateToGitHub } = require('../_lib/github-sync');
 
 module.exports = async function handler(req, res) {
   if (!['GET', 'PUT'].includes(req.method)) {
@@ -36,7 +37,11 @@ module.exports = async function handler(req, res) {
     };
 
     const savedState = await saveState(nextState);
-    return sendJson(res, 200, { ok: true, state: savedState });
+    const githubSync = await syncStateToGitHub(savedState, {
+      message: `Sync site state from admin panel (${new Date().toISOString()})`,
+    });
+
+    return sendJson(res, 200, { ok: true, state: savedState, githubSync });
   } catch (error) {
     console.error(error);
     return sendJson(res, 500, { ok: false, error: 'Admin state kaydedilemedi.' });

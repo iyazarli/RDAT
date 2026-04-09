@@ -1,6 +1,7 @@
 const crypto = require('node:crypto');
 const { sendJson, methodNotAllowed, readJsonBody } = require('./_lib/http');
 const { updateState } = require('./_lib/store');
+const { syncStateToGitHub } = require('./_lib/github-sync');
 
 function createId() {
   return `app_${crypto.randomUUID()}`;
@@ -58,7 +59,7 @@ module.exports = async function handler(req, res) {
     }
 
     const application = normalizeApplicationPayload(body);
-    await updateState((draft) => {
+    const savedState = await updateState((draft) => {
       draft.applications = [application, ...(Array.isArray(draft.applications) ? draft.applications : [])];
       draft.telemetry = {
         ...(draft.telemetry || {}),
@@ -69,7 +70,11 @@ module.exports = async function handler(req, res) {
       return draft;
     });
 
-    return sendJson(res, 201, { ok: true, id: application.id });
+    const githubSync = await syncStateToGitHub(savedState, {
+      message: `Sync site state after application ${application.id}`,
+    });
+
+    return sendJson(res, 201, { ok: true, id: application.id, githubSync });
   } catch (error) {
     console.error(error);
     return sendJson(res, 500, { ok: false, error: 'Basvuru kaydedilemedi.' });

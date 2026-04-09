@@ -670,12 +670,22 @@ async function persistRemoteState() {
 
   applyRemoteState(payload.state);
   refreshAdminViews();
-  return payload.state;
+  return payload;
 }
 
 async function syncAdminChange(target, successMessage, errorMessage) {
   try {
-    await persistRemoteState();
+    const payload = await persistRemoteState();
+    const githubSync = payload && typeof payload.githubSync === 'object' ? payload.githubSync : null;
+
+    if (githubSync && githubSync.ok === false) {
+      const syncMessage = githubSync.skipped
+        ? 'Canliya kaydedildi ama GitHub senkronu kapali.'
+        : `Canliya kaydedildi ama GitHub senkronu basarisiz: ${githubSync.error || 'bilinmeyen hata'}`;
+      setInlineStatus(target, syncMessage, 'error');
+      return false;
+    }
+
     setInlineStatus(target, successMessage, 'success');
     return true;
   } catch (error) {
