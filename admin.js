@@ -1,11 +1,11 @@
 const KEYS = {
-  applications: 'reddevil_applications',
-  teamProfiles: 'reddevil_team_profiles',
-  passcode: 'reddevil_admin_passcode',
   session: 'reddevil_admin_session',
 };
 
 const DEFAULT_BRAND_LOGO_URL = 'assets/brand/reddevil-logo.svg';
+const ADMIN_LOGIN_ENDPOINT = '/api/admin/login';
+const ADMIN_LOGOUT_ENDPOINT = '/api/admin/logout';
+const ADMIN_STATE_ENDPOINT = '/api/admin/state';
 
 const STATUS_LABELS = {
   new: 'Yeni',
@@ -117,6 +117,11 @@ const state = {
   applications: [],
   teamProfiles: [],
   siteConfig: null,
+  telemetry: {
+    errors: [],
+    lastSubmissionAt: '',
+    totalSubmissions: 0,
+  },
   selectedApplicationId: null,
   selectedCategoryId: null,
   filters: {
@@ -144,6 +149,7 @@ const el = {
   roleChart: document.querySelector('#role-chart'),
   experienceChart: document.querySelector('#experience-chart'),
   recentActivity: document.querySelector('#recent-activity'),
+  errorActivity: document.querySelector('#error-activity'),
 
   searchInput: document.querySelector('#search-input'),
   statusFilter: document.querySelector('#status-filter'),
@@ -305,6 +311,10 @@ function safeParse(raw, fallback) {
   }
 }
 
+function clone(value) {
+  return value ? JSON.parse(JSON.stringify(value)) : value;
+}
+
 function uid(prefix) {
   if (window.crypto?.randomUUID) {
     return `${prefix}_${window.crypto.randomUUID()}`;
@@ -421,10 +431,6 @@ function setInlineStatus(target, message, tone = 'muted') {
   target.style.color = '#9fb2ba';
 }
 
-function getPasscode() {
-  return localStorage.getItem(KEYS.passcode) || 'reddevil-admin';
-}
-
 function setSession(isActive) {
   if (isActive) {
     sessionStorage.setItem(KEYS.session, 'active');
@@ -475,26 +481,90 @@ function normalizeProfile(item, index = 0) {
   };
 }
 
+function normalizeTelemetryError(item, index = 0) {
+  return {
+    id: text(item && item.id, `err_${index + 1}`),
+    type: text(item && item.type, 'error'),
+    message: text(item && item.message, 'Bilinmeyen hata'),
+    source: text(item && item.source, ''),
+    path: text(item && item.path, ''),
+    stack: text(item && item.stack, ''),
+    userAgent: text(item && item.userAgent, ''),
+    timestamp: toDate(item && item.timestamp ? item.timestamp : new Date()).toISOString(),
+    line: Number.isFinite(Number(item && item.line)) ? Number(item.line) : 0,
+    column: Number.isFinite(Number(item && item.column)) ? Number(item && item.column) : 0,
+  };
+}
+
+function normalizeTelemetry(value) {
+  const source = value && typeof value === 'object' ? value : {};
+  const errors = Array.isArray(source.errors) ? source.errors : [];
+  return {
+    errors: errors
+      .map((item, index) => normalizeTelemetryError(item, index))
+      .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+      .slice(0, 30),
+    lastSubmissionAt: text(source.lastSubmissionAt, ''),
+    totalSubmissions: Number.isFinite(Number(source.totalSubmissions)) ? Number(source.totalSubmissions) : 0,
+  };
+}
+
+function isUnauthorizedError(error) {
+  return Boolean(error && (error.status === 401 || error.status === 403));
+}
+
+function handleAuthExpired(message = 'Oturum suresi doldu. Tekrar giris yapin.') {
+  setSession(false);
+  toggleAdminLock(true);
+  setInlineStatus(el.loginStatus, message, 'error');
+}
+
+async function apiRequest(url, options = {}) {
+  const response = await fetch(url, {
+    method: options.method || 'GET',
+    credentials: 'same-origin',
+    headers: {
+      Accept: 'application/json',
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(options.headers || {}),
+    },
+    body: options.body ? JSON.stringify(options.body) : undefined,
+    cache: 'no-store',
+  });
+
+  const rawText = await response.text();
+  const payload = rawText ? safeParse(rawText, null) : null;
+
+  if (!response.ok) {
+    const error = new Error((payload && payload.error) || `Istek basarisiz: ${response.status}`);
+    error.status = response.status;
+    error.payload = payload;
+    throw error;
+  }
+
+  return payload;
+}
+
 function loadApplications() {
-  const raw = safeParse(localStorage.getItem(KEYS.applications), []);
-  const list = Array.isArray(raw) ? raw : [];
-  return list.map((item) => normalizeApplication(item)).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  return [];
 }
 
 function saveApplications() {
-  localStorage.setItem(KEYS.applications, JSON.stringify(state.applications));
+  state.applications = state.applications
+    .map((item) => normalizeApplication(item))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  return true;
 }
 
 function loadTeamProfiles() {
-  const raw = safeParse(localStorage.getItem(KEYS.teamProfiles), []);
-  if (Array.isArray(raw) && raw.length > 0) {
-    return raw.map((item, index) => normalizeProfile(item, index));
-  }
   return DEFAULT_TEAM_PROFILES.map((item, index) => normalizeProfile(item, index));
 }
 
 function saveTeamProfiles() {
-  localStorage.setItem(KEYS.teamProfiles, JSON.stringify(state.teamProfiles));
+  state.teamProfiles = Array.isArray(state.teamProfiles)
+    ? state.teamProfiles.map((item, index) => normalizeProfile(item, index))
+    : [];
+  return true;
 }
 
 function loadSiteConfig() {
@@ -526,20 +596,95 @@ function loadSiteConfig() {
     };
   }
 
-  return window.SiteConfig.load();
+  return window.SiteConfig.normalize(clone(window.SiteConfig.DEFAULT_SITE_CONFIG));
 }
 
 function saveSiteConfig() {
-  if (!window.SiteConfig) return true;
+  if (window.SiteConfig && typeof window.SiteConfig.normalize === 'function') {
+    state.siteConfig = window.SiteConfig.normalize(state.siteConfig);
+  }
+  return true;
+}
+
+function applyRemoteState(remoteState) {
+  const incoming = remoteState && typeof remoteState === 'object' ? remoteState : {};
+
+  state.applications = Array.isArray(incoming.applications)
+    ? incoming.applications.map((item) => normalizeApplication(item)).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    : [];
+
+  state.teamProfiles = Array.isArray(incoming.teamProfiles)
+    ? incoming.teamProfiles.map((item, index) => normalizeProfile(item, index))
+    : loadTeamProfiles();
+
+  state.siteConfig = incoming.siteConfig && typeof incoming.siteConfig === 'object'
+    ? (window.SiteConfig ? window.SiteConfig.normalize(incoming.siteConfig) : incoming.siteConfig)
+    : loadSiteConfig();
+
+  state.telemetry = normalizeTelemetry(incoming.telemetry);
+}
+
+function refreshAdminViews() {
+  renderApplications();
+  renderDashboard();
+  renderTeamList();
+  renderContentManager();
+
+  if (state.selectedApplicationId && findApplicationById(state.selectedApplicationId)) {
+    selectApplication(state.selectedApplicationId);
+    return;
+  }
+
+  clearApplicationDetail();
+}
+
+async function loadRemoteState() {
+  const payload = await apiRequest(ADMIN_STATE_ENDPOINT, { method: 'GET' });
+  if (!payload || !payload.ok || !payload.state) {
+    throw new Error('Admin state okunamadi.');
+  }
+
+  applyRemoteState(payload.state);
+  refreshAdminViews();
+  return payload.state;
+}
+
+async function persistRemoteState() {
+  saveApplications();
+  saveTeamProfiles();
+  saveSiteConfig();
+
+  const payload = await apiRequest(ADMIN_STATE_ENDPOINT, {
+    method: 'PUT',
+    body: {
+      applications: state.applications,
+      teamProfiles: state.teamProfiles,
+      siteConfig: state.siteConfig,
+      telemetry: state.telemetry,
+    },
+  });
+
+  if (!payload || !payload.ok || !payload.state) {
+    throw new Error('Admin state kaydedilemedi.');
+  }
+
+  applyRemoteState(payload.state);
+  refreshAdminViews();
+  return payload.state;
+}
+
+async function syncAdminChange(target, successMessage, errorMessage) {
   try {
-    state.siteConfig = window.SiteConfig.save(state.siteConfig);
+    await persistRemoteState();
+    setInlineStatus(target, successMessage, 'success');
     return true;
   } catch (error) {
     console.error(error);
-    const message = error && error.name === 'QuotaExceededError'
-      ? 'Kayit yapilamadi: tarayici depolama limiti doldu. Daha kucuk gorsel yukleyin veya URL kullanin.'
-      : 'Kayit yapilamadi: bilinmeyen depolama hatasi.';
-    window.alert(message);
+    if (isUnauthorizedError(error)) {
+      handleAuthExpired();
+      return false;
+    }
+    setInlineStatus(target, error.message || errorMessage, 'error');
     return false;
   }
 }
@@ -635,6 +780,25 @@ function renderRecentActivity() {
     .join('');
 }
 
+function renderErrorActivity() {
+  if (!el.errorActivity) return;
+
+  const errors = Array.isArray(state.telemetry.errors) ? state.telemetry.errors.slice(0, 8) : [];
+  if (errors.length === 0) {
+    el.errorActivity.innerHTML = '<li>Client tarafindan raporlanan hata yok.</li>';
+    return;
+  }
+
+  el.errorActivity.innerHTML = errors
+    .map((entry) => `
+      <li>
+        <strong>${escapeHtml(entry.message || 'Bilinmeyen hata')}</strong><br>
+        <small>${formatDate(entry.timestamp)} | ${escapeHtml(entry.path || entry.source || '-')} | ${escapeHtml(entry.type || 'error')}</small>
+      </li>
+    `)
+    .join('');
+}
+
 function renderDashboard() {
   el.metricTotal.textContent = String(state.applications.length);
   el.metricNew.textContent = String(state.applications.filter((item) => item.status === 'new').length);
@@ -644,6 +808,7 @@ function renderDashboard() {
   renderChart(el.roleChart, countBy(state.applications, 'role'));
   renderChart(el.experienceChart, countBy(state.applications, 'experience'));
   renderRecentActivity();
+  renderErrorActivity();
 }
 
 function getFilteredApplications() {
@@ -1467,7 +1632,6 @@ function fileToOptimizedDataUrl(file, maxSize = 1600, quality = 0.8) {
 }
 
 function upsertCategoryBlock(categoryId, block) {
-  const previous = JSON.parse(JSON.stringify(state.siteConfig.categories));
   state.siteConfig.categories = state.siteConfig.categories.map((category) => {
     if (category.id !== categoryId) return category;
     const exists = category.blocks.some((item) => item.id === block.id);
@@ -1479,16 +1643,12 @@ function upsertCategoryBlock(categoryId, block) {
     };
   });
 
-  if (!saveSiteConfig()) {
-    state.siteConfig.categories = previous;
-    return false;
-  }
+  saveSiteConfig();
   renderCategoryManager();
   return true;
 }
 
 function deleteCategoryBlock(categoryId, blockId) {
-  const previous = JSON.parse(JSON.stringify(state.siteConfig.categories));
   state.siteConfig.categories = state.siteConfig.categories.map((category) => {
     if (category.id !== categoryId) return category;
     return {
@@ -1497,10 +1657,7 @@ function deleteCategoryBlock(categoryId, blockId) {
     };
   });
 
-  if (!saveSiteConfig()) {
-    state.siteConfig.categories = previous;
-    return false;
-  }
+  saveSiteConfig();
   renderCategoryManager();
   return true;
 }
@@ -1531,6 +1688,7 @@ function exportAllData() {
     applications: state.applications,
     teamProfiles: state.teamProfiles,
     siteConfig: state.siteConfig,
+    telemetry: state.telemetry,
   };
   downloadText(`reddevil-backup-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(payload, null, 2), 'application/json');
 }
@@ -1545,17 +1703,18 @@ function importAllData(raw) {
     saveApplications();
   }
 
-  if (Array.isArray(raw.teamProfiles) && raw.teamProfiles.length > 0) {
+  if (Array.isArray(raw.teamProfiles)) {
     state.teamProfiles = raw.teamProfiles.map((item, index) => normalizeProfile(item, index));
     saveTeamProfiles();
   }
 
   if (raw.siteConfig && typeof raw.siteConfig === 'object') {
-    if (window.SiteConfig) {
-      state.siteConfig = window.SiteConfig.save(raw.siteConfig);
-    } else {
-      state.siteConfig = raw.siteConfig;
-    }
+    state.siteConfig = window.SiteConfig ? window.SiteConfig.normalize(raw.siteConfig) : raw.siteConfig;
+    saveSiteConfig();
+  }
+
+  if (raw.telemetry && typeof raw.telemetry === 'object') {
+    state.telemetry = normalizeTelemetry(raw.telemetry);
   }
 
   clearApplicationDetail();
@@ -1564,10 +1723,7 @@ function importAllData(raw) {
   clearFaqForm();
   clearCategoryForm();
   clearCategoryBlockForm();
-  renderApplications();
-  renderDashboard();
-  renderTeamList();
-  renderContentManager();
+  refreshAdminViews();
 }
 
 function bindEvents() {
@@ -1578,19 +1734,36 @@ function bindEvents() {
     });
   });
 
-  el.loginForm?.addEventListener('submit', (event) => {
+  el.loginForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (el.adminPass.value === getPasscode()) {
+    try {
+      await apiRequest(ADMIN_LOGIN_ENDPOINT, {
+        method: 'POST',
+        body: { passcode: el.adminPass.value },
+      });
+
       setSession(true);
+      await loadRemoteState();
       toggleAdminLock(false);
       setInlineStatus(el.loginStatus, 'Giris basarili.', 'success');
       el.adminPass.value = '';
-      return;
+    } catch (error) {
+      console.error(error);
+      if (isUnauthorizedError(error)) {
+        setSession(false);
+        setInlineStatus(el.loginStatus, 'Sifre yanlis.', 'error');
+        return;
+      }
+      setInlineStatus(el.loginStatus, error.message || 'Giris yapilamadi.', 'error');
     }
-    setInlineStatus(el.loginStatus, 'Sifre yanlis.', 'error');
   });
 
-  el.logoutBtn?.addEventListener('click', () => {
+  el.logoutBtn?.addEventListener('click', async () => {
+    try {
+      await apiRequest(ADMIN_LOGOUT_ENDPOINT, { method: 'POST' });
+    } catch (error) {
+      console.error(error);
+    }
     setSession(false);
     toggleAdminLock(true);
     setInlineStatus(el.loginStatus, 'Oturum kapatildi.', 'muted');
@@ -1611,7 +1784,7 @@ function bindEvents() {
     renderApplications();
   });
 
-  el.applicationsBody?.addEventListener('click', (event) => {
+  el.applicationsBody?.addEventListener('click', async (event) => {
     const target = event.target.closest('button[data-action]');
     if (!target) return;
 
@@ -1625,19 +1798,19 @@ function bindEvents() {
 
     if (target.dataset.action === 'approve') {
       updateApplication(id, { status: 'approved' });
-      selectApplication(id);
-      setInlineStatus(el.detailStatusText, 'Durum: Onaylandi', 'success');
+      state.selectedApplicationId = id;
+      await syncAdminChange(el.detailStatusText, 'Durum: Onaylandi', 'Basvuru durumu kaydedilemedi.');
       return;
     }
 
     if (target.dataset.action === 'delete') {
       if (!window.confirm('Bu basvuru silinsin mi?')) return;
       deleteApplication(id);
-      setInlineStatus(el.detailStatusText, 'Basvuru silindi.', 'muted');
+      await syncAdminChange(el.detailStatusText, 'Basvuru silindi.', 'Basvuru silinemedi.');
     }
   });
 
-  el.detailForm?.addEventListener('submit', (event) => {
+  el.detailForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!state.selectedApplicationId) {
       setInlineStatus(el.detailStatusText, 'Once bir basvuru secin.', 'error');
@@ -1648,18 +1821,17 @@ function bindEvents() {
       status: el.detailStatus.value,
       adminNotes: el.detailAdminNotes.value.trim(),
     });
-    selectApplication(state.selectedApplicationId);
-    setInlineStatus(el.detailStatusText, 'Basvuru guncellendi.', 'success');
+    await syncAdminChange(el.detailStatusText, 'Basvuru guncellendi.', 'Basvuru guncellenemedi.');
   });
 
-  el.deleteSelectedBtn?.addEventListener('click', () => {
+  el.deleteSelectedBtn?.addEventListener('click', async () => {
     if (!state.selectedApplicationId) {
       setInlineStatus(el.detailStatusText, 'Silmek icin basvuru secin.', 'error');
       return;
     }
     if (!window.confirm('Secili basvuru silinsin mi?')) return;
     deleteApplication(state.selectedApplicationId);
-    setInlineStatus(el.detailStatusText, 'Secili basvuru silindi.', 'muted');
+    await syncAdminChange(el.detailStatusText, 'Secili basvuru silindi.', 'Secili basvuru silinemedi.');
   });
 
   el.exportCsvBtn?.addEventListener('click', () => {
@@ -1682,7 +1854,7 @@ function bindEvents() {
     try {
       const parsed = safeParse(await file.text(), null);
       importApplicationPayload(parsed);
-      setInlineStatus(el.detailStatusText, 'Basvurular ice aktarildi.', 'success');
+      await syncAdminChange(el.detailStatusText, 'Basvurular ice aktarildi.', 'Basvurular ice aktarilamadi.');
     } catch (error) {
       setInlineStatus(el.detailStatusText, error.message || 'Ice aktarma hatasi.', 'error');
     } finally {
@@ -1690,26 +1862,28 @@ function bindEvents() {
     }
   });
 
-  el.seedSamplesBtn?.addEventListener('click', () => {
+  el.seedSamplesBtn?.addEventListener('click', async () => {
     seedSampleApplications();
-    setInlineStatus(el.detailStatusText, 'Ornek veriler eklendi.', 'success');
+    await syncAdminChange(el.detailStatusText, 'Ornek veriler eklendi.', 'Ornek veriler kaydedilemedi.');
   });
 
-  el.deleteAllBtn?.addEventListener('click', () => {
+  el.deleteAllBtn?.addEventListener('click', async () => {
     if (!window.confirm('Tum basvurular kalici olarak silinsin mi?')) return;
     state.applications = [];
     saveApplications();
     clearApplicationDetail();
     renderApplications();
     renderDashboard();
-    setInlineStatus(el.detailStatusText, 'Tum basvurular silindi.', 'muted');
+    await syncAdminChange(el.detailStatusText, 'Tum basvurular silindi.', 'Basvurular silinemedi.');
   });
 
-  el.teamForm?.addEventListener('submit', (event) => {
+  el.teamForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     upsertTeamProfile(collectTeamForm());
-    clearTeamForm();
-    setInlineStatus(el.teamStatus, 'Takim karti kaydedildi.', 'success');
+    const synced = await syncAdminChange(el.teamStatus, 'Takim karti kaydedildi.', 'Takim karti kaydedilemedi.');
+    if (synced) {
+      clearTeamForm();
+    }
   });
 
   el.clearTeamForm?.addEventListener('click', () => {
@@ -1717,16 +1891,18 @@ function bindEvents() {
     setInlineStatus(el.teamStatus, 'Form temizlendi.', 'muted');
   });
 
-  el.resetTeamDefaults?.addEventListener('click', () => {
+  el.resetTeamDefaults?.addEventListener('click', async () => {
     if (!window.confirm('Takim kartlari varsayilanlara donsun mu?')) return;
     state.teamProfiles = DEFAULT_TEAM_PROFILES.map((item, index) => normalizeProfile(item, index));
     saveTeamProfiles();
     renderTeamList();
-    clearTeamForm();
-    setInlineStatus(el.teamStatus, 'Varsayilan kartlar yuklendi.', 'success');
+    const synced = await syncAdminChange(el.teamStatus, 'Varsayilan kartlar yuklendi.', 'Varsayilan kartlar kaydedilemedi.');
+    if (synced) {
+      clearTeamForm();
+    }
   });
 
-  el.teamList?.addEventListener('click', (event) => {
+  el.teamList?.addEventListener('click', async (event) => {
     const target = event.target.closest('button[data-team-action]');
     if (!target) return;
 
@@ -1744,36 +1920,40 @@ function bindEvents() {
     if (target.dataset.teamAction === 'delete') {
       if (!window.confirm('Bu takim karti silinsin mi?')) return;
       deleteTeamProfile(id);
-      setInlineStatus(el.teamStatus, 'Takim karti silindi.', 'muted');
+      await syncAdminChange(el.teamStatus, 'Takim karti silindi.', 'Takim karti silinemedi.');
     }
   });
 
-  el.contentTextForm?.addEventListener('submit', (event) => {
+  el.contentTextForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     collectContentTextForm();
     fillSiteConfigJson();
-    setInlineStatus(el.contentStatus, 'Ana metinler kaydedildi.', 'success');
+    await syncAdminChange(el.contentStatus, 'Ana metinler kaydedildi.', 'Ana metinler kaydedilemedi.');
   });
 
-  el.resetContentDefaults?.addEventListener('click', () => {
+  el.resetContentDefaults?.addEventListener('click', async () => {
     if (!window.confirm('Tum site icerikleri varsayilanlara donsun mu?')) return;
     if (window.SiteConfig) {
-      state.siteConfig = window.SiteConfig.save(window.SiteConfig.clone(window.SiteConfig.DEFAULT_SITE_CONFIG));
+      state.siteConfig = window.SiteConfig.normalize(clone(window.SiteConfig.DEFAULT_SITE_CONFIG));
+    } else {
+      state.siteConfig = loadSiteConfig();
     }
     clearHighlightForm();
     clearFaqForm();
     clearCategoryForm();
     clearCategoryBlockForm();
     renderContentManager();
-    setInlineStatus(el.contentStatus, 'Tum site icerikleri varsayilana dondu.', 'success');
+    await syncAdminChange(el.contentStatus, 'Tum site icerikleri varsayilana dondu.', 'Varsayilan icerik kaydedilemedi.');
   });
 
-  el.highlightForm?.addEventListener('submit', (event) => {
+  el.highlightForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     upsertHighlight(collectHighlightForm());
-    clearHighlightForm();
     fillSiteConfigJson();
-    setInlineStatus(el.highlightStatus, 'Highlight karti kaydedildi.', 'success');
+    const synced = await syncAdminChange(el.highlightStatus, 'Highlight karti kaydedildi.', 'Highlight karti kaydedilemedi.');
+    if (synced) {
+      clearHighlightForm();
+    }
   });
 
   el.clearHighlightForm?.addEventListener('click', () => {
@@ -1781,7 +1961,7 @@ function bindEvents() {
     setInlineStatus(el.highlightStatus, 'Form temizlendi.', 'muted');
   });
 
-  el.highlightList?.addEventListener('click', (event) => {
+  el.highlightList?.addEventListener('click', async (event) => {
     const target = event.target.closest('button[data-highlight-action]');
     if (!target) return;
 
@@ -1799,18 +1979,22 @@ function bindEvents() {
     if (target.dataset.highlightAction === 'delete') {
       if (!window.confirm('Bu highlight karti silinsin mi?')) return;
       deleteHighlight(id);
-      if (el.highlightId.value === id) clearHighlightForm();
       fillSiteConfigJson();
-      setInlineStatus(el.highlightStatus, 'Kart silindi.', 'muted');
+      const synced = await syncAdminChange(el.highlightStatus, 'Kart silindi.', 'Highlight karti silinemedi.');
+      if (synced && el.highlightId.value === id) {
+        clearHighlightForm();
+      }
     }
   });
 
-  el.faqFormAdmin?.addEventListener('submit', (event) => {
+  el.faqFormAdmin?.addEventListener('submit', async (event) => {
     event.preventDefault();
     upsertFaqItem(collectFaqForm());
-    clearFaqForm();
     fillSiteConfigJson();
-    setInlineStatus(el.faqStatus, 'SSS kaydedildi.', 'success');
+    const synced = await syncAdminChange(el.faqStatus, 'SSS kaydedildi.', 'SSS kaydedilemedi.');
+    if (synced) {
+      clearFaqForm();
+    }
   });
 
   el.clearFaqForm?.addEventListener('click', () => {
@@ -1818,7 +2002,7 @@ function bindEvents() {
     setInlineStatus(el.faqStatus, 'Form temizlendi.', 'muted');
   });
 
-  el.faqAdminList?.addEventListener('click', (event) => {
+  el.faqAdminList?.addEventListener('click', async (event) => {
     const target = event.target.closest('button[data-faq-action]');
     if (!target) return;
 
@@ -1836,21 +2020,23 @@ function bindEvents() {
     if (target.dataset.faqAction === 'delete') {
       if (!window.confirm('Bu SSS maddesi silinsin mi?')) return;
       deleteFaqItem(id);
-      if (el.faqId.value === id) clearFaqForm();
       fillSiteConfigJson();
-      setInlineStatus(el.faqStatus, 'SSS maddesi silindi.', 'muted');
+      const synced = await syncAdminChange(el.faqStatus, 'SSS maddesi silindi.', 'SSS maddesi silinemedi.');
+      if (synced && el.faqId.value === id) {
+        clearFaqForm();
+      }
     }
   });
 
-  el.brandForm?.addEventListener('submit', (event) => {
+  el.brandForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     collectBrandForm();
     renderAdminBrand();
     fillSiteConfigJson();
-    setInlineStatus(el.brandStatus, 'Logo ve navigasyon ayarlari kaydedildi.', 'success');
+    await syncAdminChange(el.brandStatus, 'Logo ve navigasyon ayarlari kaydedildi.', 'Logo ayarlari kaydedilemedi.');
   });
 
-  el.categoryForm?.addEventListener('submit', (event) => {
+  el.categoryForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     const draft = collectCategoryForm();
     const duplicateSlug = state.siteConfig.categories.find((item) => item.slug === draft.slug && item.id !== draft.id);
@@ -1860,9 +2046,11 @@ function bindEvents() {
     }
 
     upsertCategory(draft);
-    clearCategoryForm();
     fillSiteConfigJson();
-    setInlineStatus(el.categoryStatus, 'Kategori kaydedildi.', 'success');
+    const synced = await syncAdminChange(el.categoryStatus, 'Kategori kaydedildi.', 'Kategori kaydedilemedi.');
+    if (synced) {
+      clearCategoryForm();
+    }
   });
 
   el.clearCategoryForm?.addEventListener('click', () => {
@@ -1870,7 +2058,7 @@ function bindEvents() {
     setInlineStatus(el.categoryStatus, 'Form temizlendi.', 'muted');
   });
 
-  el.categoryList?.addEventListener('click', (event) => {
+  el.categoryList?.addEventListener('click', async (event) => {
     const target = event.target.closest('button[data-category-action]');
     if (!target) return;
 
@@ -1895,10 +2083,12 @@ function bindEvents() {
     if (target.dataset.categoryAction === 'delete') {
       if (!window.confirm('Bu kategori silinsin mi?')) return;
       deleteCategory(id);
-      clearCategoryForm();
-      clearCategoryBlockForm();
       fillSiteConfigJson();
-      setInlineStatus(el.categoryStatus, 'Kategori silindi.', 'muted');
+      const synced = await syncAdminChange(el.categoryStatus, 'Kategori silindi.', 'Kategori silinemedi.');
+      if (synced) {
+        clearCategoryForm();
+        clearCategoryBlockForm();
+      }
     }
   });
 
@@ -1925,7 +2115,7 @@ function bindEvents() {
     }
   });
 
-  el.categoryBlockForm?.addEventListener('submit', (event) => {
+  el.categoryBlockForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     const categoryId = el.categoryBlockCategory.value;
     if (!categoryId) {
@@ -1938,10 +2128,12 @@ function bindEvents() {
       setInlineStatus(el.categoryBlockStatus, 'Kategori blogu kaydedilemedi.', 'error');
       return;
     }
-    clearCategoryBlockForm();
     state.selectedCategoryId = categoryId;
     fillSiteConfigJson();
-    setInlineStatus(el.categoryBlockStatus, 'Kategori blogu kaydedildi.', 'success');
+    const synced = await syncAdminChange(el.categoryBlockStatus, 'Kategori blogu kaydedildi.', 'Kategori blogu kaydedilemedi.');
+    if (synced) {
+      clearCategoryBlockForm();
+    }
   });
 
   el.clearCategoryBlockForm?.addEventListener('click', () => {
@@ -1949,7 +2141,7 @@ function bindEvents() {
     setInlineStatus(el.categoryBlockStatus, 'Form temizlendi.', 'muted');
   });
 
-  el.categoryBlockList?.addEventListener('click', (event) => {
+  el.categoryBlockList?.addEventListener('click', async (event) => {
     const target = event.target.closest('button[data-category-block-action]');
     if (!target) return;
 
@@ -1975,25 +2167,27 @@ function bindEvents() {
         setInlineStatus(el.categoryBlockStatus, 'Kategori blogu silinemedi.', 'error');
         return;
       }
-      clearCategoryBlockForm();
       state.selectedCategoryId = categoryId;
       fillSiteConfigJson();
-      setInlineStatus(el.categoryBlockStatus, 'Kategori blogu silindi.', 'muted');
+      const synced = await syncAdminChange(el.categoryBlockStatus, 'Kategori blogu silindi.', 'Kategori blogu silinemedi.');
+      if (synced) {
+        clearCategoryBlockForm();
+      }
     }
   });
 
-  el.siteConfigJsonForm?.addEventListener('submit', (event) => {
+  el.siteConfigJsonForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
     try {
       const parsed = safeParse(el.siteConfigJson.value, null);
       if (!parsed || typeof parsed !== 'object') {
         throw new Error('JSON formati gecersiz.');
       }
-      state.siteConfig = window.SiteConfig ? window.SiteConfig.save(parsed) : parsed;
+      state.siteConfig = window.SiteConfig ? window.SiteConfig.normalize(parsed) : parsed;
       renderContentManager();
       clearCategoryForm();
       clearCategoryBlockForm();
-      setInlineStatus(el.siteConfigJsonStatus, 'JSON uygulanip kaydedildi.', 'success');
+      await syncAdminChange(el.siteConfigJsonStatus, 'JSON uygulanip kaydedildi.', 'JSON kaydedilemedi.');
     } catch (error) {
       setInlineStatus(el.siteConfigJsonStatus, error.message || 'JSON uygulanamadi.', 'error');
     }
@@ -2006,15 +2200,7 @@ function bindEvents() {
 
   el.passcodeForm?.addEventListener('submit', (event) => {
     event.preventDefault();
-    const newPass = text(el.newPasscode.value);
-    if (newPass.length < 6) {
-      setInlineStatus(el.settingsStatus, 'Sifre en az 6 karakter olmali.', 'error');
-      return;
-    }
-
-    localStorage.setItem(KEYS.passcode, newPass);
-    el.newPasscode.value = '';
-    setInlineStatus(el.settingsStatus, 'Panel sifresi guncellendi.', 'success');
+    setInlineStatus(el.settingsStatus, 'Panel sifresi artik Vercel environment variable ile yonetiliyor.', 'muted');
   });
 
   el.exportAllBtn?.addEventListener('click', () => {
@@ -2033,7 +2219,7 @@ function bindEvents() {
     try {
       const parsed = safeParse(await file.text(), null);
       importAllData(parsed);
-      setInlineStatus(el.settingsStatus, 'Yedekten geri yukleme tamamlandi.', 'success');
+      await syncAdminChange(el.settingsStatus, 'Yedekten geri yukleme tamamlandi.', 'Yedek geri yuklenemedi.');
     } catch (error) {
       setInlineStatus(el.settingsStatus, error.message || 'Yedek yuklenemedi.', 'error');
     } finally {
@@ -2042,7 +2228,7 @@ function bindEvents() {
   });
 }
 
-function bootstrap() {
+async function bootstrap() {
   state.applications = loadApplications();
   saveApplications();
 
@@ -2051,20 +2237,36 @@ function bootstrap() {
 
   state.siteConfig = loadSiteConfig();
   saveSiteConfig();
+  state.telemetry = normalizeTelemetry(state.telemetry);
 
+  window.SiteDataClient?.bindGlobalErrorTracking();
   bindEvents();
   activatePanel('dashboard');
-  renderApplications();
-  renderDashboard();
-  renderTeamList();
-  renderContentManager();
+  refreshAdminViews();
   clearApplicationDetail();
   clearHighlightForm();
   clearFaqForm();
   clearCategoryForm();
   clearCategoryBlockForm();
 
-  toggleAdminLock(!isSessionActive());
+  toggleAdminLock(true);
+
+  if (!isSessionActive()) {
+    return;
+  }
+
+  try {
+    await loadRemoteState();
+    toggleAdminLock(false);
+    setInlineStatus(el.loginStatus, 'Oturum geri yuklendi.', 'muted');
+  } catch (error) {
+    console.error(error);
+    if (isUnauthorizedError(error)) {
+      handleAuthExpired();
+      return;
+    }
+    setInlineStatus(el.loginStatus, error.message || 'Admin verisi yuklenemedi.', 'error');
+  }
 }
 
 bootstrap();

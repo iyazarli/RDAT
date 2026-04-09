@@ -1,0 +1,9 @@
+{
+  "name": "reddevil-airsoft",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Reddevil Airsoft public site and admin backend",
+  "dependencies": {
+    "@vercel/blob": "^2.3.3"
+  }
+}

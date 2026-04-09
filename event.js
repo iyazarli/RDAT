@@ -204,9 +204,22 @@ function renderFooter(config) {
   }
 }
 
-function init() {
+function getFallbackPublicState() {
+  if (!window.SiteConfig) return null;
+  return {
+    ok: false,
+    siteConfig: window.SiteConfig.load(),
+  };
+}
+
+async function init() {
+  window.SiteDataClient?.bindGlobalErrorTracking();
   if (!window.SiteConfig) return;
-  const config = window.SiteConfig.load();
+  const fallback = getFallbackPublicState();
+  const publicState = window.SiteDataClient?.loadPublicState
+    ? await window.SiteDataClient.loadPublicState(() => fallback)
+    : fallback;
+  const config = window.SiteConfig.normalize(publicState?.siteConfig || fallback?.siteConfig || {});
   renderBrand(config);
   renderNavigation(config);
   renderEvent(config);

@@ -107,7 +107,7 @@ function loadTeamProfiles() {
   return DEFAULT_TEAM_PROFILES;
 }
 
-function renderTeamCategory(config) {
+function renderTeamCategory(config, teamProfiles) {
   const category = config.categories.find((c) => c.slug === 'team') || {};
   setText('category-eyebrow', category.eyebrow || 'Ekip');
   setText('category-title', category.title || 'Takim Kadrosu');
@@ -124,7 +124,7 @@ function renderTeamCategory(config) {
   const emptyNode = document.querySelector('#category-empty');
   if (!blockGrid) return;
 
-  const profiles = loadTeamProfiles();
+  const profiles = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
 
   if (!profiles.length) {
     if (emptyNode) emptyNode.hidden = false;
@@ -369,12 +369,30 @@ function renderFooter(config) {
   }
 }
 
-function init() {
+function getFallbackPublicState() {
+  if (!window.SiteConfig) return null;
+  return {
+    ok: false,
+    siteConfig: window.SiteConfig.load(),
+    teamProfiles: loadTeamProfiles(),
+  };
+}
+
+async function init() {
+  window.SiteDataClient?.bindGlobalErrorTracking();
   if (!window.SiteConfig) return;
-  const config = window.SiteConfig.load();
+  const fallback = getFallbackPublicState();
+  const publicState = window.SiteDataClient?.loadPublicState
+    ? await window.SiteDataClient.loadPublicState(() => fallback)
+    : fallback;
+  const config = window.SiteConfig.normalize(publicState?.siteConfig || fallback?.siteConfig || {});
   renderBrand(config);
   renderNavigation(config);
-  renderCategory(config);
+  if (getSlugParam() === 'team') {
+    renderTeamCategory(config, publicState?.teamProfiles);
+  } else {
+    renderCategory(config);
+  }
   renderFooter(config);
   bindMobileNav();
 }

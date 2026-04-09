@@ -468,16 +468,13 @@ function renderHomeContent(config) {
   renderSponsorsSection(config);
 }
 
-function renderTeamProfilesFromStorage() {
-  const teamGrid = document.querySelector('#team-grid');
-  if (!teamGrid) return;
-
+function getLocalTeamProfiles() {
   const raw = safeParse(localStorage.getItem(STORAGE_KEYS.teamProfiles), []);
   if (!Array.isArray(raw) || raw.length === 0) {
-    return;
+    return [];
   }
 
-  const normalized = raw.map((item, index) => ({
+  return raw.map((item, index) => ({
     id: String(item.id || `team_${index}`),
     name: String(item.name || `Oyuncu ${index + 1}`),
     callsign: String(item.callsign || 'Callsign'),
@@ -489,6 +486,30 @@ function renderTeamProfilesFromStorage() {
     seasons: String(item.seasons || '-'),
     setup: String(item.setup || '-'),
   }));
+}
+
+function renderTeamProfiles(profilesInput) {
+  const teamGrid = document.querySelector('#team-grid');
+  if (!teamGrid) return;
+
+  const normalized = Array.isArray(profilesInput) && profilesInput.length
+    ? profilesInput.map((item, index) => ({
+      id: String(item.id || `team_${index}`),
+      name: String(item.name || `Oyuncu ${index + 1}`),
+      callsign: String(item.callsign || 'Callsign'),
+      title: String(item.title || 'Rol'),
+      badge: String(item.badge || 'Member'),
+      photo: String(item.photo || 'https://images.unsplash.com/photo-1522556189639-b150c3a2e10f?auto=format&fit=crop&w=900&q=80'),
+      bio: String(item.bio || ''),
+      expertise: String(item.expertise || '-'),
+      seasons: String(item.seasons || '-'),
+      setup: String(item.setup || '-'),
+    }))
+    : getLocalTeamProfiles();
+
+  if (!normalized.length) {
+    return;
+  }
 
   teamGrid.innerHTML = normalized
     .map((profile) => `
@@ -543,26 +564,48 @@ function bindFaqAccordion() {
   });
 }
 
-function initContent() {
+function getFallbackPublicState() {
   if (!window.SiteConfig) {
+    return null;
+  }
+
+  return {
+    ok: false,
+    siteConfig: window.SiteConfig.load(),
+    teamProfiles: getLocalTeamProfiles(),
+  };
+}
+
+async function initContent() {
+  window.SiteDataClient?.bindGlobalErrorTracking();
+
+  const fallback = getFallbackPublicState();
+  const publicState = window.SiteDataClient?.loadPublicState
+    ? await window.SiteDataClient.loadPublicState(() => fallback)
+    : fallback;
+  const configSource = publicState?.siteConfig || fallback?.siteConfig;
+  const config = window.SiteConfig && configSource
+    ? window.SiteConfig.normalize(configSource)
+    : configSource;
+
+  if (!config) {
     startSponsorTicker();
     bindFaqAccordion();
     bindMobileNav();
     return;
   }
 
-  const config = window.SiteConfig.load();
   renderBrand(config);
   renderNavigation(config);
   renderHomeContent(config);
-  renderTeamProfilesFromStorage();
+  renderTeamProfiles(publicState?.teamProfiles);
   bindFaqAccordion();
   bindMobileNav();
 }
 
 initContent();
 
-const FORM_ENDPOINT = ''; // Ornek: 'https://formspree.io/f/xxxxxxx'
+const FORM_ENDPOINT = '/api/applications';
 const form = document.querySelector('#apply-form');
 const statusEl = document.querySelector('.form-status');
 
@@ -571,47 +614,17 @@ const serializeForm = (formEl) => {
   return Object.fromEntries(data.entries());
 };
 
-const saveLocalApplication = (payload) => {
-  const existing = safeParse(localStorage.getItem(STORAGE_KEYS.applications), []);
-  const normalizedList = Array.isArray(existing) ? existing : [];
-  const now = new Date().toISOString();
-
-  normalizedList.push({
-    id: uid('app'),
-    name: payload.name || '',
-    email: payload.email || '',
-    phone: payload.phone || '',
-    experience: payload.experience || '',
-    role: payload.role || '',
-    region: payload.region || '',
-    notes: payload.notes || '',
-    consent: Boolean(payload.consent),
-    status: 'new',
-    adminNotes: '',
-    createdAt: now,
-    updatedAt: now,
-  });
-
-  localStorage.setItem(STORAGE_KEYS.applications, JSON.stringify(normalizedList));
-};
-
 const postToEndpoint = async (payload) => {
-  if (!FORM_ENDPOINT) {
-    saveLocalApplication(payload);
-    return { ok: true, localOnly: true };
-  }
-
   const res = await fetch(FORM_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      consent: Boolean(form?.consent?.checked),
+    }),
   });
-
-  if (res.ok) {
-    saveLocalApplication(payload);
-  }
-
-  return { ok: res.ok, localOnly: false };
+  const body = await res.json().catch(() => ({}));
+  return { ok: res.ok, body };
 };
 
 const setStatus = (msg, tone = 'muted') => {
@@ -634,18 +647,18 @@ form?.addEventListener('submit', async (event) => {
   try {
     const result = await postToEndpoint(payload);
     if (!result.ok) {
-      throw new Error('Gonderim hatasi');
+      throw new Error(result.body?.error || 'Gonderim hatasi');
     }
 
-    if (result.localOnly) {
-      setStatus('Basvuru kaydedildi.', 'success');
-    } else {
-      setStatus('Basvurun iletildi.', 'success');
-    }
-
+    setStatus('Basvurun iletildi ve admin paneline dustu.', 'success');
     form.reset();
   } catch (error) {
     console.error(error);
-    setStatus('Gonderilemedi. Endpoint ayarini kontrol edip tekrar dene.', 'error');
+    window.SiteDataClient?.reportError({
+      type: 'form_submit_error',
+      message: error.message || 'Basvuru gonderimi basarisiz',
+      stack: error.stack || '',
+    });
+    setStatus(error.message || 'Gonderilemedi. Lutfen tekrar dene.', 'error');
   }
 });

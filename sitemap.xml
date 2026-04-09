@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://reddevil-airsoft.vercel.app/</loc>
+  </url>
+  <url>
+    <loc>https://reddevil-airsoft.vercel.app/category?slug=about</loc>
+  </url>
+  <url>
+    <loc>https://reddevil-airsoft.vercel.app/category?slug=highlights</loc>
+  </url>
+  <url>
+    <loc>https://reddevil-airsoft.vercel.app/category?slug=team</loc>
+  </url>
+  <url>
+    <loc>https://reddevil-airsoft.vercel.app/category?slug=field</loc>
+  </url>
+  <url>
+    <loc>https://reddevil-airsoft.vercel.app/category?slug=faq</loc>
+  </url>
+  <url>
+    <loc>https://reddevil-airsoft.vercel.app/category?slug=events</loc>
+  </url>
+  <url>
+    <loc>https://reddevil-airsoft.vercel.app/category?slug=sponsors</loc>
+  </url>
+</urlset>
