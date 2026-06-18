@@ -135,6 +135,7 @@ const el = {
   lockScreen: document.querySelector('#lock-screen'),
   adminContent: document.querySelector('#admin-content'),
   loginForm: document.querySelector('#login-form'),
+  adminUsername: document.querySelector('#admin-username'),
   adminPass: document.querySelector('#admin-pass'),
   loginStatus: document.querySelector('#login-status'),
   logoutBtn: document.querySelector('#logout-btn'),
@@ -520,17 +521,27 @@ function handleAuthExpired(message = 'Oturum suresi doldu. Tekrar giris yapin.')
 }
 
 async function apiRequest(url, options = {}) {
-  const response = await fetch(url, {
-    method: options.method || 'GET',
-    credentials: 'same-origin',
-    headers: {
-      Accept: 'application/json',
-      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
-      ...(options.headers || {}),
-    },
-    body: options.body ? JSON.stringify(options.body) : undefined,
-    cache: 'no-store',
-  });
+  let response;
+
+  try {
+    response = await fetch(url, {
+      method: options.method || 'GET',
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(options.headers || {}),
+      },
+      body: options.body ? JSON.stringify(options.body) : undefined,
+      cache: 'no-store',
+    });
+  } catch (error) {
+    const isFilePage = window.location.protocol === 'file:';
+    const message = isFilePage
+      ? 'Admin API calismiyor. Paneli dosya olarak acma; Vercel deploy veya vercel dev ile ac.'
+      : 'Admin API istegi basarisiz. Deploy ve environment variable ayarlarini kontrol et.';
+    throw new Error(message);
+  }
 
   const rawText = await response.text();
   const payload = rawText ? safeParse(rawText, null) : null;
@@ -1749,19 +1760,23 @@ function bindEvents() {
     try {
       await apiRequest(ADMIN_LOGIN_ENDPOINT, {
         method: 'POST',
-        body: { passcode: el.adminPass.value },
+        body: {
+          username: el.adminUsername?.value || '',
+          passcode: el.adminPass.value,
+        },
       });
 
       setSession(true);
       await loadRemoteState();
       toggleAdminLock(false);
       setInlineStatus(el.loginStatus, 'Giris basarili.', 'success');
+      if (el.adminUsername) el.adminUsername.value = '';
       el.adminPass.value = '';
     } catch (error) {
       console.error(error);
       if (isUnauthorizedError(error)) {
         setSession(false);
-        setInlineStatus(el.loginStatus, 'Sifre yanlis.', 'error');
+        setInlineStatus(el.loginStatus, 'Kullanici adi veya sifre yanlis.', 'error');
         return;
       }
       setInlineStatus(el.loginStatus, error.message || 'Giris yapilamadi.', 'error');
