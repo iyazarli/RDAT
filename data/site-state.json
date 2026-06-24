@@ -9,7 +9,7 @@
       "badge": "Lider",
       "photo": "https://images.unsplash.com/photo-1608064229007-dca149d32c4f?auto=format&fit=crop&w=900&q=80",
       "bio": "Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.",
-      "expertise": "Komuta & Entry",
+      "expertise": "DMR",
       "seasons": "5. sezon",
       "setup": "Hk416a5 - SSP18"
     },
@@ -576,6 +576,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:07:47.627Z"
+    "updatedAt": "2026-06-24T22:08:39.411Z"
   }
 }
