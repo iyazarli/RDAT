@@ -456,19 +456,6 @@
         "ctaHref": "index.html#apply",
         "blocks": [
           {
-            "id": "cat_events_block_1",
-            "title": "Woodland Gunu | Ocak 2026",
-            "text": "Sabah sisli sahada 4 takimli bayrak senaryosu oynandi. 32 oyuncu katildi.",
-            "tag": "Woodland",
-            "imageUrl": "https://images.unsplash.com/photo-1504039268625-5f3f6f7f2f53?auto=format&fit=crop&w=1600&q=80",
-            "url": "",
-            "gallery": [
-              "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1600&q=80",
-              "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1600&q=80",
-              "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1600&q=80"
-            ]
-          },
-          {
             "id": "cat_events_block_2",
             "title": "CQB Gece Operasyonu",
             "text": "Kapali alanda dusuk isikta role dayali mini-milsim gorevleri uygulandi.",
@@ -589,6 +576,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:14:24.997Z"
+    "updatedAt": "2026-06-24T22:15:19.536Z"
   }
 }
