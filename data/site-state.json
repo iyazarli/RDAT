@@ -456,19 +456,6 @@
         "ctaHref": "index.html#apply",
         "blocks": [
           {
-            "id": "cat_events_block_4",
-            "title": "Orman Senaryosu | Kocaeli",
-            "text": "Uzun mesafe devriye ve lojistik gorevleri iceren 6 saatlik oyun oturumu.",
-            "tag": "MilSim",
-            "imageUrl": "https://images.unsplash.com/photo-1519669417670-68775a50919c?auto=format&fit=crop&w=1600&q=80",
-            "url": "",
-            "gallery": [
-              "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
-              "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1600&q=80",
-              "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80"
-            ]
-          },
-          {
             "id": "block_c2560cee-e667-449b-9875-6399c199d3aa",
             "title": "Marmara Airsoft Turnuvası 2025",
             "text": "Sakarya'nın Karasu ilçesinde 2025 yılında düzenlenen ve ülke çapında 25 takımın katılımıyla gerçekleştirilen 2 gün süren turnuvadan ekibimizin harika anıları.",
@@ -550,6 +537,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:15:24.921Z"
+    "updatedAt": "2026-06-24T22:15:28.700Z"
   }
 }
