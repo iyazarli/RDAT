@@ -3,15 +3,15 @@
   "teamProfiles": [
     {
       "id": "team_ghost",
-      "name": "Kagan",
-      "callsign": "Ghost",
+      "name": "Şenol",
+      "callsign": "Amca",
       "title": "Takim lideri | Oyun kurgu",
       "badge": "Lider",
       "photo": "https://images.unsplash.com/photo-1608064229007-dca149d32c4f?auto=format&fit=crop&w=900&q=80",
       "bio": "Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.",
       "expertise": "Komuta & Entry",
       "seasons": "5. sezon",
-      "setup": "M4 + red dot"
+      "setup": "Hk416a5 - SSP18"
     },
     {
       "id": "team_mamba",
@@ -576,6 +576,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:05:33.141Z"
+    "updatedAt": "2026-06-24T22:06:38.070Z"
   }
 }
