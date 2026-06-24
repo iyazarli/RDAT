@@ -7,11 +7,11 @@
       "callsign": "Ghost",
       "title": "Takim lideri | Oyun kurgu",
       "badge": "Lider",
+      "photo": "https://images.unsplash.com/photo-1608064229007-dca149d32c4f?auto=format&fit=crop&w=900&q=80",
       "bio": "Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.",
       "expertise": "Komuta & Entry",
       "seasons": "5. sezon",
-      "setup": "M4 + red dot",
-      "photo": "https://images.unsplash.com/photo-1608064229007-dca149d32c4f?auto=format&fit=crop&w=900&q=80"
+      "setup": "M4 + red dot"
     },
     {
       "id": "team_mamba",
@@ -19,11 +19,11 @@
       "callsign": "Mamba",
       "title": "Safety Officer | Medic egitimi",
       "badge": "Safety",
+      "photo": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=80",
       "bio": "Guvenlik brifingi, ilk yardim kiti ve saha ici risk kontrolunu yonetir.",
       "expertise": "Medic & Safety",
       "seasons": "4. sezon",
-      "setup": "SMG + sidearm",
-      "photo": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=80"
+      "setup": "SMG + sidearm"
     },
     {
       "id": "team_forge",
@@ -31,11 +31,11 @@
       "callsign": "Forge",
       "title": "Ekipman mentoru",
       "badge": "Tech",
+      "photo": "https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=900&q=80",
       "bio": "Kronograf, bakim, yedek ekipman ve butce dostu setup onerileri sunar.",
       "expertise": "Tech & DMR",
       "seasons": "6. sezon",
-      "setup": "DMR 1.64J",
-      "photo": "https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=900&q=80"
+      "setup": "DMR 1.64J"
     },
     {
       "id": "team_spark",
@@ -43,11 +43,11 @@
       "callsign": "Spark",
       "title": "Medya | After Action",
       "badge": "Media",
+      "photo": "https://images.unsplash.com/photo-1522556189639-b150c3a2e10f?auto=format&fit=crop&w=900&q=80",
       "bio": "Oyun goruntuleri, highlight montajlari ve AAR notlarinin paylasimini yapar.",
       "expertise": "Recon & Media",
       "seasons": "3. sezon",
-      "setup": "Carbine + action cam",
-      "photo": "https://images.unsplash.com/photo-1522556189639-b150c3a2e10f?auto=format&fit=crop&w=900&q=80"
+      "setup": "Carbine + action cam"
     },
     {
       "id": "team_placeholder_5",
@@ -55,11 +55,11 @@
       "callsign": "Callsign",
       "title": "Rol - Guncelleniyor",
       "badge": "Member",
+      "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80",
       "bio": "Oyuncu bilgileri yakin zamanda eklenecek.",
       "expertise": "-",
       "seasons": "-",
-      "setup": "-",
-      "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80"
+      "setup": "-"
     },
     {
       "id": "team_placeholder_6",
@@ -67,11 +67,11 @@
       "callsign": "Callsign",
       "title": "Rol - Guncelleniyor",
       "badge": "Member",
+      "photo": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80",
       "bio": "Oyuncu bilgileri yakin zamanda eklenecek.",
       "expertise": "-",
       "seasons": "-",
-      "setup": "-",
-      "photo": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80"
+      "setup": "-"
     },
     {
       "id": "team_placeholder_7",
@@ -79,11 +79,11 @@
       "callsign": "Callsign",
       "title": "Rol - Guncelleniyor",
       "badge": "Member",
+      "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80",
       "bio": "Oyuncu bilgileri yakin zamanda eklenecek.",
       "expertise": "-",
       "seasons": "-",
-      "setup": "-",
-      "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80"
+      "setup": "-"
     },
     {
       "id": "team_placeholder_8",
@@ -91,11 +91,11 @@
       "callsign": "Callsign",
       "title": "Rol - Guncelleniyor",
       "badge": "Member",
+      "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80",
       "bio": "Oyuncu bilgileri yakin zamanda eklenecek.",
       "expertise": "-",
       "seasons": "-",
-      "setup": "-",
-      "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80"
+      "setup": "-"
     }
   ],
   "siteConfig": {
@@ -113,10 +113,10 @@
     },
     "home": {
       "hero": {
-        "eyebrow": "Taktik disiplin • Guvenli oyun • Gercek ekip ruhu",
+        "eyebrow": "Taktik disiplin • Guvenli oyun • Gercek Ekip Ruhu",
         "titleMain": "Reddevil Airsoft",
         "titleAccent": "Sahada Goruselim",
-        "lede": "Marmara bolgesinde aktif sahalarda oynayan, takim koordinasyonuna ve guvenlige onem veren bir airsoft topluluguyuz. Yeni oyunculara egitim, ekipman rehberi ve rol calismalari sunuyoruz.",
+        "lede": "Eskişehir bolgesinde aktif sahalarda oynayan, takim koordinasyonuna ve disipline onem veren bir airsoft topluluguyuz. Yeni oyunculara egitim, ekipman rehberi ve rol calismalari sunuyoruz.",
         "ctaPrimaryText": "Takima Katil",
         "ctaPrimaryHref": "#apply",
         "ctaSecondaryText": "Takimi Tani",
@@ -125,17 +125,17 @@
       "metrics": [
         {
           "id": "metric_players",
-          "value": "30+",
+          "value": "10+",
           "label": "Aktif oyuncu"
         },
         {
           "id": "metric_days",
-          "value": "12",
+          "value": "4",
           "label": "Aylik saha gunu"
         },
         {
           "id": "metric_roles",
-          "value": "4",
+          "value": "6",
           "label": "Rol kilavuzu"
         }
       ],
@@ -145,22 +145,22 @@
           {
             "id": "op_type",
             "label": "Oyun tipi",
-            "value": "MilSim / SpeedQB karma"
+            "value": "MilSim"
           },
           {
             "id": "op_field",
             "label": "Ana saha",
-            "value": "Istanbul & Kocaeli woodland"
+            "value": "Eskisehir"
           },
           {
             "id": "op_radio",
             "label": "Takim frekansi",
-            "value": "PMR CH 6"
+            "value": "444.222"
           },
           {
             "id": "op_priority",
             "label": "Oncelik",
-            "value": "Guvenlik, disiplin, senaryo"
+            "value": "Takım Oyunu, Disiplin, Güven"
           }
         ],
         "tag": "Yeni oyuncular icin orientasyon saglanir"
@@ -168,7 +168,7 @@
       "about": {
         "eyebrow": "Hakkimizda",
         "title": "Sahada koordinasyon ve guvenlige odakli, butik bir airsoft ekibiyiz.",
-        "text": "Reddevil; cesitli saha tiplerinde (CQB, woodland, endustriyel) duzenli olarak oynayan, fair-play kurallarina sadik, guvenligi onceleyen bir takimdi. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
+        "text": "Reddevil; cesitli saha tiplerinde (CQB, woodland, endustriyel) duzenli olarak oynayan, fair-play kurallarina sadik, disiplin ve koordinasyonu hedefleyen bir takimdi. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
         "pills": [
           "Ekipman rehberi",
           "Senaryo brifing",
@@ -222,8 +222,8 @@
       },
       "field": {
         "eyebrow": "Saha & Takvim",
-        "title": "Istanbul / Kocaeli woodland ve donemsel CQB organizasyonlari",
-        "subtitle": "Aylik takvim: her ay 2 woodland, 1 CQB, 1 gece oyunu. Ozel etkinlikler icin haftaici atolye duyurulari.",
+        "title": "Eskisehir Milsim Airsoft Oyunları",
+        "subtitle": "Aylik takvim: her ay Ormanlık Arazi, Meskun Mahal Çatışmaları ve Savunma Hucum Senaryoları ve Ozel etkinlikler icin haftaici atolye duyurulari.",
         "schedule": [
           {
             "id": "sch_meet",
@@ -234,17 +234,12 @@
             "id": "sch_start",
             "label": "Oyun baslangici",
             "value": "09:00"
-          },
-          {
-            "id": "sch_night",
-            "label": "Gece oyunu",
-            "value": "Cuma 21:00"
           }
         ],
         "note": "Adres ve haftalik konum bilgisi basvuru onayi sonrasi paylasilir.",
         "checklistTitle": "Hazirlik Kontrol Listesi",
         "checklist": [
-          "Chrono limiti: 1.14J (AEG) / 1.64J (DMR) / 2.3J (Bolt)",
+          "Chrono limiti: 1.0J (Tabanca) / 1.4J (CQB) / 1.6J (Assault) / 2.0J (DMR) / 3.0J (Sniper)",
           "Eye-pro yedek, kirilmaz lens",
           "Su + enerji atistirmaligi",
           "Kiyafet: woodland uyumlu, saglam ayakkabi"
@@ -284,7 +279,7 @@
       },
       "footer": {
         "blurb": "Guvenli, disiplinli ve eglenceli airsoft deneyimi. Basvurular inceleme sonrasi e-posta ile yanitlanir.",
-        "instagram": "@reddevil.airsoft",
+        "instagram": "@reddevilairsoftteam",
         "email": "team@reddevilairsoft.com",
         "quickTags": [
           "Guvenlik odakli",
@@ -310,14 +305,18 @@
             "title": "Takim Felsefesi",
             "text": "Fair-play, guvenlik ve iletisim protokolu oyunun merkezindedir.",
             "tag": "Kultur",
-            "imageUrl": "https://images.unsplash.com/photo-1520975878803-a3b0f5f58f92?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1520975878803-a3b0f5f58f92?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           },
           {
             "id": "cat_about_block_2",
             "title": "Ogrenme Ortami",
             "text": "Yeni oyuncular orientation ve mentor destegi ile sahaya adapte edilir.",
             "tag": "Egitim",
-            "imageUrl": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           }
         ]
       },
@@ -337,14 +336,18 @@
             "title": "Rol Drillleri",
             "text": "Rifleman, DMR, destek ve medic rollerinde mini senaryo calismalari.",
             "tag": "Taktik",
-            "imageUrl": "https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           },
           {
             "id": "cat_highlights_block_2",
             "title": "Ekipman Mentorlugu",
             "text": "Butceye uygun setup secimi, kronograf ve bakim destegi.",
             "tag": "Setup",
-            "imageUrl": "https://images.unsplash.com/photo-1563213126-a4273aed2016?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1563213126-a4273aed2016?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           }
         ]
       },
@@ -364,14 +367,18 @@
             "title": "Liderlik",
             "text": "Senaryo, saha planlamasi ve frekans koordinasyonu lider ekip tarafindan yonetilir.",
             "tag": "Komuta",
-            "imageUrl": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           },
           {
             "id": "cat_team_block_2",
             "title": "Safety Officer",
             "text": "Her etkinlikte guvenlik protokollerini denetleyen sorumlu bulunur.",
             "tag": "Safety",
-            "imageUrl": "https://images.unsplash.com/photo-1582719478170-5f6895d2f5f4?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1582719478170-5f6895d2f5f4?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           }
         ]
       },
@@ -391,14 +398,18 @@
             "title": "Woodland Operasyonlari",
             "text": "Aylik duzende woodland agirlikli oyunlar ile uzun mesafe koordinasyon calisilir.",
             "tag": "Outdoor",
-            "imageUrl": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           },
           {
             "id": "cat_field_block_2",
             "title": "CQB ve Gece Oyunu",
             "text": "Yakin mesafe refleks, iletisim ve takim hareketi odakli etkinlikler yapilir.",
             "tag": "CQB",
-            "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           }
         ]
       },
@@ -418,14 +429,18 @@
             "title": "Ekipman",
             "text": "Yedek ekipman sinirli sayida mevcuttur; temel goz koruma zorunludur.",
             "tag": "Hazirlik",
-            "imageUrl": "https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           },
           {
             "id": "cat_faq_block_2",
             "title": "Yas ve Kurallar",
             "text": "18+ onceliklidir; tum oyuncular guvenlik brifingine katilmak zorundadir.",
             "tag": "Kurallar",
-            "imageUrl": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1400&q=80"
+            "imageUrl": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1400&q=80",
+            "url": "",
+            "gallery": []
           }
         ]
       },
@@ -446,6 +461,7 @@
             "text": "Sabah sisli sahada 4 takimli bayrak senaryosu oynandi. 32 oyuncu katildi.",
             "tag": "Woodland",
             "imageUrl": "https://images.unsplash.com/photo-1504039268625-5f3f6f7f2f53?auto=format&fit=crop&w=1600&q=80",
+            "url": "",
             "gallery": [
               "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1600&q=80",
               "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1600&q=80",
@@ -458,6 +474,7 @@
             "text": "Kapali alanda dusuk isikta role dayali mini-milsim gorevleri uygulandi.",
             "tag": "CQB",
             "imageUrl": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1600&q=80",
+            "url": "",
             "gallery": [
               "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1600&q=80",
               "https://images.unsplash.com/photo-1509824227185-9c5a01ceba0d?auto=format&fit=crop&w=1600&q=80",
@@ -470,6 +487,7 @@
             "text": "Telsiz disiplin, stack giris ve medic tahliye protokolleri tekrarlandi.",
             "tag": "Atolye",
             "imageUrl": "https://images.unsplash.com/photo-1529651737248-dad5e287768e?auto=format&fit=crop&w=1600&q=80",
+            "url": "",
             "gallery": [
               "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1600&q=80",
               "https://images.unsplash.com/photo-1485217988980-11786ced9454?auto=format&fit=crop&w=1600&q=80",
@@ -482,6 +500,7 @@
             "text": "Uzun mesafe devriye ve lojistik gorevleri iceren 6 saatlik oyun oturumu.",
             "tag": "MilSim",
             "imageUrl": "https://images.unsplash.com/photo-1519669417670-68775a50919c?auto=format&fit=crop&w=1600&q=80",
+            "url": "",
             "gallery": [
               "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
               "https://images.unsplash.com/photo-1470770903676-69b98201ea1c?auto=format&fit=crop&w=1600&q=80",
@@ -507,7 +526,8 @@
             "text": "Airsoft ve outdoor ekipman tedarik destegi.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/izmiravmarket.png",
-            "url": "https://izmiravmarket.com"
+            "url": "https://izmiravmarket.com",
+            "gallery": []
           },
           {
             "id": "cat_sponsors_block_2",
@@ -515,7 +535,8 @@
             "text": "Optik sistemler ve saha gorus ekipmanlari.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/vector-optics.svg",
-            "url": "https://www.vectoroptics.com"
+            "url": "https://www.vectoroptics.com",
+            "gallery": []
           },
           {
             "id": "cat_sponsors_block_3",
@@ -523,7 +544,8 @@
             "text": "Airsoft platformlari ve etkinlik katkisi.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/isgairsoft.png",
-            "url": "https://isgairsoft.com"
+            "url": "https://isgairsoft.com",
+            "gallery": []
           },
           {
             "id": "cat_sponsors_block_4",
@@ -531,7 +553,8 @@
             "text": "Koruyucu ekipman ve taktik aksesuar destegi.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/armorion.png",
-            "url": "https://www.armorion.com"
+            "url": "https://www.armorion.com",
+            "gallery": []
           },
           {
             "id": "cat_sponsors_block_5",
@@ -539,7 +562,8 @@
             "text": "Yerel ekipman tedarik ve saha is birligi.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/poligunstore.png",
-            "url": "https://poligunstore.com"
+            "url": "https://poligunstore.com",
+            "gallery": []
           }
         ]
       }
@@ -552,6 +576,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-04-09T09:50:32.675Z"
+    "updatedAt": "2026-06-24T21:24:23.048Z"
   }
 }
