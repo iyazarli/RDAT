@@ -456,19 +456,6 @@
         "ctaHref": "index.html#apply",
         "blocks": [
           {
-            "id": "cat_events_block_3",
-            "title": "Takim Drill Atolyesi",
-            "text": "Telsiz disiplin, stack giris ve medic tahliye protokolleri tekrarlandi.",
-            "tag": "Atolye",
-            "imageUrl": "https://images.unsplash.com/photo-1529651737248-dad5e287768e?auto=format&fit=crop&w=1600&q=80",
-            "url": "",
-            "gallery": [
-              "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1600&q=80",
-              "https://images.unsplash.com/photo-1485217988980-11786ced9454?auto=format&fit=crop&w=1600&q=80",
-              "https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=1600&q=80"
-            ]
-          },
-          {
             "id": "cat_events_block_4",
             "title": "Orman Senaryosu | Kocaeli",
             "text": "Uzun mesafe devriye ve lojistik gorevleri iceren 6 saatlik oyun oturumu.",
@@ -563,6 +550,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:15:22.781Z"
+    "updatedAt": "2026-06-24T22:15:24.921Z"
   }
 }
