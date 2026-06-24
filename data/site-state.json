@@ -456,19 +456,6 @@
         "ctaHref": "index.html#apply",
         "blocks": [
           {
-            "id": "cat_events_block_2",
-            "title": "CQB Gece Operasyonu",
-            "text": "Kapali alanda dusuk isikta role dayali mini-milsim gorevleri uygulandi.",
-            "tag": "CQB",
-            "imageUrl": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1600&q=80",
-            "url": "",
-            "gallery": [
-              "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1600&q=80",
-              "https://images.unsplash.com/photo-1509824227185-9c5a01ceba0d?auto=format&fit=crop&w=1600&q=80",
-              "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80"
-            ]
-          },
-          {
             "id": "cat_events_block_3",
             "title": "Takim Drill Atolyesi",
             "text": "Telsiz disiplin, stack giris ve medic tahliye protokolleri tekrarlandi.",
@@ -576,6 +563,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:15:19.536Z"
+    "updatedAt": "2026-06-24T22:15:22.781Z"
   }
 }
