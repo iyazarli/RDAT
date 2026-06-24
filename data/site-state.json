@@ -482,9 +482,9 @@
             ]
           },
           {
-            "id": "block_e2b8fc3c-9d07-47eb-aeb7-5a2e7b030197",
+            "id": "block_23609bf0-9092-4071-9999-da0cea1e3387",
             "title": "WAR Z - III APOCALYPSE",
-            "text": "4-25 Mayıs tarihlerinde İzmir Çeşme’de terkedilmiş, kale konseptli bir otelde gerçekleştirilmiştir. Toplam 300 katılımcının yer aldığı bu etkinlik 11 saat sürmüştür.",
+            "text": "24-25 Mayıs tarihlerinde İzmir Çeşme’de terkedilmiş, kale konseptli bir otelde gerçekleştirilmiştir. Toplam 300 katılımcının yer aldığı bu etkinlik 11 saat sürmüştür.",
             "tag": "WarZ",
             "imageUrl": "https://images.unsplash.com/photo-1529651737248-dad5e287768e?auto=format&fit=crop&w=1600&q=80",
             "url": "",
@@ -563,6 +563,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:19:19.694Z"
+    "updatedAt": "2026-06-24T22:22:45.463Z"
   }
 }
