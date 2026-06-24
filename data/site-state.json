@@ -480,6 +480,19 @@
               "https://images.unsplash.com/photo-1509824227185-9c5a01ceba0d?auto=format&fit=crop&w=1600&q=80",
               "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80"
             ]
+          },
+          {
+            "id": "block_e2b8fc3c-9d07-47eb-aeb7-5a2e7b030197",
+            "title": "WAR Z - III APOCALYPSE",
+            "text": "4-25 Mayıs tarihlerinde İzmir Çeşme’de terkedilmiş, kale konseptli bir otelde gerçekleştirilmiştir. Toplam 300 katılımcının yer aldığı bu etkinlik 11 saat sürmüştür.",
+            "tag": "WarZ",
+            "imageUrl": "https://images.unsplash.com/photo-1529651737248-dad5e287768e?auto=format&fit=crop&w=1600&q=80",
+            "url": "",
+            "gallery": [
+              "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1600&q=80",
+              "https://images.unsplash.com/photo-1485217988980-11786ced9454?auto=format&fit=crop&w=1600&q=80",
+              "https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=1600&q=80"
+            ]
           }
         ]
       },
@@ -550,6 +563,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:17:50.864Z"
+    "updatedAt": "2026-06-24T22:19:19.694Z"
   }
 }
