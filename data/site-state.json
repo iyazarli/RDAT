@@ -199,7 +199,7 @@
             "id": "hl_roles",
             "title": "Rol Calismalari",
             "description": "Rifleman, DMR, destek ve medic rollerinde mini drill'ler; telsiz iletisim protokolleri.",
-            "chip": "Atolye"
+            "chip": "Antreman"
           },
           {
             "id": "hl_gear",
@@ -576,6 +576,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:02:54.397Z"
+    "updatedAt": "2026-06-24T22:03:14.482Z"
   }
 }
