@@ -179,10 +179,10 @@
         "criteriaItems": [
           "18+ yas (18 alti icin veli onayi sart)",
           "ANSI Z87.1+ gozluk veya tam yuz maskesi",
-          "Alan hakem ve kural brifinglerine uyum",
-          "Kendi ulasimini saglayabilmek"
+          "Hakem ve kural brifinglerine uyum",
+          "Takım içi Disiplin ve Dostluk"
         ],
-        "criteriaNote": "Kendi ekipmani olmayanlar icin sinirli yedek set mevcut."
+        "criteriaNote": "Kendi ekipmani olmayanlar icin sınırlı yedek set mevcut."
       },
       "highlights": {
         "eyebrow": "Ne Sunuyoruz",
@@ -576,6 +576,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T21:53:39.283Z"
+    "updatedAt": "2026-06-24T21:56:34.999Z"
   }
 }
