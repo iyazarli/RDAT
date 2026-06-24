@@ -209,9 +209,9 @@
           },
           {
             "id": "hl_media",
-            "title": "Medya & Icerik",
-            "description": "Oyun sonrasi secilmis foto/video paylasimi, highlight montajlari, takim arsivi.",
-            "chip": "Produksiyon"
+            "title": "Ulusal ve Uluslararası Başarı",
+            "description": "Ulusal veya Uluslararası Düzeyde Yapılan Organizasyonlar - Turnuvalara Katılma İmkanı",
+            "chip": "Başarı"
           }
         ]
       },
@@ -576,6 +576,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:00:45.622Z"
+    "updatedAt": "2026-06-24T22:02:26.584Z"
   }
 }
