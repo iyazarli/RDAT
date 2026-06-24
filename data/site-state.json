@@ -193,7 +193,7 @@
             "id": "hl_safety",
             "title": "Ömür Boyu Sadakat",
             "description": "Hem Sahada Hemde Saha Dışında Ömür Boyu Birbirinine Sırtını Dayabilecek Bir Ekip",
-            "chip": "Ekip #1"
+            "chip": "Ekip"
           },
           {
             "id": "hl_roles",
@@ -576,6 +576,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-06-24T22:03:14.482Z"
+    "updatedAt": "2026-06-24T22:03:31.784Z"
   }
 }
