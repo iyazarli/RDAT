@@ -3,63 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reddevil Admin Panel</title>
+  <title>Reddevil | Yönetim Paneli</title>
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#0b1110">
+  <meta name="theme-color" content="#0b0e09">
   <link rel="icon" type="image/png" href="assets/brand/reddevil-logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin.css?v=20260409-3">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=General+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css?v=20260928-1">
 </head>
 <body>
   <div class="admin-shell">
     <aside class="sidebar">
-      <a class="brand-block" href="index.html" aria-label="Ana sayfaya don">
+      <a class="brand-block" href="index.html" aria-label="Ana sayfaya dön">
         <div class="brand-mark logo-image" data-admin-brand-mark style="background-image: url('assets/brand/reddevil-logo.svg');">RD</div>
         <div>
           <strong>Reddevil Ops</strong>
-          <small>Admin Console</small>
+          <small>YÖNETİM</small>
         </div>
       </a>
 
-      <nav class="sidebar-nav" aria-label="Admin bolumleri">
-        <button class="nav-item active" data-panel-target="dashboard">Dashboard</button>
-        <button class="nav-item" data-panel-target="applications">Basvurular</button>
-        <button class="nav-item" data-panel-target="team">Takim Kartlari</button>
-        <button class="nav-item" data-panel-target="content">Icerik CMS</button>
+      <nav class="sidebar-nav" aria-label="Yönetim bölümleri">
+        <button class="nav-item active" data-panel-target="dashboard">Genel Bakış</button>
+        <button class="nav-item" data-panel-target="applications">Başvurular</button>
+        <button class="nav-item" data-panel-target="team">Ekip Kartları</button>
+        <button class="nav-item" data-panel-target="content">Site İçeriği</button>
         <button class="nav-item" data-panel-target="settings">Ayarlar</button>
       </nav>
 
       <div class="sidebar-foot">
-        <a href="index.html">Siteye Don</a>
+        <a href="index.html">Siteyi Görüntüle</a>
       </div>
     </aside>
 
     <main class="main-view">
       <header class="topbar">
         <div>
-          <h1>Airsoft Admin Panel</h1>
-          <p>Basvurulari, takim kartlarini ve site iceriklerini yonet.</p>
+          <p class="page-kicker">REDDEVIL AIRSOFT / OPERASYON</p>
+          <h1>Yönetim Paneli</h1>
+          <p>Başvuruları, ekip profillerini ve site içeriklerini yönetin.</p>
         </div>
         <div class="topbar-actions">
           <button id="logout-btn" class="ghost-btn">Oturumu Kapat</button>
-          <a class="primary-btn" href="index.html">Canli Site</a>
+          <a class="primary-btn" href="index.html">Canlı Site</a>
         </div>
       </header>
 
       <section id="lock-screen" class="lock-screen">
         <div class="lock-card">
-          <h2>Yonetici Girisi</h2>
-          <p>Bu panel artik server tarafinda oturum acar ve kalici veriyi private Blob store uzerinden yonetir.</p>
+          <p class="page-kicker">GÜVENLİ YÖNETİM ALANI</p>
+          <h2>Yönetici Girişi</h2>
+          <p>Yönetim alanına erişmek için hesabınızla giriş yapın.</p>
           <form id="login-form" class="stack-form">
-            <label>Kullanici Adi
-              <input id="admin-username" type="text" autocomplete="username" placeholder="ADMIN_USERS kullanici adi">
+            <label>Kullanıcı adı
+              <input id="admin-username" type="text" autocomplete="username" placeholder="Yönetici kullanıcı adınız">
             </label>
-            <label>Sifre
-              <input id="admin-pass" type="password" autocomplete="current-password" required placeholder="Vercel env sifrenizi girin">
+            <label>Şifre
+              <input id="admin-pass" type="password" autocomplete="current-password" required placeholder="Şifrenizi girin">
             </label>
-            <button type="submit" class="primary-btn full">Panele Gir</button>
+            <button type="submit" class="primary-btn full">Giriş Yap</button>
             <div id="login-status" class="inline-status" aria-live="polite"></div>
           </form>
         </div>
@@ -69,7 +71,7 @@
         <section class="panel active" data-panel="dashboard">
           <div class="metric-grid">
             <article class="metric-card">
-              <h3>Toplam Basvuru</h3>
+              <h3>Toplam Başvuru</h3>
               <strong id="metric-total">0</strong>
             </article>
             <article class="metric-card">
@@ -89,14 +91,14 @@
           <div class="panel-grid">
             <article class="soft-card">
               <header>
-                <h3>Rol Dagilimi</h3>
+                <h3>Rol Dağılımı</h3>
               </header>
               <div id="role-chart" class="chart-list"></div>
             </article>
 
             <article class="soft-card">
               <header>
-                <h3>Deneyim Dagilimi</h3>
+                <h3>Deneyim Dağılımı</h3>
               </header>
               <div id="experience-chart" class="chart-list"></div>
             </article>
@@ -110,7 +112,7 @@
 
             <article class="soft-card full-width">
               <header>
-                <h3>Client Hatalari</h3>
+                <h3>İstemci Hataları</h3>
               </header>
               <ul id="error-activity" class="activity-list"></ul>
             </article>
@@ -120,7 +122,7 @@
         <section class="panel" data-panel="applications">
           <article class="soft-card">
             <header class="card-header">
-              <h3>Basvuru Yonetimi</h3>
+              <h3>Başvuru Yönetimi</h3>
               <div class="header-actions">
                 <button id="seed-samples-btn" class="ghost-btn">Ornek Veri Yukle</button>
                 <button id="export-csv-btn" class="ghost-btn">CSV Indir</button>
@@ -174,7 +176,7 @@
 
           <article class="soft-card detail-card">
             <header class="card-header">
-              <h3>Basvuru Detayi</h3>
+              <h3>Başvuru Detayı</h3>
             </header>
 
             <form id="application-detail-form" class="stack-form">
@@ -216,7 +218,7 @@
         <section class="panel" data-panel="team">
           <article class="soft-card">
             <header class="card-header">
-              <h3>Takim Karti Yonetimi</h3>
+              <h3>Ekip Kartı Yönetimi</h3>
               <div class="header-actions">
                 <button id="reset-team-defaults" class="ghost-btn">Varsayilanlari Yukle</button>
               </div>
@@ -262,7 +264,7 @@
 
           <article class="soft-card">
             <header class="card-header">
-              <h3>Mevcut Takim Kartlari</h3>
+              <h3>Mevcut Ekip Kartları</h3>
             </header>
             <div id="team-list" class="team-list"></div>
           </article>
@@ -271,7 +273,7 @@
         <section class="panel" data-panel="content">
           <article class="soft-card">
             <header class="card-header">
-              <h3>Ana Metinler</h3>
+              <h3>Ana Sayfa Metinleri</h3>
               <div class="header-actions">
                 <button id="reset-content-defaults" class="ghost-btn" type="button">Varsayilanlari Yukle</button>
               </div>
@@ -414,7 +416,7 @@
 
           <article class="soft-card">
             <header class="card-header">
-              <h3>Highlights Kartlari</h3>
+              <h3>Öne Çıkanlar</h3>
             </header>
 
             <form id="highlight-form" class="stack-form">
@@ -440,7 +442,7 @@
 
           <article class="soft-card">
             <header class="card-header">
-              <h3>SSS Yonetimi</h3>
+              <h3>Sık Sorulan Sorular</h3>
             </header>
 
             <form id="faq-form-admin" class="stack-form">
@@ -500,7 +502,7 @@
 
           <article class="soft-card">
             <header class="card-header">
-              <h3>Kategori Sayfalari</h3>
+              <h3>Kategori Sayfaları</h3>
             </header>
 
             <form id="category-form" class="stack-form">
@@ -509,7 +511,7 @@
                 <input id="category-label" type="text" required>
               </label>
               <label>Slug
-                <input id="category-slug" type="text" required placeholder="ornek: highlights">
+                <input id="category-slug" type="text" required placeholder="ornek: team">
               </label>
               <label>Kategori Eyebrow
                 <input id="category-eyebrow" type="text" required>
@@ -542,7 +544,7 @@
 
           <article class="soft-card">
             <header class="card-header">
-              <h3>Kategori Bloklari</h3>
+              <h3>Kategori Blokları</h3>
             </header>
             <p class="helper-note">Blok eklemek icin once bir kategori sec.</p>
 
@@ -584,7 +586,7 @@
 
           <article class="soft-card">
             <header class="card-header">
-              <h3>Gelişmis JSON Editor</h3>
+              <h3>Gelişmiş JSON Düzenleyici</h3>
             </header>
             <p class="helper-note">Sitedeki tum alanlari tek seferde duzenlemek icin tum konfigu JSON olarak guncellenebilir.</p>
             <form id="site-config-json-form" class="stack-form">
@@ -603,7 +605,7 @@
         <section class="panel" data-panel="settings">
           <article class="soft-card">
             <header class="card-header">
-              <h3>Panel Ayarlari</h3>
+              <h3>Panel Ayarları</h3>
             </header>
 
             <form id="passcode-form" class="stack-form">
@@ -629,7 +631,7 @@
 
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script src="site-data-client.js?v=20260409-3"></script>
-  <script src="site-config.js?v=20260409-3"></script>
+  <script src="site-config.js?v=20260928-olive4"></script>
   <script src="admin.js?v=20260619-2"></script>
 </body>
 </html>
