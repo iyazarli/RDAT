@@ -167,7 +167,7 @@
       },
       "about": {
         "eyebrow": "Hakkımızda",
-        "title": "Sahada koordinasyon ve güvenlige odakli, butik bir airsoft ekibiyiz.",
+        "title": "Sahada koordinasyon ve taktik başarı odaklı arkada kimseyi bırakmamak misyonuna sahip bir Airsoft ekibiyiz.",
         "text": "Reddevil; cesitli saha tiplerinde (MILSIM, Orman, Şehir Çatışmaları, Hücum/Savunma) duzenli olarak oynayan, fair-play kurallarina sadik, disiplin ve koordinasyonu hedefleyen bir takimdir. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
         "pills": [
           "Ekipman rehberi",
@@ -581,6 +581,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-09-28T21:04:36.708Z"
+    "updatedAt": "2026-09-28T21:07:47.381Z"
   }
 }
