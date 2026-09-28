@@ -3,9 +3,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_ghost',
     name: 'Kagan',
     callsign: 'Ghost',
-    title: 'Takim lideri | Oyun kurgu',
+    title: 'Takım lideri • Oyun kurgusu',
     badge: 'Lider',
-    bio: 'Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.',
+    bio: 'Senaryo akışını ve saha koordinasyonunu planlar; telsiz iletişim düzeninin oyun boyunca korunmasına destek olur.',
     expertise: 'Komuta & Entry',
     seasons: '5. sezon',
     setup: 'M4 + red dot',
@@ -15,9 +15,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_mamba',
     name: 'Selin',
     callsign: 'Mamba',
-    title: 'Safety Officer | Medic egitimi',
+    title: 'Güvenlik sorumlusu • Medic eğitimi',
     badge: 'Safety',
-    bio: 'Guvenlik brifingi, ilk yardim kiti ve saha ici risk kontrolunu yonetir.',
+    bio: 'Güvenlik brifingini, ilk yardım hazırlığını ve saha içi risk kontrollerini yürütür.',
     expertise: 'Medic & Safety',
     seasons: '4. sezon',
     setup: 'SMG + sidearm',
@@ -29,7 +29,7 @@ const DEFAULT_TEAM_PROFILES = [
     callsign: 'Forge',
     title: 'Ekipman mentoru',
     badge: 'Tech',
-    bio: 'Kronograf, bakim, yedek ekipman ve butce dostu setup onerileri sunar.',
+    bio: 'Kronograf ve ekipman bakımı, yedek ekipman takibi ve bütçeye uygun kurulum önerilerinde destek verir.',
     expertise: 'Tech & DMR',
     seasons: '6. sezon',
     setup: 'DMR 1.64J',
@@ -39,9 +39,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_spark',
     name: 'Deniz',
     callsign: 'Spark',
-    title: 'Medya | After Action',
+    title: 'Medya • Oyun sonrası değerlendirme',
     badge: 'Media',
-    bio: 'Oyun goruntuleri, highlight montajlari ve AAR notlarinin paylasimini yapar.',
+    bio: 'Oyun görüntülerini ve seçili anları düzenler; ekip arşivinin ve oyun sonrası değerlendirme notlarının paylaşımına katkı sağlar.',
     expertise: 'Recon & Media',
     seasons: '3. sezon',
     setup: 'Carbine + action cam',
@@ -256,26 +256,26 @@ const DEFAULT_SITE_CONFIG = {
     {
       id: 'cat_about',
       slug: 'about',
-      label: 'Hakkimizda',
+      label: 'Hakkımızda',
       showInMenu: true,
-      eyebrow: 'Kategori',
-      title: 'Reddevil Hakkinda',
-      intro: 'Takim kulturumuz disiplin, guvenlik ve surekli gelisim odaklidir.',
-      ctaLabel: 'Basvuru Formuna Git',
+      eyebrow: 'TAKIM KÜLTÜRÜ',
+      title: 'Güvenli oyun, birlikte gelişim.',
+      intro: 'Reddevil; fair-play’i, açık iletişimi ve saha güvenliğini önceleyen bir airsoft ekibi. Yeni oyuncularla ilk oyun hazırlığını, ekipman listesini ve rol seçeneklerini birlikte gözden geçiririz.',
+      ctaLabel: 'İlk oyunu konuşalım',
       ctaHref: 'index.html#apply',
       blocks: [
         {
           id: 'cat_about_block_1',
-          title: 'Takim Felsefesi',
-          text: 'Fair-play, guvenlik ve iletisim protokolu oyunun merkezindedir.',
-          tag: 'Kultur',
+          title: 'Güvenlik ve fair-play',
+          text: 'Her oyun güvenlik brifingi ve saha kurallarıyla başlar. Oyunculardan kararları açıkça paylaşmaları, saha yönlendirmelerine uymaları ve karşılıklı saygıyı korumaları beklenir.',
+          tag: 'Güvenlik',
           imageUrl: 'https://images.unsplash.com/photo-1520975878803-a3b0f5f58f92?auto=format&fit=crop&w=1400&q=80'
         },
         {
           id: 'cat_about_block_2',
-          title: 'Ogrenme Ortami',
-          text: 'Yeni oyuncular orientation ve mentor destegi ile sahaya adapte edilir.',
-          tag: 'Egitim',
+          title: 'İlk oyuna birlikte hazırlan',
+          text: 'Ekipman listesi, oyun akışı ve rol seçenekleri ilk buluşmadan önce konuşulur. Sınırlı yedek ekipman olanağı ve uygunluk başvuru sırasında netleştirilir.',
+          tag: 'Yeni oyuncular',
           imageUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1400&q=80'
         }
       ]
@@ -285,24 +285,24 @@ const DEFAULT_SITE_CONFIG = {
       slug: 'team',
       label: 'Ekip',
       showInMenu: true,
-      eyebrow: 'Kategori',
-      title: 'Cekirdek Kadro',
-      intro: 'Oyun guvenligi, kurgu ve operasyon surecini yoneten cekirdek ekip.',
-      ctaLabel: 'Takimi Incele',
-      ctaHref: 'index.html#team',
+      eyebrow: 'ÇEKİRDEK KADRO',
+      title: 'Her rol, ortak bir oyuna katkı sağlar.',
+      intro: 'Oyun kurgusu, güvenlik, ekipman ve medya sorumlulukları çekirdek kadro içinde paylaşılır. Profil kartlarında ekip üyelerinin görev alanlarını ve uzmanlıklarını tanıyabilirsin.',
+      ctaLabel: 'İlk oyunu konuşalım',
+      ctaHref: 'index.html#apply',
       blocks: [
         {
           id: 'cat_team_block_1',
-          title: 'Liderlik',
-          text: 'Senaryo, saha planlamasi ve frekans koordinasyonu lider ekip tarafindan yonetilir.',
-          tag: 'Komuta',
+          title: 'Oyun kurgusu ve koordinasyon',
+          text: 'Senaryo akışı, saha planı ve telsiz iletişimi ekip içindeki liderlik görevlerinin parçasıdır.',
+          tag: 'Koordinasyon',
           imageUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=1400&q=80'
         },
         {
           id: 'cat_team_block_2',
-          title: 'Safety Officer',
-          text: 'Her etkinlikte guvenlik protokollerini denetleyen sorumlu bulunur.',
-          tag: 'Safety',
+          title: 'Güvenlik ve saha hazırlığı',
+          text: 'Güvenlik brifingi, saha içi risk kontrolü ve ilk yardım hazırlığı oyun öncesi planın parçasıdır.',
+          tag: 'Güvenlik',
           imageUrl: 'https://images.unsplash.com/photo-1582719478170-5f6895d2f5f4?auto=format&fit=crop&w=1400&q=80'
         }
       ]
@@ -312,23 +312,23 @@ const DEFAULT_SITE_CONFIG = {
       slug: 'field',
       label: 'Saha',
       showInMenu: true,
-      eyebrow: 'Kategori',
-      title: 'Saha ve Takvim',
-      intro: 'Woodland, CQB ve gece oyunlari icin surekli guncellenen takvim.',
-      ctaLabel: 'Takvimi Ogren',
+      eyebrow: 'SAHA VE OYUN AKIŞI',
+      title: 'Her saha için doğru hazırlık.',
+      intro: 'Woodland, CQB ve gece oyunlarında hazırlık ve oyun akışı değişebilir. Takvim ve katılım bilgileri duyuruda paylaşılır; kesin konum, katılım onayından sonra iletilir.',
+      ctaLabel: 'Saha ve takvimi gör',
       ctaHref: 'index.html#field',
       blocks: [
         {
           id: 'cat_field_block_1',
-          title: 'Woodland Operasyonlari',
-          text: 'Aylik duzende woodland agirlikli oyunlar ile uzun mesafe koordinasyon calisilir.',
-          tag: 'Outdoor',
+          title: 'Woodland • Açık arazi',
+          text: 'Görüş mesafesi, arazi ve senaryo akışı woodland oyunlarının hazırlığını belirler. Brifingde saha sınırları ve güvenlik kuralları netleştirilir.',
+          tag: 'Woodland',
           imageUrl: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1400&q=80'
         },
         {
           id: 'cat_field_block_2',
-          title: 'CQB ve Gece Oyunu',
-          text: 'Yakin mesafe refleks, iletisim ve takim hareketi odakli etkinlikler yapilir.',
+          title: 'CQB ve gece oyunları',
+          text: 'Yakın mesafe veya düşük ışık düzeninde hareket disiplini ve net iletişim öne çıkar. Etkinliğe özel hazırlık bilgileri duyuruda paylaşılır.',
           tag: 'CQB',
           imageUrl: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80'
         }
@@ -339,25 +339,53 @@ const DEFAULT_SITE_CONFIG = {
       slug: 'faq',
       label: 'SSS',
       showInMenu: true,
-      eyebrow: 'Kategori',
-      title: 'Sik Sorulan Sorular',
-      intro: 'Katilim, ekipman ve oyun kurallariyla ilgili temel yanitlar.',
-      ctaLabel: 'Basvuruya Gec',
+      eyebrow: 'KATILIM ÖNCESİ',
+      title: 'İlk oyunla ilgili merak edilenler',
+      intro: 'Katılım, ekipman ve güvenlik hakkında kısa yanıtlar. Tarih, saha ve organizasyon ücreti gibi etkinlik ayrıntıları duyuruda ayrıca paylaşılır.',
+      ctaLabel: 'Başvuruya geç',
       ctaHref: 'index.html#apply',
       blocks: [
         {
           id: 'cat_faq_block_1',
-          title: 'Ekipman',
-          text: 'Yedek ekipman sinirli sayida mevcuttur; temel goz koruma zorunludur.',
-          tag: 'Hazirlik',
-          imageUrl: 'https://images.unsplash.com/photo-1511882150382-421056c89033?auto=format&fit=crop&w=1400&q=80'
+          title: 'İlk kez katılabilir miyim?',
+          text: 'Evet. İlk oyun öncesinde güvenlik brifingi, temel ekipman ve oyun akışı hakkında bilgilendirme yapılır.',
+          tag: 'Katılım',
+          imageUrl: ''
         },
         {
           id: 'cat_faq_block_2',
-          title: 'Yas ve Kurallar',
-          text: '18+ onceliklidir; tum oyuncular guvenlik brifingine katilmak zorundadir.',
-          tag: 'Kurallar',
-          imageUrl: 'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1400&q=80'
+          title: 'Kendi ekipmanım yoksa?',
+          text: 'Sınırlı sayıda yedek set bulunur. Temel gözlük veya maske zorunludur; ekipman ihtiyacını başvuruda belirt.',
+          tag: 'Ekipman',
+          imageUrl: ''
+        },
+        {
+          id: 'cat_faq_block_3',
+          title: 'Yaş sınırı nedir?',
+          text: 'Genel katılım yaşı 18+’dır. 16–17 yaş aralığında yazılı veli izni ve saha onayı gerekir.',
+          tag: 'Yaş',
+          imageUrl: ''
+        },
+        {
+          id: 'cat_faq_block_4',
+          title: 'Düzenli aidat alınıyor mu?',
+          text: 'Aidat yok. Oyun ve organizasyon ücretleri sahaya göre değişir; özel etkinliklerde ön ödeme istenebilir.',
+          tag: 'Ücret',
+          imageUrl: ''
+        },
+        {
+          id: 'cat_faq_block_5',
+          title: 'Güvenlik brifingi zorunlu mu?',
+          text: 'Evet. Oyuna çıkmadan önce saha kuralları ve güvenlik brifingine uyulması gerekir.',
+          tag: 'Güvenlik',
+          imageUrl: ''
+        },
+        {
+          id: 'cat_faq_block_6',
+          title: 'Adres ve konum ne zaman paylaşılır?',
+          text: 'Adres ve haftalık konum bilgisi başvuru onayından sonra paylaşılır.',
+          tag: 'Konum',
+          imageUrl: ''
         }
       ]
     },

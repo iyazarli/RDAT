@@ -5,9 +5,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_ghost',
     name: 'Kagan',
     callsign: 'Ghost',
-    title: 'Takim lideri | Oyun kurgu',
+    title: 'Takım lideri • Oyun kurgusu',
     badge: 'Lider',
-    bio: 'Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.',
+    bio: 'Senaryo akışını ve saha koordinasyonunu planlar; telsiz iletişim düzeninin oyun boyunca korunmasına destek olur.',
     expertise: 'Komuta & Entry',
     seasons: '5. sezon',
     setup: 'M4 + red dot',
@@ -17,9 +17,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_mamba',
     name: 'Selin',
     callsign: 'Mamba',
-    title: 'Safety Officer | Medic egitimi',
+    title: 'Güvenlik sorumlusu • Medic eğitimi',
     badge: 'Safety',
-    bio: 'Guvenlik brifingi, ilk yardim kiti ve saha ici risk kontrolunu yonetir.',
+    bio: 'Güvenlik brifingini, ilk yardım hazırlığını ve saha içi risk kontrollerini yürütür.',
     expertise: 'Medic & Safety',
     seasons: '4. sezon',
     setup: 'SMG + sidearm',
@@ -31,7 +31,7 @@ const DEFAULT_TEAM_PROFILES = [
     callsign: 'Forge',
     title: 'Ekipman mentoru',
     badge: 'Tech',
-    bio: 'Kronograf, bakim, yedek ekipman ve butce dostu setup onerileri sunar.',
+    bio: 'Kronograf ve ekipman bakımı, yedek ekipman takibi ve bütçeye uygun kurulum önerilerinde destek verir.',
     expertise: 'Tech & DMR',
     seasons: '6. sezon',
     setup: 'DMR 1.64J',
@@ -41,9 +41,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_spark',
     name: 'Deniz',
     callsign: 'Spark',
-    title: 'Medya | After Action',
+    title: 'Medya • Oyun sonrası değerlendirme',
     badge: 'Media',
-    bio: 'Oyun goruntuleri, highlight montajlari ve AAR notlarinin paylasimini yapar.',
+    bio: 'Oyun görüntülerini ve seçili anları düzenler; ekip arşivinin ve oyun sonrası değerlendirme notlarının paylaşımına katkı sağlar.',
     expertise: 'Recon & Media',
     seasons: '3. sezon',
     setup: 'Carbine + action cam',
@@ -107,6 +107,43 @@ function loadTeamProfiles() {
   return DEFAULT_TEAM_PROFILES;
 }
 
+const LEGACY_TEAM_PROFILE_COPY = {
+  team_ghost: {
+    titles: ['Takim lideri | Oyun kurgu', 'Takim Lideri'],
+    title: 'Takım lideri • Oyun kurgusu',
+    bio: 'Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.',
+    updatedBio: 'Senaryo akışını ve saha koordinasyonunu planlar; telsiz iletişim düzeninin oyun boyunca korunmasına destek olur.',
+  },
+  team_mamba: {
+    titles: ['Safety Officer | Medic egitimi'],
+    title: 'Güvenlik sorumlusu • Medic eğitimi',
+    bio: 'Guvenlik brifingi, ilk yardim kiti ve saha ici risk kontrolunu yonetir.',
+    updatedBio: 'Güvenlik brifingini, ilk yardım hazırlığını ve saha içi risk kontrollerini yürütür.',
+  },
+  team_forge: {
+    titles: ['Ekipman mentoru'],
+    title: 'Ekipman mentoru',
+    bio: 'Kronograf, bakim, yedek ekipman ve butce dostu setup onerileri sunar.',
+    updatedBio: 'Kronograf ve ekipman bakımı, yedek ekipman takibi ve bütçeye uygun kurulum önerilerinde destek verir.',
+  },
+  team_spark: {
+    titles: ['Medya | After Action'],
+    title: 'Medya • Oyun sonrası değerlendirme',
+    bio: 'Oyun goruntuleri, highlight montajlari ve AAR notlarinin paylasimini yapar.',
+    updatedBio: 'Oyun görüntülerini ve seçili anları düzenler; ekip arşivinin ve oyun sonrası değerlendirme notlarının paylaşımına katkı sağlar.',
+  },
+};
+
+function migrateLegacyTeamProfileCopy(profile) {
+  const legacy = LEGACY_TEAM_PROFILE_COPY[profile && profile.id];
+  if (!legacy) return profile;
+  return {
+    ...profile,
+    title: legacy.titles.includes(profile.title) ? legacy.title : profile.title,
+    bio: profile.bio === legacy.bio ? legacy.updatedBio : profile.bio,
+  };
+}
+
 function updateCategoryMetadata(brandName, category, titleSuffix = '') {
   const label = category.label || 'Reddevil Airsoft';
   const title = `${label} | ${brandName} (RDAT)${titleSuffix}`;
@@ -157,7 +194,7 @@ function renderTeamCategory(config, teamProfiles) {
   if (!blockGrid) return;
 
   const profileSource = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
-  const profiles = profileSource.filter((profile) => {
+  const profiles = profileSource.map(migrateLegacyTeamProfileCopy).filter((profile) => {
     if (!profile || typeof profile !== 'object') return false;
     const name = String(profile?.name ?? '').trim();
     const callsign = String(profile?.callsign ?? '').trim();
@@ -187,9 +224,9 @@ function renderTeamCategory(config, teamProfiles) {
         </header>
         <p>${escapeHtml(p.bio)}</p>
         <ul class="category-person-meta">
-          <li><span>Uzmanlik</span><strong>${escapeHtml(p.expertise)}</strong></li>
-          <li><span>Takimda</span><strong>${escapeHtml(p.seasons)}</strong></li>
-          <li><span>Favori setup</span><strong>${escapeHtml(p.setup)}</strong></li>
+          <li><span>Uzmanlık alanı</span><strong>${escapeHtml(p.expertise)}</strong></li>
+          <li><span>Ekip deneyimi</span><strong>${escapeHtml(p.seasons)}</strong></li>
+          <li><span>Ekipman tercihi</span><strong>${escapeHtml(p.setup)}</strong></li>
         </ul>
       </div>
     </article>
