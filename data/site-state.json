@@ -117,9 +117,9 @@
         "titleMain": "Red Devil Airsoft",
         "titleAccent": "Sahada Görüşelim",
         "lede": "Eskişehir bölgesinde aktif sahalarda oynayan, takim koordinasyonuna ve disipline önem veren bir airsoft topluluguyuz. Yeni oyunculara egitim, ekipman rehberi ve rol calismalari sunuyoruz.",
-        "ctaPrimaryText": "Takima Katil",
+        "ctaPrimaryText": "Takima Katıl",
         "ctaPrimaryHref": "#apply",
-        "ctaSecondaryText": "Takimi Tani",
+        "ctaSecondaryText": "Takimi Tanı",
         "ctaSecondaryHref": "category.html?slug=about"
       },
       "metrics": [
@@ -131,12 +131,12 @@
         {
           "id": "metric_days",
           "value": "4",
-          "label": "Aylik saha gunu"
+          "label": "Ayda Minimum Oyun Sayısı"
         },
         {
           "id": "metric_roles",
           "value": "6",
-          "label": "Rol kilavuzu"
+          "label": "Pozisyon"
         }
       ],
       "operation": {
@@ -145,7 +145,7 @@
           {
             "id": "op_type",
             "label": "Oyun tipi",
-            "value": "MilSim"
+            "value": "Milsim"
           },
           {
             "id": "op_field",
@@ -163,11 +163,11 @@
             "value": "Takım Oyunu, Disiplin, Güven"
           }
         ],
-        "tag": "Yeni oyuncular icin orientasyon saglanir"
+        "tag": "Yeni oyuncular icin oryantasyon"
       },
       "about": {
-        "eyebrow": "Hakkimizda",
-        "title": "Sahada koordinasyon ve guvenlige odakli, butik bir airsoft ekibiyiz.",
+        "eyebrow": "Hakkımızda",
+        "title": "Sahada koordinasyon ve güvenlige odakli, butik bir airsoft ekibiyiz.",
         "text": "Reddevil; cesitli saha tiplerinde (MILSIM, Orman, Şehir Çatışmaları, Hücum/Savunma) duzenli olarak oynayan, fair-play kurallarina sadik, disiplin ve koordinasyonu hedefleyen bir takimdir. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
         "pills": [
           "Ekipman rehberi",
@@ -581,6 +581,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-09-28T21:02:24.365Z"
+    "updatedAt": "2026-09-28T21:04:36.708Z"
   }
 }
