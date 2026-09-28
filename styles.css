@@ -465,8 +465,10 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: rgba(va
 
 .home-footer {
   display: block;
-  padding-top: 10px;
-  padding-bottom: 36px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 10px 28px 36px;
 }
 
 .home-footer .footer-shell {
@@ -1076,17 +1078,6 @@ body {
 }
 .hero-footline a { color: #c4c99a; }
 .hero-footline a:hover { color: #fff; }
-.hero-photo-credit {
-  position: absolute;
-  right: clamp(28px, 7.5vw, 116px);
-  bottom: 63px;
-  z-index: 3;
-  color: rgba(240, 242, 235, 0.68);
-  font-size: 9px;
-  letter-spacing: 0.04em;
-}
-.hero-photo-credit:hover { color: #fff; }
-
 .proof-strip {
   display: grid;
   grid-template-columns: minmax(185px, 0.7fr) minmax(0, 1.3fr);
@@ -1315,7 +1306,6 @@ body {
     font-size: 8px;
     letter-spacing: 0.1em;
   }
-  .hero-photo-credit { right: 23px; bottom: 58px; font-size: 8px; }
   .proof-strip { grid-template-columns: 1fr; gap: 16px; padding: 19px 23px 21px; }
   .proof-strip .hero-metrics { gap: 10px; }
   .proof-strip .hero-metrics > div { padding-left: 9px; }
@@ -1343,7 +1333,6 @@ body {
   .hero-actions .btn { justify-content: center; padding-right: 10px; padding-left: 10px; }
   .hero-footline { right: 19px; left: 19px; }
   .hero-footline > span { max-width: 185px; line-height: 1.5; }
-  .hero-photo-credit { right: 19px; }
   .proof-strip { padding-right: 19px; padding-left: 19px; }
   .proof-strip .metric { font-size: 12px; }
   .team-grid { gap: 8px; }
