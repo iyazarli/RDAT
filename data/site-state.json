@@ -217,7 +217,7 @@
       },
       "team": {
         "eyebrow": "Ekip",
-        "title": "Cekirdek kadro",
+        "title": "Kurucu Kadromuz",
         "subtitle": "Her oyun oncesi oryantasyon ve saha guvenliginden sorumlu cekirdek ekip."
       },
       "field": {
@@ -581,6 +581,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-09-28T21:07:47.381Z"
+    "updatedAt": "2026-09-28T21:09:44.469Z"
   }
 }
