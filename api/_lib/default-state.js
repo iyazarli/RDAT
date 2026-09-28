@@ -107,19 +107,19 @@ const DEFAULT_SITE_CONFIG = {
     logoUrl: 'assets/brand/reddevil-logo.svg'
   },
   nav: {
-    applyLabel: 'Basvur',
+    applyLabel: 'İlk oyunu sor',
     applyHref: '#apply'
   },
   home: {
     hero: {
-      eyebrow: 'Taktik disiplin • Guvenli oyun • Gercek ekip ruhu',
+      eyebrow: 'Eskişehir • MilSim • Güvenli oyun',
       titleMain: 'Reddevil Airsoft',
-      titleAccent: 'Sahada Goruselim',
-      lede: 'Marmara bolgesinde aktif sahalarda oynayan, takim koordinasyonuna ve guvenlige onem veren bir airsoft topluluguyuz. Yeni oyunculara egitim, ekipman rehberi ve rol calismalari sunuyoruz.',
-      ctaPrimaryText: 'Takima Katil',
+      titleAccent: 'Eskişehir’de MilSim',
+      lede: 'Takım koordinasyonu, fair-play ve güvenli oyun etrafında bir araya geliyoruz. İlk kez katılacak oyunculara hazırlık sürecinde yol gösteriyoruz.',
+      ctaPrimaryText: 'İlk oyunu sor',
       ctaPrimaryHref: '#apply',
-      ctaSecondaryText: 'Takimi Tani',
-      ctaSecondaryHref: 'category.html?slug=about'
+      ctaSecondaryText: 'Takımı tanı',
+      ctaSecondaryHref: '#about'
     },
     metrics: [
       { id: 'metric_players', value: '30+', label: 'Aktif oyuncu' },
