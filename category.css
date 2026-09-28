@@ -31,8 +31,8 @@
 }
 
 .category-block {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 18px;
   box-shadow: 0 24px 70px -30px rgba(0, 0, 0, 0.85);
@@ -51,8 +51,8 @@
 
 .category-event-link:hover .category-block--event {
   transform: translateY(-4px);
-  border-color: rgba(162, 255, 67, 0.4);
-  box-shadow: 0 24px 70px -30px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(162, 255, 67, 0.22);
+  border-color: rgba(var(--accent-rgb), 0.52);
+  box-shadow: 0 24px 70px -30px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(var(--accent-rgb), 0.2);
 }
 
 .category-block-media {
@@ -61,7 +61,7 @@
   border-radius: 10px;
   object-fit: cover;
   margin-bottom: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border);
 }
 
 .category-block h3 {
@@ -77,8 +77,8 @@
   display: inline-flex;
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(162, 255, 67, 0.35);
-  background: rgba(162, 255, 67, 0.12);
+  border: 1px solid rgba(var(--accent-2-rgb), 0.5);
+  background: rgba(var(--accent-2-rgb), 0.2);
   color: var(--accent);
   font-size: 12px;
 }
@@ -86,20 +86,20 @@
 .category-empty {
   margin-top: 10px;
   color: var(--muted);
-  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border: 1px dashed var(--border);
   border-radius: 12px;
   padding: 14px;
 }
 
 .category-sponsor-block {
-  background: rgba(7, 11, 10, 0.82);
+  background: rgba(0, 0, 0, 0.82);
 }
 
 .category-sponsor-logo-wrap {
   width: 100%;
   height: 110px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--border);
   background: #ffffff;
   display: flex;
   align-items: center;
@@ -110,13 +110,13 @@
 }
 
 .category-sponsor-logo-wrap:hover {
-  border-color: rgba(162, 255, 67, 0.35);
-  box-shadow: 0 0 0 1px rgba(162, 255, 67, 0.22);
+  border-color: rgba(var(--accent-rgb), 0.52);
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.2);
 }
 
 .category-sponsor-logo-wrap--vector {
-  background: #121816;
-  border-color: rgba(255, 255, 255, 0.18);
+  background: var(--bg-2);
+  border-color: var(--border);
 }
 
 .category-sponsor-logo {
@@ -143,14 +143,14 @@
 .category-sponsor-link {
   font-size: 13px;
   color: var(--muted);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 5px 10px;
 }
 
 .category-sponsor-link:hover {
   color: var(--text);
-  border-color: rgba(162, 255, 67, 0.35);
+  border-color: rgba(var(--accent-rgb), 0.52);
 }
 
 /* ── Team category ── */
@@ -161,7 +161,7 @@
 }
 
 .category-person-card {
-  background: linear-gradient(170deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  background: linear-gradient(170deg, rgba(var(--surface-rgb),0.055), rgba(var(--surface-rgb),0.02));
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
@@ -171,7 +171,7 @@
 
 .category-person-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(162, 255, 67, 0.45);
+  border-color: rgba(var(--accent-rgb), 0.52);
 }
 
 .category-person-photo {
@@ -207,8 +207,8 @@
 .category-role-badge {
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(162, 255, 67, 0.35);
-  background: rgba(162, 255, 67, 0.1);
+  border: 1px solid rgba(var(--accent-2-rgb), 0.5);
+  background: rgba(var(--accent-2-rgb), 0.2);
   color: var(--accent);
   font-size: 11px;
   font-weight: 600;
