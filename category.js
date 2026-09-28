@@ -124,7 +124,16 @@ function renderTeamCategory(config, teamProfiles) {
   const emptyNode = document.querySelector('#category-empty');
   if (!blockGrid) return;
 
-  const profiles = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
+  const profileSource = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
+  const profiles = profileSource.filter((profile) => {
+    if (!profile || typeof profile !== 'object') return false;
+    const name = String(profile?.name ?? '').trim();
+    const callsign = String(profile?.callsign ?? '').trim();
+    const title = String(profile?.title ?? '').trim();
+    return !/^ad$/i.test(name)
+      && !/^callsign$/i.test(callsign)
+      && !/guncelleniyor|güncelleniyor/i.test(title);
+  });
 
   if (!profiles.length) {
     if (emptyNode) emptyNode.hidden = false;
@@ -135,7 +144,7 @@ function renderTeamCategory(config, teamProfiles) {
   blockGrid.className = 'category-team-grid';
   blockGrid.innerHTML = profiles.map((p) => `
     <article class="category-person-card">
-      <img class="category-person-photo" loading="lazy" src="${escapeHtml(p.photo || '')}" alt="${escapeHtml(p.name)} ${escapeHtml(p.callsign)} portresi">
+      ${renderTeamPortrait(p)}
       <div class="category-person-body">
         <header class="category-person-header">
           <div>
@@ -154,7 +163,37 @@ function renderTeamCategory(config, teamProfiles) {
     </article>
   `).join('');
 
+  blockGrid.querySelectorAll('.category-person-photo').forEach((photo) => {
+    photo.addEventListener('error', () => {
+      photo.replaceWith(createTeamMonogram(photo.dataset.monogram));
+    }, { once: true });
+  });
+
   document.title = `${category.label || 'Ekip'} | ${config.brand.name}`;
+}
+
+function renderTeamPortrait(profile) {
+  const name = String(profile?.name ?? '').trim();
+  const callsign = String(profile?.callsign ?? '').trim();
+  const photo = String(profile?.photo ?? '').trim();
+  const initials = `${name.charAt(0)}${callsign.charAt(0)}`.toUpperCase() || 'RD';
+
+  if (!photo || /images\.unsplash\.com/i.test(photo)) {
+    return `<div class="category-person-monogram" aria-hidden="true"><span>${escapeHtml(initials)}</span></div>`;
+  }
+
+  return `<img class="category-person-photo" loading="lazy" src="${escapeHtml(photo)}" alt="${escapeHtml(`${name} ${callsign} portresi`)}" data-monogram="${escapeHtml(initials)}">`;
+}
+
+function createTeamMonogram(initials) {
+  const monogram = document.createElement('div');
+  monogram.className = 'category-person-monogram';
+  monogram.setAttribute('aria-hidden', 'true');
+
+  const letters = document.createElement('span');
+  letters.textContent = String(initials || 'RD');
+  monogram.append(letters);
+  return monogram;
 }
 
 function escapeHtml(value) {
