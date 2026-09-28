@@ -281,33 +281,6 @@ const DEFAULT_SITE_CONFIG = {
       ]
     },
     {
-      id: 'cat_highlights',
-      slug: 'highlights',
-      label: 'Ne Sunuyoruz',
-      showInMenu: true,
-      eyebrow: 'Kategori',
-      title: 'Takimin Sunduğu Deneyim',
-      intro: 'Hem yeni baslayanlar hem deneyimli oyuncular icin yapilandirilmis akislar.',
-      ctaLabel: 'Ekibe Katil',
-      ctaHref: 'index.html#apply',
-      blocks: [
-        {
-          id: 'cat_highlights_block_1',
-          title: 'Rol Drillleri',
-          text: 'Rifleman, DMR, destek ve medic rollerinde mini senaryo calismalari.',
-          tag: 'Taktik',
-          imageUrl: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=1400&q=80'
-        },
-        {
-          id: 'cat_highlights_block_2',
-          title: 'Ekipman Mentorlugu',
-          text: 'Butceye uygun setup secimi, kronograf ve bakim destegi.',
-          tag: 'Setup',
-          imageUrl: 'https://images.unsplash.com/photo-1563213126-a4273aed2016?auto=format&fit=crop&w=1400&q=80'
-        }
-      ]
-    },
-    {
       id: 'cat_team',
       slug: 'team',
       label: 'Ekip',

@@ -420,6 +420,10 @@ function getFallbackPublicState() {
 async function init() {
   window.SiteDataClient?.bindGlobalErrorTracking();
   if (!window.SiteConfig) return;
+  if (getSlugParam() === 'highlights') {
+    window.location.replace('index.html#highlights');
+    return;
+  }
   const fallback = getFallbackPublicState();
   const publicState = window.SiteDataClient?.loadPublicState
     ? await window.SiteDataClient.loadPublicState(() => fallback)
