@@ -113,10 +113,10 @@
     },
     "home": {
       "hero": {
-        "eyebrow": "Taktik disiplin • Guvenli oyun • Gercek Ekip Ruhu",
+        "eyebrow": "Eskişehir • Türkiye • Airsoft",
         "titleMain": "Reddevil Airsoft",
-        "titleAccent": "Sahada Goruselim",
-        "lede": "Eskişehir bolgesinde aktif sahalarda oynayan, takim koordinasyonuna ve disipline onem veren bir airsoft topluluguyuz. Yeni oyunculara egitim, ekipman rehberi ve rol calismalari sunuyoruz.",
+        "titleAccent": "Eskişehir’de Airsoft",
+        "lede": "Reddevil Airsoft (RDAT), Eskişehir merkezli bir airsoft takımıdır. MilSim, fair-play ve güvenli oyun odağıyla Anadolu’daki oyuncuların katılımına açığız.",
         "ctaPrimaryText": "Takima Katil",
         "ctaPrimaryHref": "#apply",
         "ctaSecondaryText": "Takimi Tani",
@@ -149,8 +149,8 @@
           },
           {
             "id": "op_field",
-            "label": "Ana saha",
-            "value": "Eskisehir"
+            "label": "Merkez ve katılım",
+            "value": "Eskişehir • Anadolu’ya açık"
           },
           {
             "id": "op_radio",
@@ -168,7 +168,7 @@
       "about": {
         "eyebrow": "Hakkimizda",
         "title": "Sahada koordinasyon ve guvenlige odakli, butik bir airsoft ekibiyiz.",
-        "text": "Reddevil; cesitli saha tiplerinde (MILSIM, Orman, Şehir Çatışmaları, Hücum/Savunma) duzenli olarak oynayan, fair-play kurallarina sadik, disiplin ve koordinasyonu hedefleyen bir takimdir. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
+        "text": "Reddevil Airsoft (RDAT), Eskişehir merkezli bir airsoft takımıdır. MilSim ve senaryo temelli oyunlarda fair-play, güvenlik ve takım koordinasyonuna önem verir. Anadolu'daki oyuncular ilk oyun ve katılım bilgisi için ekiple iletişime geçebilir.",
         "pills": [
           "Ekipman rehberi",
           "Senaryo brifing",
@@ -222,8 +222,8 @@
       },
       "field": {
         "eyebrow": "Saha & Takvim",
-        "title": "Eskisehir Milsim Airsoft Oyunları",
-        "subtitle": "Aylik takvim: her ay Ormanlık Arazi, Meskun Mahal Çatışmaları ve Savunma Hucum Senaryoları ve Ozel etkinlikler icin haftaici atolye duyurulari.",
+        "title": "Eskişehir’de MilSim ve senaryo temelli airsoft oyunları",
+        "subtitle": "Reddevil Airsoft Eskişehir merkezlidir ve Anadolu’daki oyuncuların katılımına açıktır. Güncel oyun tarihi ve saha bilgisi etkinlik duyurularında paylaşılır.",
         "schedule": [
           {
             "id": "sch_meet",

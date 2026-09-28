@@ -107,8 +107,40 @@ function loadTeamProfiles() {
   return DEFAULT_TEAM_PROFILES;
 }
 
+function updateCategoryMetadata(brandName, category, titleSuffix = '') {
+  const label = category.label || 'Reddevil Airsoft';
+  const title = `${label} | ${brandName} (RDAT)${titleSuffix}`;
+  const intro = String(category.intro || 'Takım, airsoft etkinlikleri ve katılım bilgileri.').trim();
+  const description = `${brandName} (RDAT), Eskişehir merkezli bir airsoft takımıdır. ${intro}`;
+  const descriptionNode = document.querySelector('meta[name="description"]');
+  if (descriptionNode) descriptionNode.content = description;
+  document.title = title;
+
+  const canonicalNode = document.querySelector('link[rel="canonical"]');
+  let canonicalOrigin = window.location.origin;
+  try {
+    if (canonicalNode) canonicalOrigin = new URL(canonicalNode.href).origin;
+  } catch {}
+  const canonicalUrl = new URL('/category', canonicalOrigin);
+  canonicalUrl.searchParams.set('slug', category.slug || 'about');
+  if (canonicalNode) canonicalNode.href = canonicalUrl.href;
+
+  const metadata = [
+    ['meta[property="og:title"]', title],
+    ['meta[property="og:description"]', description],
+    ['meta[property="og:url"]', canonicalUrl.href],
+    ['meta[name="twitter:title"]', title],
+    ['meta[name="twitter:description"]', description],
+  ];
+  metadata.forEach(([selector, value]) => {
+    const node = document.querySelector(selector);
+    if (node) node.content = value;
+  });
+}
+
 function renderTeamCategory(config, teamProfiles) {
   const category = config.categories.find((c) => c.slug === 'team') || {};
+  updateCategoryMetadata(config.brand.name, category, ' | Eskişehir Airsoft Takımı');
   setText('category-eyebrow', category.eyebrow || 'Ekip');
   setText('category-title', category.title || 'Takim Kadrosu');
   setText('category-intro', category.intro || '');
@@ -169,7 +201,6 @@ function renderTeamCategory(config, teamProfiles) {
     }, { once: true });
   });
 
-  document.title = `${category.label || 'Ekip'} | ${config.brand.name}`;
 }
 
 function renderTeamPortrait(profile) {
@@ -373,7 +404,7 @@ function renderCategory(config) {
     }
   }
 
-  document.title = `${category.label} | ${config.brand.name}`;
+  updateCategoryMetadata(config.brand.name, category, ' | Eskişehir ve Anadolu');
 }
 
 function bindMobileNav() {
