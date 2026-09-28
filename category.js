@@ -107,8 +107,40 @@ function loadTeamProfiles() {
   return DEFAULT_TEAM_PROFILES;
 }
 
+function updateCategoryMetadata(brandName, category, titleSuffix = '') {
+  const label = category.label || 'Reddevil Airsoft';
+  const title = `${label} | ${brandName} (RDAT)${titleSuffix}`;
+  const intro = String(category.intro || 'Takım, airsoft etkinlikleri ve katılım bilgileri.').trim();
+  const description = `${brandName} (RDAT), Eskişehir merkezli bir airsoft takımıdır. ${intro}`;
+  const descriptionNode = document.querySelector('meta[name="description"]');
+  if (descriptionNode) descriptionNode.content = description;
+  document.title = title;
+
+  const canonicalNode = document.querySelector('link[rel="canonical"]');
+  let canonicalOrigin = window.location.origin;
+  try {
+    if (canonicalNode) canonicalOrigin = new URL(canonicalNode.href).origin;
+  } catch {}
+  const canonicalUrl = new URL('/category', canonicalOrigin);
+  canonicalUrl.searchParams.set('slug', category.slug || 'about');
+  if (canonicalNode) canonicalNode.href = canonicalUrl.href;
+
+  const metadata = [
+    ['meta[property="og:title"]', title],
+    ['meta[property="og:description"]', description],
+    ['meta[property="og:url"]', canonicalUrl.href],
+    ['meta[name="twitter:title"]', title],
+    ['meta[name="twitter:description"]', description],
+  ];
+  metadata.forEach(([selector, value]) => {
+    const node = document.querySelector(selector);
+    if (node) node.content = value;
+  });
+}
+
 function renderTeamCategory(config, teamProfiles) {
   const category = config.categories.find((c) => c.slug === 'team') || {};
+  updateCategoryMetadata(config.brand.name, category, ' | Eskişehir Airsoft Takımı');
   setText('category-eyebrow', category.eyebrow || 'Ekip');
   setText('category-title', category.title || 'Takim Kadrosu');
   setText('category-intro', category.intro || '');
@@ -124,7 +156,16 @@ function renderTeamCategory(config, teamProfiles) {
   const emptyNode = document.querySelector('#category-empty');
   if (!blockGrid) return;
 
-  const profiles = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
+  const profileSource = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
+  const profiles = profileSource.filter((profile) => {
+    if (!profile || typeof profile !== 'object') return false;
+    const name = String(profile?.name ?? '').trim();
+    const callsign = String(profile?.callsign ?? '').trim();
+    const title = String(profile?.title ?? '').trim();
+    return !/^ad$/i.test(name)
+      && !/^callsign$/i.test(callsign)
+      && !/guncelleniyor|güncelleniyor/i.test(title);
+  });
 
   if (!profiles.length) {
     if (emptyNode) emptyNode.hidden = false;
@@ -135,7 +176,7 @@ function renderTeamCategory(config, teamProfiles) {
   blockGrid.className = 'category-team-grid';
   blockGrid.innerHTML = profiles.map((p) => `
     <article class="category-person-card">
-      <img class="category-person-photo" loading="lazy" src="${escapeHtml(p.photo || '')}" alt="${escapeHtml(p.name)} ${escapeHtml(p.callsign)} portresi">
+      ${renderTeamPortrait(p)}
       <div class="category-person-body">
         <header class="category-person-header">
           <div>
@@ -154,7 +195,36 @@ function renderTeamCategory(config, teamProfiles) {
     </article>
   `).join('');
 
-  document.title = `${category.label || 'Ekip'} | ${config.brand.name}`;
+  blockGrid.querySelectorAll('.category-person-photo').forEach((photo) => {
+    photo.addEventListener('error', () => {
+      photo.replaceWith(createTeamMonogram(photo.dataset.monogram));
+    }, { once: true });
+  });
+
+}
+
+function renderTeamPortrait(profile) {
+  const name = String(profile?.name ?? '').trim();
+  const callsign = String(profile?.callsign ?? '').trim();
+  const photo = String(profile?.photo ?? '').trim();
+  const initials = `${name.charAt(0)}${callsign.charAt(0)}`.toUpperCase() || 'RD';
+
+  if (!photo || /images\.unsplash\.com/i.test(photo)) {
+    return `<div class="category-person-monogram" aria-hidden="true"><span>${escapeHtml(initials)}</span></div>`;
+  }
+
+  return `<img class="category-person-photo" loading="lazy" src="${escapeHtml(photo)}" alt="${escapeHtml(`${name} ${callsign} portresi`)}" data-monogram="${escapeHtml(initials)}">`;
+}
+
+function createTeamMonogram(initials) {
+  const monogram = document.createElement('div');
+  monogram.className = 'category-person-monogram';
+  monogram.setAttribute('aria-hidden', 'true');
+
+  const letters = document.createElement('span');
+  letters.textContent = String(initials || 'RD');
+  monogram.append(letters);
+  return monogram;
 }
 
 function escapeHtml(value) {
@@ -334,7 +404,7 @@ function renderCategory(config) {
     }
   }
 
-  document.title = `${category.label} | ${config.brand.name}`;
+  updateCategoryMetadata(config.brand.name, category, ' | Eskişehir ve Anadolu');
 }
 
 function bindMobileNav() {
@@ -381,6 +451,10 @@ function getFallbackPublicState() {
 async function init() {
   window.SiteDataClient?.bindGlobalErrorTracking();
   if (!window.SiteConfig) return;
+  if (getSlugParam() === 'highlights') {
+    window.location.replace('index.html#highlights');
+    return;
+  }
   const fallback = getFallbackPublicState();
   const publicState = window.SiteDataClient?.loadPublicState
     ? await window.SiteDataClient.loadPublicState(() => fallback)

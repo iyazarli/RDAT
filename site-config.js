@@ -12,19 +12,19 @@
       logoUrl: 'assets/brand/reddevil-logo.svg',
     },
     nav: {
-      applyLabel: 'Basvur',
+      applyLabel: 'İlk oyunu sor',
       applyHref: '#apply',
     },
     home: {
       hero: {
-        eyebrow: 'Taktik disiplin • Guvenli oyun • Gercek ekip ruhu',
+        eyebrow: 'Eskişehir • Türkiye • Airsoft',
         titleMain: 'Reddevil Airsoft',
-        titleAccent: 'Sahada Goruselim',
-        lede: 'Marmara bolgesinde aktif sahalarda oynayan, takim koordinasyonuna ve guvenlige onem veren bir airsoft topluluguyuz. Yeni oyunculara egitim, ekipman rehberi ve rol calismalari sunuyoruz.',
-        ctaPrimaryText: 'Takima Katil',
+        titleAccent: 'Eskişehir’de Airsoft',
+        lede: 'Reddevil Airsoft (RDAT), Eskişehir merkezli bir airsoft takımıdır. MilSim, fair-play ve güvenli oyun odağıyla Anadolu’daki oyuncuların katılımına açığız.',
+        ctaPrimaryText: 'İlk oyunu sor',
         ctaPrimaryHref: '#apply',
-        ctaSecondaryText: 'Takimi Tani',
-        ctaSecondaryHref: 'category.html?slug=about',
+        ctaSecondaryText: 'Takımı tanı',
+        ctaSecondaryHref: '#about',
       },
       metrics: [
         { id: 'metric_players', value: '30+', label: 'Aktif oyuncu' },
@@ -35,7 +35,7 @@
         title: 'Operasyon Profili',
         items: [
           { id: 'op_type', label: 'Oyun tipi', value: 'MilSim / SpeedQB karma' },
-          { id: 'op_field', label: 'Ana saha', value: 'Istanbul & Kocaeli woodland' },
+          { id: 'op_field', label: 'Merkez ve katılım', value: 'Eskişehir • Anadolu’ya açık' },
           { id: 'op_radio', label: 'Takim frekansi', value: 'PMR CH 6' },
           { id: 'op_priority', label: 'Oncelik', value: 'Guvenlik, disiplin, senaryo' },
         ],
@@ -44,7 +44,7 @@
       about: {
         eyebrow: 'Hakkimizda',
         title: 'Sahada koordinasyon ve guvenlige odakli, butik bir airsoft ekibiyiz.',
-        text: "Reddevil; cesitli saha tiplerinde (CQB, woodland, endustriyel) duzenli olarak oynayan, fair-play kurallarina sadik, guvenligi onceleyen bir takimdi. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
+        text: "Reddevil Airsoft (RDAT), Eskişehir merkezli bir airsoft takımıdır. MilSim ve senaryo temelli oyunlarda fair-play, güvenlik ve takım koordinasyonuna önem verir. Anadolu'daki oyuncular ilk oyun ve katılım bilgisi için ekiple iletişime geçebilir.",
         pills: [
           'Ekipman rehberi',
           'Senaryo brifing',
@@ -98,8 +98,8 @@
       },
       field: {
         eyebrow: 'Saha & Takvim',
-        title: 'Istanbul / Kocaeli woodland ve donemsel CQB organizasyonlari',
-        subtitle: 'Aylik takvim: her ay 2 woodland, 1 CQB, 1 gece oyunu. Ozel etkinlikler icin haftaici atolye duyurulari.',
+        title: 'Eskişehir’de MilSim ve senaryo temelli airsoft oyunları',
+        subtitle: 'Reddevil Airsoft Eskişehir merkezlidir ve Anadolu’daki oyuncuların katılımına açıktır. Güncel oyun tarihi ve saha bilgisi etkinlik duyurularında paylaşılır.',
         schedule: [
           { id: 'sch_meet', label: 'Toplanma', value: '07:30 - 08:00' },
           { id: 'sch_start', label: 'Oyun baslangici', value: '09:00' },
@@ -182,33 +182,6 @@
             text: 'Yeni oyuncular orientation ve mentor destegi ile sahaya adapte edilir.',
             tag: 'Egitim',
             imageUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1400&q=80',
-          },
-        ],
-      },
-      {
-        id: 'cat_highlights',
-        slug: 'highlights',
-        label: 'Ne Sunuyoruz',
-        showInMenu: true,
-        eyebrow: 'Kategori',
-        title: 'Takimin Sunduğu Deneyim',
-        intro: 'Hem yeni baslayanlar hem deneyimli oyuncular icin yapilandirilmis akislar.',
-        ctaLabel: 'Ekibe Katil',
-        ctaHref: 'index.html#apply',
-        blocks: [
-          {
-            id: 'cat_highlights_block_1',
-            title: 'Rol Drillleri',
-            text: 'Rifleman, DMR, destek ve medic rollerinde mini senaryo calismalari.',
-            tag: 'Taktik',
-            imageUrl: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=1400&q=80',
-          },
-          {
-            id: 'cat_highlights_block_2',
-            title: 'Ekipman Mentorlugu',
-            text: 'Bütceye uygun setup secimi, kronograf ve bakim destegi.',
-            tag: 'Setup',
-            imageUrl: 'https://images.unsplash.com/photo-1563213126-a4273aed2016?auto=format&fit=crop&w=1400&q=80',
           },
         ],
       },
@@ -542,7 +515,9 @@
     const footerQuickTagsSource = Array.isArray(footer.quickTags) ? footer.quickTags : base.home.footer.quickTags;
 
     const categoriesSource = Array.isArray(source.categories) ? source.categories : base.categories;
-    const normalizedCategories = categoriesSource.map((category, index) => normalizeCategory(category, index));
+    const normalizedCategories = categoriesSource
+      .map((category, index) => normalizeCategory(category, index))
+      .filter((category) => category.slug !== 'highlights');
 
     const defaultCategorySlugs = base.categories.map((item) => item.slug);
     defaultCategorySlugs.forEach((slug) => {
