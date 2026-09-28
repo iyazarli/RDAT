@@ -210,6 +210,44 @@ function renderFaqItems(items) {
     .join('');
 }
 
+function renderHomeEvents(config) {
+  const container = document.querySelector('#home-events-grid');
+  if (!container) return;
+
+  const eventsCategory = Array.isArray(config.categories)
+    ? config.categories.find((category) => category.slug === 'events')
+    : null;
+  const events = Array.isArray(eventsCategory?.blocks)
+    ? eventsCategory.blocks.filter((item) => text(item?.title) && text(item?.text)).slice(0, 3)
+    : [];
+
+  if (!events.length) {
+    container.innerHTML = '<p class="event-empty">Etkinlik notları burada paylaşılacak.</p>';
+    return;
+  }
+
+  container.innerHTML = events
+    .map((item, index) => {
+      const imageUrl = text(item.imageUrl, '');
+      const showImage = imageUrl && !/images\.unsplash\.com/i.test(imageUrl);
+      const image = showImage
+        ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(item.title)} etkinliğinden kare" loading="lazy">`
+        : `<div class="event-cover-mark" aria-hidden="true"><span>RD / SAHA NOTLARI</span><strong>${String(index + 1).padStart(2, '0')}</strong></div>`;
+
+      return `
+        <article class="event-story reveal">
+          <div class="event-cover">${image}</div>
+          <div class="event-story-copy">
+            <p class="eyebrow">${escapeHtml(text(item.tag, 'Etkinlik arşivi'))}</p>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.text)}</p>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+}
+
 function renderFieldSchedule(schedule) {
   const container = document.querySelector('#field-schedule');
   if (!container) return;
@@ -425,6 +463,7 @@ function renderHomeContent(config) {
 
   renderHeroMetrics(home.metrics);
   renderOperationCard(home.operation);
+  renderHomeEvents(config);
 
   setText('about-eyebrow', home.about.eyebrow);
   setText('about-title', home.about.title);
@@ -491,6 +530,7 @@ function getLocalTeamProfiles() {
 function renderTeamProfiles(profilesInput) {
   const teamGrid = document.querySelector('#team-grid');
   if (!teamGrid) return;
+  const emptyMessage = document.querySelector('#team-empty');
 
   const normalized = Array.isArray(profilesInput) && profilesInput.length
     ? profilesInput.map((item, index) => ({
@@ -507,14 +547,25 @@ function renderTeamProfiles(profilesInput) {
     }))
     : getLocalTeamProfiles();
 
-  if (!normalized.length) {
+  const profiles = normalized.filter((profile) => {
+    const isPlaceholder = /^ad$/i.test(profile.name.trim())
+      || /^callsign$/i.test(profile.callsign.trim())
+      || /guncelleniyor|güncelleniyor/i.test(profile.title);
+    return !isPlaceholder;
+  });
+
+  if (!profiles.length) {
+    if (emptyMessage) emptyMessage.hidden = false;
     return;
   }
 
-  teamGrid.innerHTML = normalized
+  if (emptyMessage) emptyMessage.hidden = true;
+  teamGrid.innerHTML = profiles
     .map((profile) => `
       <article class="person-card" data-profile-id="${escapeHtml(profile.id)}">
-        <img class="person-photo" src="${escapeHtml(profile.photo)}" alt="${escapeHtml(profile.name)} ${escapeHtml(profile.callsign)} portresi">
+        ${profile.photo && !/images\.unsplash\.com/i.test(profile.photo)
+          ? `<img class="person-photo" src="${escapeHtml(profile.photo)}" alt="${escapeHtml(profile.name)} ${escapeHtml(profile.callsign)}" loading="lazy">`
+          : `<div class="person-monogram" aria-hidden="true">${escapeHtml(profile.name.trim().charAt(0))}${escapeHtml(profile.callsign.trim().charAt(0))}</div>`}
         <div class="person-body">
           <header class="person-header">
             <div>
@@ -525,9 +576,9 @@ function renderTeamProfiles(profilesInput) {
           </header>
           <p>${escapeHtml(profile.bio)}</p>
           <ul class="person-meta">
-            <li><span>Uzmanlik</span><strong>${escapeHtml(profile.expertise)}</strong></li>
-            <li><span>Takimda</span><strong>${escapeHtml(profile.seasons)}</strong></li>
-            <li><span>Favori setup</span><strong>${escapeHtml(profile.setup)}</strong></li>
+            <li><span>Uzmanlık</span><strong>${escapeHtml(profile.expertise)}</strong></li>
+            <li><span>Takımda</span><strong>${escapeHtml(profile.seasons)}</strong></li>
+            <li><span>Favori ekipman</span><strong>${escapeHtml(profile.setup)}</strong></li>
           </ul>
         </div>
       </article>
@@ -564,6 +615,22 @@ function bindFaqAccordion() {
   });
 }
 
+function bindScrollReveals() {
+  const targets = document.querySelectorAll('.reveal');
+  if (!targets.length || !('IntersectionObserver' in window)) return;
+
+  document.body.classList.add('motion-ready');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+
+  targets.forEach((target) => observer.observe(target));
+}
+
 function getFallbackPublicState() {
   if (!window.SiteConfig) {
     return null;
@@ -576,6 +643,109 @@ function getFallbackPublicState() {
   };
 }
 
+function applyDraftContent(config) {
+  if (new URLSearchParams(window.location.search).get('draft') !== '1') return config;
+
+  const draft = JSON.parse(JSON.stringify(config));
+  draft.nav.applyLabel = 'İlk oyunu sor';
+  draft.home.hero = {
+    ...draft.home.hero,
+    eyebrow: 'ESKİŞEHİR • MILSIM • YENİ OYUNCULARA AÇIK',
+    titleMain: 'Reddevil Airsoft',
+    titleAccent: 'Eskişehir’de MilSim',
+    lede: 'Fair-play, güvenlik ve takım koordinasyonuyla oynuyoruz. İlk kez katılacaklara ekipman rehberi, güvenlik brifingi ve rol seçimiyle eşlik ediyoruz.',
+    ctaPrimaryText: 'İlk oyunu sor',
+    ctaPrimaryHref: '#apply',
+    ctaSecondaryText: 'Sahadan',
+    ctaSecondaryHref: '#events-preview',
+  };
+  draft.home.about = {
+    ...draft.home.about,
+    eyebrow: 'TAKIM KÜLTÜRÜ',
+    title: 'Güvenli oyun, adil rekabet ve takım ruhu.',
+    text: 'Eskişehir’de MilSim ve orman/şehir senaryolarında bir araya geliyoruz. Oyun öncesi güvenlik brifingini, saha kurallarına uyumu ve takım iletişimini önemsiyoruz. Yeni katılımcılar için ekipman listesi ve rol seçimiyle hazırlığı kolaylaştırıyoruz.',
+    pills: ['Güvenlik brifingi', 'Ekipman rehberi', 'Rol yönlendirmesi', 'Saha sonrası notlar'],
+    criteriaTitle: 'İlk oyuna gelirken',
+    criteriaItems: [
+      '18+ yaş (18 yaş altı için veli onayı gerekir)',
+      'ANSI Z87.1+ gözlük veya tam yüz maskesi',
+      'Hakem ve saha kurallarına uyum',
+      'Takım içinde disiplin ve dostluk',
+    ],
+    criteriaNote: 'Kendi ekipmanı olmayanlar için sınırlı sayıda yedek set bulunur.',
+  };
+  draft.home.highlights = {
+    ...draft.home.highlights,
+    eyebrow: 'TAKIM DENEYİMİ',
+    title: 'Sahaya birlikte hazırlanırız.',
+    subtitle: 'Yeni başlayanlar için anlaşılır bir ilk oyun; deneyimli oyuncular için takım koordinasyonu ve senaryo derinliği.',
+    cards: [
+      { id: 'draft_safety', title: 'Güvenli oyun', description: 'Oyun öncesi brifing, saha kuralları ve koruyucu ekipman kontrolü.', chip: 'Öncelik' },
+      { id: 'draft_roles', title: 'Rol çalışmaları', description: 'Rifleman, DMR, destek ve medic rolleri için takım senaryoları.', chip: 'Antrenman' },
+      { id: 'draft_gear', title: 'Ekipman rehberi', description: 'Başlangıç seviyene ve bütçene uygun ekipman seçimi ve bakım önerileri.', chip: 'Yönlendirme' },
+      { id: 'draft_team', title: 'Takım kültürü', description: 'Fair-play, açık iletişim ve oyun sonrası kısa değerlendirme.', chip: 'Birlikte' },
+    ],
+  };
+  draft.home.team = {
+    ...draft.home.team,
+    eyebrow: 'EKİP',
+    title: 'Ekiple tanış.',
+    subtitle: 'Oyun kurgusu, saha güvenliği, ekipman ve medya görevlerini yürüten çekirdek kadro.',
+  };
+  draft.home.field = {
+    ...draft.home.field,
+    eyebrow: 'SAHA & TAKVİM',
+    title: 'Eskişehir’de MilSim oyunları',
+    subtitle: 'Ormanlık arazi ve şehir senaryoları. Yaklaşan oyunların tarihi ve katılım ayrıntıları etkinlik duyurusunda.',
+    schedule: [
+      { id: 'draft_meet', label: 'Toplanma', value: '07:30–08:00' },
+      { id: 'draft_start', label: 'Oyun başlangıcı', value: '09:00' },
+    ],
+    checklist: [
+      'Kronograf sınırları: tabanca 1,0 J · CQB 1,4 J · assault 1,6 J · DMR 2,0 J · sniper 3,0 J',
+      'Yedek gözlük ve kırılmaz lens',
+      'Su ve enerji atıştırmalığı',
+      'Araziye uygun kıyafet ve sağlam ayakkabı',
+    ],
+  };
+  draft.home.faq = {
+    ...draft.home.faq,
+    eyebrow: 'MERAK EDİLENLER',
+    title: 'Sık sorulan sorular',
+    items: [
+      { id: 'draft_gear', question: 'Kendi ekipmanım yok, katılabilir miyim?', answer: 'Evet. Sınırlı sayıda yedek set bulunur; temel göz koruması zorunludur. Ekipman desteği için başvuruda not bırakabilirsin.' },
+      { id: 'draft_training', question: 'Yeni başlayanlara destek var mı?', answer: 'İlk oyundan önce güvenlik brifingi, ekipman kontrolü ve temel iletişim kuralları paylaşılır.' },
+      { id: 'draft_age', question: 'Yaş sınırı nedir?', answer: '18 yaş ve üzeri. 16–17 yaş için yazılı veli onayı ve saha onayı gerekir.' },
+      { id: 'draft_fee', question: 'Üyelik ücreti var mı?', answer: 'Takım aidatı yoktur. Oyun ve organizasyon ücretleri etkinlik öncesinde paylaşılır.' },
+    ],
+  };
+  draft.home.apply = {
+    ...draft.home.apply,
+    eyebrow: 'İLK OYUNUN',
+    title: 'Sahada görüşelim.',
+    subtitle: 'Deneyim seviyeni ve merak ettiklerini yaz; oyun, ekipman ve hazırlık adımlarını birlikte netleştirelim.',
+  };
+  draft.home.footer = {
+    ...draft.home.footer,
+    blurb: 'Eskişehir’de güvenli, disiplinli ve takım odaklı MilSim oyunları.',
+    quickTags: ['Fair-play', 'Güvenlik odaklı', 'Yeni oyunculara açık'],
+  };
+  const navLabels = {
+    about: 'Takım',
+    highlights: 'Deneyim',
+    team: 'Ekip',
+    field: 'Saha',
+    faq: 'SSS',
+    events: 'Sahadan',
+    sponsors: 'Destekçiler',
+  };
+  draft.categories = draft.categories.map((category) => ({
+    ...category,
+    label: navLabels[category.slug] || category.label,
+  }));
+  return draft;
+}
+
 async function initContent() {
   window.SiteDataClient?.bindGlobalErrorTracking();
 
@@ -584,9 +754,10 @@ async function initContent() {
     ? await window.SiteDataClient.loadPublicState(() => fallback)
     : fallback;
   const configSource = publicState?.siteConfig || fallback?.siteConfig;
-  const config = window.SiteConfig && configSource
+  const normalizedConfig = window.SiteConfig && configSource
     ? window.SiteConfig.normalize(configSource)
     : configSource;
+  const config = normalizedConfig ? applyDraftContent(normalizedConfig) : null;
 
   if (!config) {
     startSponsorTicker();
@@ -601,6 +772,7 @@ async function initContent() {
   renderTeamProfiles(publicState?.teamProfiles);
   bindFaqAccordion();
   bindMobileNav();
+  bindScrollReveals();
 }
 
 initContent();

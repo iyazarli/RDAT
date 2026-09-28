@@ -5,9 +5,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_ghost',
     name: 'Kagan',
     callsign: 'Ghost',
-    title: 'Takim lideri | Oyun kurgu',
+    title: 'Takım lideri • Oyun kurgusu',
     badge: 'Lider',
-    bio: 'Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.',
+    bio: 'Senaryo akışını ve saha koordinasyonunu planlar; telsiz iletişim düzeninin oyun boyunca korunmasına destek olur.',
     expertise: 'Komuta & Entry',
     seasons: '5. sezon',
     setup: 'M4 + red dot',
@@ -17,9 +17,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_mamba',
     name: 'Selin',
     callsign: 'Mamba',
-    title: 'Safety Officer | Medic egitimi',
+    title: 'Güvenlik sorumlusu • Medic eğitimi',
     badge: 'Safety',
-    bio: 'Guvenlik brifingi, ilk yardim kiti ve saha ici risk kontrolunu yonetir.',
+    bio: 'Güvenlik brifingini, ilk yardım hazırlığını ve saha içi risk kontrollerini yürütür.',
     expertise: 'Medic & Safety',
     seasons: '4. sezon',
     setup: 'SMG + sidearm',
@@ -31,7 +31,7 @@ const DEFAULT_TEAM_PROFILES = [
     callsign: 'Forge',
     title: 'Ekipman mentoru',
     badge: 'Tech',
-    bio: 'Kronograf, bakim, yedek ekipman ve butce dostu setup onerileri sunar.',
+    bio: 'Kronograf ve ekipman bakımı, yedek ekipman takibi ve bütçeye uygun kurulum önerilerinde destek verir.',
     expertise: 'Tech & DMR',
     seasons: '6. sezon',
     setup: 'DMR 1.64J',
@@ -41,9 +41,9 @@ const DEFAULT_TEAM_PROFILES = [
     id: 'team_spark',
     name: 'Deniz',
     callsign: 'Spark',
-    title: 'Medya | After Action',
+    title: 'Medya • Oyun sonrası değerlendirme',
     badge: 'Media',
-    bio: 'Oyun goruntuleri, highlight montajlari ve AAR notlarinin paylasimini yapar.',
+    bio: 'Oyun görüntülerini ve seçili anları düzenler; ekip arşivinin ve oyun sonrası değerlendirme notlarının paylaşımına katkı sağlar.',
     expertise: 'Recon & Media',
     seasons: '3. sezon',
     setup: 'Carbine + action cam',
@@ -99,12 +99,77 @@ const DEFAULT_TEAM_PROFILES = [
   },
 ];
 
+function updateCategoryMetadata(brandName, category, titleSuffix = '') {
+  const label = category.label || 'Reddevil Airsoft';
+  const title = `${label} | ${brandName} (RDAT)${titleSuffix}`;
+  const intro = String(category.intro || 'Takım, airsoft etkinlikleri ve katılım bilgileri.').trim();
+  const description = `${brandName} (RDAT), Eskişehir merkezli bir airsoft takımıdır. ${intro}`;
+  const descriptionNode = document.querySelector('meta[name="description"]');
+  if (descriptionNode) descriptionNode.content = description;
+  document.title = title;
+
+  const canonicalNode = document.querySelector('link[rel="canonical"]');
+  const canonicalOrigin = canonicalNode ? new URL(canonicalNode.href).origin : window.location.origin;
+  const canonicalUrl = new URL('/category', canonicalOrigin);
+  canonicalUrl.searchParams.set('slug', category.slug || 'about');
+  if (canonicalNode) canonicalNode.href = canonicalUrl.href;
+
+  const metadata = [
+    ['meta[property="og:title"]', title],
+    ['meta[property="og:description"]', description],
+    ['meta[property="og:url"]', canonicalUrl.href],
+    ['meta[name="twitter:title"]', title],
+    ['meta[name="twitter:description"]', description],
+  ];
+  metadata.forEach(([selector, content]) => {
+    const node = document.querySelector(selector);
+    if (node) node.content = content;
+  });
+}
+
 function loadTeamProfiles() {
   try {
     const raw = JSON.parse(localStorage.getItem(TEAM_STORAGE_KEY));
     if (Array.isArray(raw) && raw.length > 0) return raw;
   } catch {}
   return DEFAULT_TEAM_PROFILES;
+}
+
+const LEGACY_TEAM_PROFILE_COPY = {
+  team_ghost: {
+    titles: ['Takim lideri | Oyun kurgu', 'Takim Lideri'],
+    title: 'Takım lideri • Oyun kurgusu',
+    bio: 'Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.',
+    updatedBio: 'Senaryo akışını ve saha koordinasyonunu planlar; telsiz iletişim düzeninin oyun boyunca korunmasına destek olur.',
+  },
+  team_mamba: {
+    titles: ['Safety Officer | Medic egitimi'],
+    title: 'Güvenlik sorumlusu • Medic eğitimi',
+    bio: 'Guvenlik brifingi, ilk yardim kiti ve saha ici risk kontrolunu yonetir.',
+    updatedBio: 'Güvenlik brifingini, ilk yardım hazırlığını ve saha içi risk kontrollerini yürütür.',
+  },
+  team_forge: {
+    titles: ['Ekipman mentoru'],
+    title: 'Ekipman mentoru',
+    bio: 'Kronograf, bakim, yedek ekipman ve butce dostu setup onerileri sunar.',
+    updatedBio: 'Kronograf ve ekipman bakımı, yedek ekipman takibi ve bütçeye uygun kurulum önerilerinde destek verir.',
+  },
+  team_spark: {
+    titles: ['Medya | After Action'],
+    title: 'Medya • Oyun sonrası değerlendirme',
+    bio: 'Oyun goruntuleri, highlight montajlari ve AAR notlarinin paylasimini yapar.',
+    updatedBio: 'Oyun görüntülerini ve seçili anları düzenler; ekip arşivinin ve oyun sonrası değerlendirme notlarının paylaşımına katkı sağlar.',
+  },
+};
+
+function migrateLegacyTeamProfileCopy(profile) {
+  const legacy = LEGACY_TEAM_PROFILE_COPY[profile && profile.id];
+  if (!legacy) return profile;
+  return {
+    ...profile,
+    title: legacy.titles.includes(profile.title) ? legacy.title : profile.title,
+    bio: profile.bio === legacy.bio ? legacy.updatedBio : profile.bio,
+  };
 }
 
 function renderTeamCategory(config, teamProfiles) {
@@ -124,7 +189,16 @@ function renderTeamCategory(config, teamProfiles) {
   const emptyNode = document.querySelector('#category-empty');
   if (!blockGrid) return;
 
-  const profiles = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
+  const profileSource = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
+  const profiles = profileSource.map(migrateLegacyTeamProfileCopy).filter((profile) => {
+    if (!profile || typeof profile !== 'object') return false;
+    const name = String(profile?.name ?? '').trim();
+    const callsign = String(profile?.callsign ?? '').trim();
+    const title = String(profile?.title ?? '').trim();
+    return !/^ad$/i.test(name)
+      && !/^callsign$/i.test(callsign)
+      && !/guncelleniyor|güncelleniyor/i.test(title);
+  });
 
   if (!profiles.length) {
     if (emptyNode) emptyNode.hidden = false;
@@ -135,7 +209,7 @@ function renderTeamCategory(config, teamProfiles) {
   blockGrid.className = 'category-team-grid';
   blockGrid.innerHTML = profiles.map((p) => `
     <article class="category-person-card">
-      <img class="category-person-photo" loading="lazy" src="${escapeHtml(p.photo || '')}" alt="${escapeHtml(p.name)} ${escapeHtml(p.callsign)} portresi">
+      ${renderTeamPortrait(p)}
       <div class="category-person-body">
         <header class="category-person-header">
           <div>
@@ -146,15 +220,45 @@ function renderTeamCategory(config, teamProfiles) {
         </header>
         <p>${escapeHtml(p.bio)}</p>
         <ul class="category-person-meta">
-          <li><span>Uzmanlik</span><strong>${escapeHtml(p.expertise)}</strong></li>
-          <li><span>Takimda</span><strong>${escapeHtml(p.seasons)}</strong></li>
-          <li><span>Favori setup</span><strong>${escapeHtml(p.setup)}</strong></li>
+          <li><span>Uzmanlık alanı</span><strong>${escapeHtml(p.expertise)}</strong></li>
+          <li><span>Ekip deneyimi</span><strong>${escapeHtml(p.seasons)}</strong></li>
+          <li><span>Ekipman tercihi</span><strong>${escapeHtml(p.setup)}</strong></li>
         </ul>
       </div>
     </article>
   `).join('');
 
-  document.title = `${category.label || 'Ekip'} | ${config.brand.name}`;
+  blockGrid.querySelectorAll('.category-person-photo').forEach((photo) => {
+    photo.addEventListener('error', () => {
+      photo.replaceWith(createTeamMonogram(photo.dataset.monogram));
+    }, { once: true });
+  });
+
+  updateCategoryMetadata(config.brand.name, category, ' | Eskişehir Airsoft Takımı');
+}
+
+function renderTeamPortrait(profile) {
+  const name = String(profile?.name ?? '').trim();
+  const callsign = String(profile?.callsign ?? '').trim();
+  const photo = String(profile?.photo ?? '').trim();
+  const initials = `${name.charAt(0)}${callsign.charAt(0)}`.toUpperCase() || 'RD';
+
+  if (!photo || /images\.unsplash\.com/i.test(photo)) {
+    return `<div class="category-person-monogram" aria-hidden="true"><span>${escapeHtml(initials)}</span></div>`;
+  }
+
+  return `<img class="category-person-photo" loading="lazy" src="${escapeHtml(photo)}" alt="${escapeHtml(`${name} ${callsign} portresi`)}" data-monogram="${escapeHtml(initials)}">`;
+}
+
+function createTeamMonogram(initials) {
+  const monogram = document.createElement('div');
+  monogram.className = 'category-person-monogram';
+  monogram.setAttribute('aria-hidden', 'true');
+
+  const letters = document.createElement('span');
+  letters.textContent = String(initials || 'RD');
+  monogram.append(letters);
+  return monogram;
 }
 
 function escapeHtml(value) {
@@ -334,7 +438,7 @@ function renderCategory(config) {
     }
   }
 
-  document.title = `${category.label} | ${config.brand.name}`;
+  updateCategoryMetadata(config.brand.name, category, ' | Eskişehir ve Anadolu');
 }
 
 function bindMobileNav() {
@@ -381,6 +485,10 @@ function getFallbackPublicState() {
 async function init() {
   window.SiteDataClient?.bindGlobalErrorTracking();
   if (!window.SiteConfig) return;
+  if (getSlugParam() === 'highlights') {
+    window.location.replace('index.html#highlights');
+    return;
+  }
   const fallback = getFallbackPublicState();
   const publicState = window.SiteDataClient?.loadPublicState
     ? await window.SiteDataClient.loadPublicState(() => fallback)

@@ -20,6 +20,43 @@ function text(value, fallback = '') {
   return trimmed || fallback;
 }
 
+function updateEventMetadata(title, description, slug, eventId, indexable = true) {
+  document.title = title;
+  const descriptionNode = document.querySelector('meta[name="description"]');
+  if (descriptionNode) descriptionNode.content = description;
+
+  const canonicalNode = document.querySelector('link[rel="canonical"]');
+  const canonicalOrigin = canonicalNode ? new URL(canonicalNode.href).origin : window.location.origin;
+  const canonicalUrl = new URL('/event', canonicalOrigin);
+  canonicalUrl.searchParams.set('slug', slug || 'events');
+  if (eventId) canonicalUrl.searchParams.set('event', eventId);
+  if (canonicalNode) canonicalNode.href = canonicalUrl.href;
+
+  const metadata = [
+    ['meta[property="og:title"]', title],
+    ['meta[property="og:description"]', description],
+    ['meta[property="og:url"]', canonicalUrl.href],
+    ['meta[name="twitter:title"]', title],
+    ['meta[name="twitter:description"]', description],
+  ];
+  metadata.forEach(([selector, content]) => {
+    const node = document.querySelector(selector);
+    if (node) node.content = content;
+  });
+
+  const eventRobotsNode = document.querySelector('meta[data-event-noindex="true"]');
+  if (!indexable) {
+    if (!eventRobotsNode) {
+      const directive = document.head.appendChild(document.createElement('meta'));
+      directive.name = 'robots';
+      directive.content = 'noindex, follow';
+      directive.dataset.eventNoindex = 'true';
+    }
+  } else if (eventRobotsNode) {
+    eventRobotsNode.remove();
+  }
+}
+
 function getQueryParams() {
   const params = new URLSearchParams(window.location.search);
   return {
@@ -100,7 +137,7 @@ function resolveEvent(config) {
     return { category: null, eventBlock: null };
   }
 
-  const selected = eventsCategory.blocks.find((item) => item.id === eventId) || eventsCategory.blocks[0];
+  const selected = eventId ? eventsCategory.blocks.find((item) => item.id === eventId) : null;
   return { category: eventsCategory, eventBlock: selected };
 }
 
@@ -119,7 +156,13 @@ function renderEvent(config) {
     if (emptyNode) emptyNode.hidden = false;
     if (tagNode) tagNode.hidden = true;
     if (backLink) backLink.href = 'category.html?slug=events';
-    document.title = `Etkinlik | ${config.brand.name}`;
+    updateEventMetadata(
+      `Etkinlik bulunamadı | ${config.brand.name} (RDAT)`,
+      'Etkinlik kaydı bulunamadı. Güncel Reddevil Airsoft etkinlikleri için etkinlik arşivini ziyaret edin.',
+      category?.slug || getQueryParams().slug,
+      '',
+      false,
+    );
     return;
   }
 
@@ -169,7 +212,12 @@ function renderEvent(config) {
       .join('');
   }
 
-  document.title = `${eventBlock.title} | ${config.brand.name}`;
+  updateEventMetadata(
+    `${eventBlock.title} | ${config.brand.name} (RDAT)`,
+    `${eventBlock.text || 'Etkinlik özeti'} Reddevil Airsoft (RDAT), Eskişehir merkezli bir airsoft takımıdır.`,
+    category.slug,
+    eventBlock.id,
+  );
 }
 
 function bindMobileNav() {
