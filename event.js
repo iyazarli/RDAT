@@ -264,15 +264,18 @@ async function init() {
   window.SiteDataClient?.bindGlobalErrorTracking();
   if (!window.SiteConfig) return;
   const fallback = getFallbackPublicState();
-  const publicState = window.SiteDataClient?.loadPublicState
-    ? await window.SiteDataClient.loadPublicState(() => fallback)
-    : fallback;
-  const config = window.SiteConfig.normalize(publicState?.siteConfig || fallback?.siteConfig || {});
-  renderBrand(config);
-  renderNavigation(config);
-  renderEvent(config);
-  renderFooter(config);
+  function renderState(publicState) {
+    const config = window.SiteConfig.normalize(publicState?.siteConfig || fallback?.siteConfig || {});
+    renderBrand(config);
+    renderNavigation(config);
+    renderEvent(config);
+    renderFooter(config);
+    document.documentElement.classList.remove('page-pending');
+  }
   bindMobileNav();
+  const publicState = window.SiteDataClient?.loadPublicState
+    ? await window.SiteDataClient.loadPublicState(() => fallback) : fallback;
+  renderState(publicState);
 }
 
 init();

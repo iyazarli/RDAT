@@ -394,19 +394,20 @@ async function init() {
     return;
   }
   const fallback = getFallbackPublicState();
-  const publicState = window.SiteDataClient?.loadPublicState
-    ? await window.SiteDataClient.loadPublicState(() => fallback)
-    : fallback;
-  const config = window.SiteConfig.normalize(publicState?.siteConfig || fallback?.siteConfig || {});
-  renderBrand(config);
-  renderNavigation(config);
-  if (getSlugParam() === 'team') {
-    renderTeamCategory(config, publicState?.teamProfiles);
-  } else {
-    renderCategory(config);
+  function renderState(publicState) {
+    const config = window.SiteConfig.normalize(publicState?.siteConfig || fallback?.siteConfig || {});
+    renderBrand(config);
+    renderNavigation(config);
+    if (getSlugParam() === 'team') renderTeamCategory(config, window.RdatTeam.apply(publicState?.teamProfiles));
+    else renderCategory(config);
+    renderFooter(config);
+    document.documentElement.classList.remove('page-pending');
   }
-  renderFooter(config);
+  renderState(fallback);
   bindMobileNav();
+  const publicState = window.SiteDataClient?.loadPublicState
+    ? await window.SiteDataClient.loadPublicState(() => fallback) : fallback;
+  renderState(publicState);
 }
 
 init();
