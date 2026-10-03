@@ -14,7 +14,7 @@
     {
       "id": "cat_about_block_1",
       "title": "Bir oyundan daha fazlası",
-      "text": "Hepimiz farklı hayatların içinden geliyoruz; farklı karakterlerimiz, deneyimlerimiz ve bakış açılarımız var. R.D.A.T.’ta bu farklılıklar, ortak bir bağın etrafında birleşir. 2022’den bu yana kurduğumuz ilişkiyi sahada birbirimize güvenerek, birbirimizi destekleyerek ve arkada kimseyi bırakmayarak güçlendiriyoruz.",
+      "text": "Hepimiz farklı hayatların içinden geliyoruz; farklı karakterlerimiz, deneyimlerimiz ve bakış açılarımız var. R.D.A.T.’ta bu farklılıklar, ortak bir bağın etrafında birleşir. Sahada ve saha dışında birbirimize güvenerek, her koşulda ve ortamda birbirimize destek olarak, ne sahada ne de hayatta kimseyi arkada bırakmayarak güçleniyoruz.",
       "tag": "Takım ruhu",
       "imageUrl": "assets/about/takim-bagi.jpg",
       "url": "",
@@ -190,6 +190,11 @@
       const replacement = category.blocks.find(item => item.id === block.id);
       const previousImage = legacyCategories.flatMap(item => item.blocks).find(item => item.id === block.id)?.imageUrl;
       if (replacement && (!block.imageUrl || block.imageUrl === previousImage)) block.imageUrl = replacement.imageUrl;
+    }
+    for (const block of aboutCategory?.blocks || []) {
+      if (block.id === 'cat_about_block_1' && typeof block.text === 'string') {
+        block.text = block.text.replace('2022’den bu yana kurduğumuz ilişkiyi sahada birbirimize güvenerek, birbirimizi destekleyerek ve arkada kimseyi bırakmayarak güçlendiriyoruz.', 'Sahada ve saha dışında birbirimize güvenerek, her koşulda ve ortamda birbirimize destek olarak, ne sahada ne de hayatta kimseyi arkada bırakmayarak güçleniyoruz.');
+      }
     }
     correctNames(next);
     return next;
