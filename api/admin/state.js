@@ -1,6 +1,7 @@
 const { requireAdmin } = require('../_lib/admin-auth');
 const { sendJson, methodNotAllowed, readJsonBody } = require('../_lib/http');
 const { loadState, saveState } = require('../_lib/store');
+const EventBlocks = require('../../event-blocks');
 const { syncStateToGitHub } = require('../_lib/github-sync');
 
 module.exports = async function handler(req, res) {
@@ -36,6 +37,9 @@ module.exports = async function handler(req, res) {
       }
     };
 
+    const validationError = EventBlocks.validate(nextState.siteConfig, currentState.siteConfig);
+    if (validationError) return sendJson(res, 400, { ok: false, error: validationError });
+    EventBlocks.prepare(nextState.siteConfig, currentState.siteConfig);
     const savedState = await saveState(nextState);
     const githubSync = await syncStateToGitHub(savedState, {
       message: `Sync site state from admin panel (${new Date().toISOString()})`,

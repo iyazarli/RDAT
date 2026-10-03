@@ -281,6 +281,8 @@ const el = {
   categoryBlockId: document.querySelector('#category-block-id'),
   categoryBlockCategory: document.querySelector('#category-block-category'),
   categoryBlockTitle: document.querySelector('#category-block-title'),
+  categoryBlockEventDate: document.querySelector('#category-block-event-date'),
+  categoryBlockEventDateLabel: document.querySelector('#category-block-event-date-label'),
   categoryBlockText: document.querySelector('#category-block-text'),
   categoryBlockTag: document.querySelector('#category-block-tag'),
   categoryBlockImage: document.querySelector('#category-block-image'),
@@ -1550,9 +1552,19 @@ function renderCategorySelect() {
     .join('');
 
   el.categoryBlockCategory.value = state.selectedCategoryId;
+  refreshEventDateField();
+}
+
+function refreshEventDateField() {
+  const isEvent = getCategoryById(el.categoryBlockCategory.value)?.slug === 'events';
+  el.categoryBlockEventDateLabel.hidden = !isEvent;
+  el.categoryBlockEventDate.required = isEvent;
+  el.categoryBlockEventDate.disabled = !isEvent;
 }
 
 function clearCategoryBlockForm() {
+  el.categoryBlockEventDate.value = '';
+  refreshEventDateField();
   el.categoryBlockId.value = '';
   el.categoryBlockTitle.value = '';
   el.categoryBlockText.value = '';
@@ -1568,6 +1580,8 @@ function clearCategoryBlockForm() {
 function fillCategoryBlockForm(block, categoryId) {
   state.selectedCategoryId = categoryId;
   renderCategorySelect();
+  el.categoryBlockEventDate.value = block.event_date || '';
+  refreshEventDateField();
   el.categoryBlockId.value = block.id;
   el.categoryBlockTitle.value = block.title;
   el.categoryBlockText.value = block.text;
@@ -1589,6 +1603,8 @@ function collectCategoryBlockForm() {
     imageUrl: text(el.categoryBlockImage.value, ''),
     url: text(el.categoryBlockUrl.value, ''),
     gallery: parseLineList(el.categoryBlockGallery.value),
+    event_date: el.categoryBlockEventDate.disabled ? '' : el.categoryBlockEventDate.value,
+    created_at: getCategoryById(el.categoryBlockCategory.value)?.blocks.find(item => item.id === el.categoryBlockId.value)?.created_at || (el.categoryBlockId.value ? '' : new Date().toISOString()),
   };
 }
 
@@ -1605,7 +1621,8 @@ function renderCategoryBlockList() {
     return;
   }
 
-  el.categoryBlockList.innerHTML = category.blocks
+  refreshEventDateField();
+  el.categoryBlockList.innerHTML = (category.slug === 'events' ? window.EventBlocks.sort(category.blocks) : category.blocks)
     .map((block) => `
       <article class="mini-item">
         ${block.imageUrl ? `<img src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.title)}" style="width:100%;height:140px;object-fit:cover;border-radius:8px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.12);">` : ''}
@@ -1617,7 +1634,7 @@ function renderCategoryBlockList() {
           </div>
         </div>
         <p>${escapeHtml(block.text)}</p>
-        <small class="helper-note">Etiket: ${escapeHtml(block.tag || '-')} | Link: ${escapeHtml(block.url || '-')} | Galeri: ${Array.isArray(block.gallery) ? block.gallery.length : 0}</small>
+        <small class="helper-note">${category.slug === 'events' ? `Etkinlik Tarihi: ${escapeHtml(block.event_date || 'Tarih belirtilmemiş')} | ` : ''}Etiket: ${escapeHtml(block.tag || '-')} | Link: ${escapeHtml(block.url || '-')} | Galeri: ${Array.isArray(block.gallery) ? block.gallery.length : 0}</small>
       </article>
     `)
     .join('');
@@ -2148,7 +2165,12 @@ function bindEvents() {
       return;
     }
 
-    const saved = upsertCategoryBlock(categoryId, collectCategoryBlockForm());
+    const block = collectCategoryBlockForm();
+    if (getCategoryById(categoryId)?.slug === 'events' && !window.EventBlocks.validDate(block.event_date)) {
+      setInlineStatus(el.categoryBlockStatus, 'Geçerli bir etkinlik tarihi girin.', 'error');
+      return;
+    }
+    const saved = upsertCategoryBlock(categoryId, block);
     if (!saved) {
       setInlineStatus(el.categoryBlockStatus, 'Kategori blogu kaydedilemedi.', 'error');
       return;

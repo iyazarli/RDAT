@@ -549,6 +549,8 @@
       imageUrl: text(item && item.imageUrl, ''),
       url: text(item && item.url, ''),
       gallery,
+      event_date: text(item && item.event_date, ''),
+      created_at: text(item && item.created_at, ''),
     };
   }
 
@@ -774,7 +776,8 @@
           quickTags: footerQuickTagsSource.map((item) => text(item, '')).filter(Boolean),
         },
       },
-      categories: normalizedCategories,
+      categories: normalizedCategories.map(category => category.slug === 'events'
+        ? { ...category, blocks: global.EventBlocks.sort(category.blocks) } : category),
     };
   }
 

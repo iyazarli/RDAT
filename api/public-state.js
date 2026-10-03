@@ -1,4 +1,5 @@
 const { sendJson, methodNotAllowed } = require('./_lib/http');
+const EventBlocks = require('../event-blocks');
 const { loadState } = require('./_lib/store');
 
 module.exports = async function handler(req, res) {
@@ -8,6 +9,9 @@ module.exports = async function handler(req, res) {
 
   try {
     const state = await loadState();
+    for (const category of state.siteConfig?.categories || []) {
+      if (category.slug === 'events') category.blocks = EventBlocks.sort(category.blocks || []);
+    }
     res.setHeader('Cache-Control', 'no-store');
     return sendJson(res, 200, {
       ok: true,

@@ -365,6 +365,7 @@ function renderCategory(config) {
   const category = config.categories.find((item) => item.slug === slug) || config.categories[0];
   const isSponsorCategory = category.slug === 'sponsors';
   const isEventsCategory = category.slug === 'events';
+  if (isEventsCategory) category.blocks = window.EventBlocks.sort(category.blocks || []);
 
   setText('category-eyebrow', category.eyebrow);
   setText('category-title', category.title);
