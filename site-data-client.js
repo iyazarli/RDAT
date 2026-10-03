@@ -19,12 +19,13 @@
 
       const payload = await response.json();
       if (payload && payload.ok && payload.siteConfig) {
-        return clone(payload);
+        return { ...clone(payload), teamProfiles: global.RdatTeam.apply(payload.teamProfiles) };
       }
       throw new Error('Public state payload gecersiz.');
     } catch (error) {
       console.error(error);
-      return typeof fallbackFactory === 'function' ? fallbackFactory() : null;
+      const fallback = typeof fallbackFactory === 'function' ? fallbackFactory() : null;
+      return fallback ? { ...fallback, teamProfiles: global.RdatTeam.apply(fallback.teamProfiles) } : null;
     }
   }
 

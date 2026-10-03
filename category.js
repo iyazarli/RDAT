@@ -1,103 +1,6 @@
 const TEAM_STORAGE_KEY = 'reddevil_team_profiles';
 
-const DEFAULT_TEAM_PROFILES = [
-  {
-    id: 'team_ghost',
-    name: 'Kagan',
-    callsign: 'Ghost',
-    title: 'Takım lideri • Oyun kurgusu',
-    badge: 'Lider',
-    bio: 'Senaryo akışını ve saha koordinasyonunu planlar; telsiz iletişim düzeninin oyun boyunca korunmasına destek olur.',
-    expertise: 'Komuta & Entry',
-    seasons: '5. sezon',
-    setup: 'M4 + red dot',
-    photo: 'https://images.unsplash.com/photo-1608064229007-dca149d32c4f?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 'team_mamba',
-    name: 'Selin',
-    callsign: 'Mamba',
-    title: 'Güvenlik sorumlusu • Medic eğitimi',
-    badge: 'Safety',
-    bio: 'Güvenlik brifingini, ilk yardım hazırlığını ve saha içi risk kontrollerini yürütür.',
-    expertise: 'Medic & Safety',
-    seasons: '4. sezon',
-    setup: 'SMG + sidearm',
-    photo: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 'team_forge',
-    name: 'Emir',
-    callsign: 'Forge',
-    title: 'Ekipman mentoru',
-    badge: 'Tech',
-    bio: 'Kronograf ve ekipman bakımı, yedek ekipman takibi ve bütçeye uygun kurulum önerilerinde destek verir.',
-    expertise: 'Tech & DMR',
-    seasons: '6. sezon',
-    setup: 'DMR 1.64J',
-    photo: 'https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 'team_spark',
-    name: 'Deniz',
-    callsign: 'Spark',
-    title: 'Medya • Oyun sonrası değerlendirme',
-    badge: 'Media',
-    bio: 'Oyun görüntülerini ve seçili anları düzenler; ekip arşivinin ve oyun sonrası değerlendirme notlarının paylaşımına katkı sağlar.',
-    expertise: 'Recon & Media',
-    seasons: '3. sezon',
-    setup: 'Carbine + action cam',
-    photo: 'https://images.unsplash.com/photo-1522556189639-b150c3a2e10f?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 'team_placeholder_5',
-    name: 'Ad',
-    callsign: 'Callsign',
-    title: 'Rol — Guncelleniyor',
-    badge: 'Member',
-    bio: 'Oyuncu bilgileri yakin zamanda eklenecek.',
-    expertise: '—',
-    seasons: '—',
-    setup: '—',
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 'team_placeholder_6',
-    name: 'Ad',
-    callsign: 'Callsign',
-    title: 'Rol — Guncelleniyor',
-    badge: 'Member',
-    bio: 'Oyuncu bilgileri yakin zamanda eklenecek.',
-    expertise: '—',
-    seasons: '—',
-    setup: '—',
-    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 'team_placeholder_7',
-    name: 'Ad',
-    callsign: 'Callsign',
-    title: 'Rol — Guncelleniyor',
-    badge: 'Member',
-    bio: 'Oyuncu bilgileri yakin zamanda eklenecek.',
-    expertise: '—',
-    seasons: '—',
-    setup: '—',
-    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80',
-  },
-  {
-    id: 'team_placeholder_8',
-    name: 'Ad',
-    callsign: 'Callsign',
-    title: 'Rol — Guncelleniyor',
-    badge: 'Member',
-    bio: 'Oyuncu bilgileri yakin zamanda eklenecek.',
-    expertise: '—',
-    seasons: '—',
-    setup: '—',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80',
-  },
-];
+const DEFAULT_TEAM_PROFILES = window.RdatTeam.profiles;
 
 function updateCategoryMetadata(brandName, category, titleSuffix = '') {
   const label = category.label || 'Red Devil Airsoft';
@@ -213,7 +116,7 @@ function renderTeamCategory(config, teamProfiles) {
       <div class="category-person-body">
         <header class="category-person-header">
           <div>
-            <h3>${escapeHtml(p.name)} &ldquo;${escapeHtml(p.callsign)}&rdquo;</h3>
+            <h3>${escapeHtml(p.name)}${p.callsign ? ` &ldquo;${escapeHtml(p.callsign)}&rdquo;` : ''}</h3>
             <small>${escapeHtml(p.title)}</small>
           </div>
           <span class="category-role-badge">${escapeHtml(p.badge)}</span>

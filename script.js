@@ -516,10 +516,10 @@ function getLocalTeamProfiles() {
   return raw.map((item, index) => ({
     id: String(item.id || `team_${index}`),
     name: String(item.name || `Oyuncu ${index + 1}`),
-    callsign: String(item.callsign || 'Callsign'),
+    callsign: String(item.callsign || ''),
     title: String(item.title || 'Rol'),
     badge: String(item.badge || 'Member'),
-    photo: String(item.photo || 'https://images.unsplash.com/photo-1522556189639-b150c3a2e10f?auto=format&fit=crop&w=900&q=80'),
+    photo: String(item.photo || ''),
     bio: String(item.bio || ''),
     expertise: String(item.expertise || '-'),
     seasons: String(item.seasons || '-'),
@@ -536,10 +536,10 @@ function renderTeamProfiles(profilesInput) {
     ? profilesInput.map((item, index) => ({
       id: String(item.id || `team_${index}`),
       name: String(item.name || `Oyuncu ${index + 1}`),
-      callsign: String(item.callsign || 'Callsign'),
+      callsign: String(item.callsign || ''),
       title: String(item.title || 'Rol'),
       badge: String(item.badge || 'Member'),
-      photo: String(item.photo || 'https://images.unsplash.com/photo-1522556189639-b150c3a2e10f?auto=format&fit=crop&w=900&q=80'),
+      photo: String(item.photo || ''),
       bio: String(item.bio || ''),
       expertise: String(item.expertise || '-'),
       seasons: String(item.seasons || '-'),
@@ -569,7 +569,7 @@ function renderTeamProfiles(profilesInput) {
         <div class="person-body">
           <header class="person-header">
             <div>
-              <h3>${escapeHtml(profile.name)} "${escapeHtml(profile.callsign)}"</h3>
+              <h3>${escapeHtml(profile.name)}${profile.callsign ? ` &ldquo;${escapeHtml(profile.callsign)}&rdquo;` : ''}</h3>
               <small>${escapeHtml(profile.title)}</small>
             </div>
             <span class="role-badge">${escapeHtml(profile.badge)}</span>
