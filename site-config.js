@@ -7,7 +7,7 @@
     brand: {
       logoMode: 'image',
       markText: 'RD',
-      name: 'Reddevil',
+      name: 'Red Devil',
       tagline: 'Airsoft Team',
       logoUrl: 'assets/brand/reddevil-logo.svg',
     },
@@ -18,9 +18,9 @@
     home: {
       hero: {
         eyebrow: 'Eskişehir • Türkiye • Airsoft',
-        titleMain: 'Reddevil Airsoft',
+        titleMain: 'Red Devil Airsoft',
         titleAccent: 'Eskişehir’de Airsoft',
-        lede: 'Reddevil Airsoft (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır. MilSim, fair-play ve güvenli oyun odağıyla Anadolu’daki oyuncuların katılımına açığız.',
+        lede: 'Red Devil Airsoft (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır. MilSim, fair-play ve güvenli oyun odağıyla Anadolu’daki oyuncuların katılımına açığız.',
         ctaPrimaryText: 'İlk oyunu sor',
         ctaPrimaryHref: '#apply',
         ctaSecondaryText: 'Takımı tanı',
@@ -44,7 +44,7 @@
       about: {
         eyebrow: 'Hakkimizda',
         title: 'Sahada koordinasyon ve guvenlige odakli, butik bir airsoft ekibiyiz.',
-        text: "Reddevil Airsoft (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır. MilSim ve senaryo temelli oyunlarda fair-play, güvenlik ve takım koordinasyonuna önem verir. Anadolu'daki oyuncular ilk oyun ve katılım bilgisi için ekiple iletişime geçebilir.",
+        text: "Red Devil Airsoft (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır. MilSim ve senaryo temelli oyunlarda fair-play, güvenlik ve takım koordinasyonuna önem verir. Anadolu'daki oyuncular ilk oyun ve katılım bilgisi için ekiple iletişime geçebilir.",
         pills: [
           'Ekipman rehberi',
           'Senaryo brifing',
@@ -99,7 +99,7 @@
       field: {
         eyebrow: 'Saha & Takvim',
         title: 'Eskişehir’de MilSim ve senaryo temelli airsoft oyunları',
-        subtitle: 'Reddevil Airsoft Eskişehir merkezlidir ve Anadolu’daki oyuncuların katılımına açıktır. Güncel oyun tarihi ve saha bilgisi etkinlik duyurularında paylaşılır.',
+        subtitle: 'Red Devil Airsoft Eskişehir merkezlidir ve Anadolu’daki oyuncuların katılımına açıktır. Güncel oyun tarihi ve saha bilgisi etkinlik duyurularında paylaşılır.',
         schedule: [
           { id: 'sch_meet', label: 'Toplanma', value: '07:30 - 08:00' },
           { id: 'sch_start', label: 'Oyun baslangici', value: '09:00' },
@@ -165,7 +165,7 @@
         showInMenu: true,
         eyebrow: 'TAKIM KÜLTÜRÜ',
         title: 'Güvenli oyun, birlikte gelişim.',
-        intro: 'Reddevil; fair-play’i, açık iletişimi ve saha güvenliğini önceleyen bir airsoft ekibi. Yeni oyuncularla ilk oyun hazırlığını, ekipman listesini ve rol seçeneklerini birlikte gözden geçiririz.',
+        intro: 'Red Devil; fair-play’i, açık iletişimi ve saha güvenliğini önceleyen bir airsoft ekibi. Yeni oyuncularla ilk oyun hazırlığını, ekipman listesini ve rol seçeneklerini birlikte gözden geçiririz.',
         ctaLabel: 'İlk oyunu konuşalım',
         ctaHref: 'index.html#apply',
         blocks: [
@@ -418,7 +418,7 @@
       id: 'cat_about',
       label: 'Hakkimizda',
       eyebrow: 'Kategori',
-      title: 'Reddevil Hakkinda',
+      title: 'Red Devil Hakkinda',
       intro: 'Takim kulturumuz disiplin, guvenlik ve surekli gelisim odaklidir.',
       ctaLabel: 'Basvuru Formuna Git',
       ctaHref: 'index.html#apply',

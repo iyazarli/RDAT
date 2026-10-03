@@ -158,7 +158,7 @@ function renderEvent(config) {
     if (backLink) backLink.href = 'category.html?slug=events';
     updateEventMetadata(
       `Etkinlik bulunamadı | ${config.brand.name} (R.D.A.T.)`,
-      'Etkinlik kaydı bulunamadı. Güncel Reddevil Airsoft etkinlikleri için etkinlik arşivini ziyaret edin.',
+      'Etkinlik kaydı bulunamadı. Güncel Red Devil Airsoft etkinlikleri için etkinlik arşivini ziyaret edin.',
       category?.slug || getQueryParams().slug,
       '',
       false,
@@ -214,7 +214,7 @@ function renderEvent(config) {
 
   updateEventMetadata(
     `${eventBlock.title} | ${config.brand.name} (R.D.A.T.)`,
-    `${eventBlock.text || 'Etkinlik özeti'} Reddevil Airsoft (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır.`,
+    `${eventBlock.text || 'Etkinlik özeti'} Red Devil Airsoft (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır.`,
     category.slug,
     eventBlock.id,
   );

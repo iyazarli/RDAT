@@ -6,8 +6,8 @@
   "label": "Hakkımızda",
   "showInMenu": true,
   "eyebrow": "2022’DEN BERİ · ESKİŞEHİR",
-  "title": "Farklı hayatlar. Tek bağ. Reddevil.",
-  "intro": "2022 yılında kurulan Reddevil Airsoft Takımı (R.D.A.T.), birbirinden farklı hayatları ve karakterleri airsoft tutkusu etrafında buluşturur. Bizi bir arada tutan, oyun günü kurulan koordinasyon kadar saha dışında da devam eden güçlü bağdır.",
+  "title": "Farklı hayatlar. Tek bağ. Red Devil.",
+  "intro": "2022 yılında kurulan Red Devil Airsoft Takımı (R.D.A.T.), birbirinden farklı hayatları ve karakterleri airsoft tutkusu etrafında buluşturur. Bizi bir arada tutan, oyun günü kurulan koordinasyon kadar saha dışında da devam eden güçlü bağdır.",
   "ctaLabel": "R.D.A.T. ile tanış",
   "ctaHref": "index.html#apply",
   "blocks": [
@@ -52,7 +52,7 @@
   const home = {
   "eyebrow": "2022’den beri · Eskişehir",
   "title": "Farklı hayatları aynı takım ruhunda buluşturuyoruz.",
-  "text": "Reddevil Airsoft Takımı (R.D.A.T.), 2022’den bu yana farklı karakterleri airsoft tutkusu etrafında bir araya getiriyor. Ağırlıklı olarak Eskişehir’de iki haftada bir pazar günleri oynuyor; dost takım buluşmaları ve şehir dışı ziyaretlerle yılda yaklaşık 40 oyuna katılıyoruz. Sahada birbirimize güveniyor, arkada kimseyi bırakmıyoruz.",
+  "text": "Red Devil Airsoft Takımı (R.D.A.T.), 2022’den bu yana farklı karakterleri airsoft tutkusu etrafında bir araya getiriyor. Ağırlıklı olarak Eskişehir’de iki haftada bir pazar günleri oynuyor; dost takım buluşmaları ve şehir dışı ziyaretlerle yılda yaklaşık 40 oyuna katılıyoruz. Sahada birbirimize güveniyor, arkada kimseyi bırakmıyoruz.",
   "pills": [
     "Oyun felsefesi ve kuralları",
     "Ekipman mentorluğu",
@@ -177,11 +177,11 @@
     }
     if (next.home?.about && (force || legacyHomes.some(old => equal(next.home.about, old)))) next.home.about = copy(home);
     // Kayıtlı eski metinlerde de takımın resmi kısaltmasını göster.
-    const textFields = new Set(['title', 'text', 'intro', 'ctaLabel', 'lede', 'description', 'label', 'question', 'answer']);
+    const textFields = new Set(['title', 'text', 'intro', 'ctaLabel', 'lede', 'description', 'label', 'question', 'answer', 'name', 'titleMain', 'blurb']);
     function correctNames(value) {
       if (!value || typeof value !== 'object') return;
       for (const [key, item] of Object.entries(value)) {
-        if (typeof item === 'string' && textFields.has(key)) value[key] = item.replace(/RDAT/g, 'R.D.A.T.');
+        if (typeof item === 'string' && textFields.has(key)) value[key] = item.replace(/RDAT/g, 'R.D.A.T.').replace(/Reddevil/g, 'Red Devil').replace(/REDDEVIL/g, 'RED DEVIL');
         else if (item && typeof item === 'object') correctNames(item);
       }
     }

@@ -651,7 +651,7 @@ function applyDraftContent(config) {
   draft.home.hero = {
     ...draft.home.hero,
     eyebrow: 'ESKİŞEHİR • MILSIM • YENİ OYUNCULARA AÇIK',
-    titleMain: 'Reddevil Airsoft',
+    titleMain: 'Red Devil Airsoft',
     titleAccent: 'Eskişehir’de MilSim',
     lede: 'Fair-play, güvenlik ve takım koordinasyonuyla oynuyoruz. İlk kez katılacaklara ekipman rehberi, güvenlik brifingi ve rol seçimiyle eşlik ediyoruz.',
     ctaPrimaryText: 'İlk oyunu sor',

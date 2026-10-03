@@ -100,7 +100,7 @@ const DEFAULT_TEAM_PROFILES = [
 ];
 
 function updateCategoryMetadata(brandName, category, titleSuffix = '') {
-  const label = category.label || 'Reddevil Airsoft';
+  const label = category.label || 'Red Devil Airsoft';
   const title = `${label} | ${brandName} (R.D.A.T.)${titleSuffix}`;
   const intro = String(category.intro || 'Takım, airsoft etkinlikleri ve katılım bilgileri.').trim();
   const description = `${brandName} (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır. ${intro}`;

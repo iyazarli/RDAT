@@ -102,7 +102,7 @@ let DEFAULT_SITE_CONFIG = {
   brand: {
     logoMode: 'image',
     markText: 'RD',
-    name: 'Reddevil',
+    name: 'Red Devil',
     tagline: 'Airsoft Team',
     logoUrl: 'assets/brand/reddevil-logo.svg'
   },
@@ -113,7 +113,7 @@ let DEFAULT_SITE_CONFIG = {
   home: {
     hero: {
       eyebrow: 'Taktik disiplin • Guvenli oyun • Gercek ekip ruhu',
-      titleMain: 'Reddevil Airsoft',
+      titleMain: 'Red Devil Airsoft',
       titleAccent: 'Sahada Goruselim',
       lede: 'Marmara bolgesinde aktif sahalarda oynayan, takim koordinasyonuna ve guvenlige onem veren bir airsoft topluluguyuz. Yeni oyunculara egitim, ekipman rehberi ve rol calismalari sunuyoruz.',
       ctaPrimaryText: 'Takima Katil',
@@ -139,7 +139,7 @@ let DEFAULT_SITE_CONFIG = {
     about: {
       eyebrow: 'Hakkimizda',
       title: 'Sahada koordinasyon ve guvenlige odakli, butik bir airsoft ekibiyiz.',
-      text: "Reddevil; cesitli saha tiplerinde (CQB, woodland, endustriyel) duzenli olarak oynayan, fair-play kurallarina sadik, guvenligi onceleyen bir takimdi. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
+      text: "Red Devil; cesitli saha tiplerinde (CQB, woodland, endustriyel) duzenli olarak oynayan, fair-play kurallarina sadik, guvenligi onceleyen bir takimdi. Yeni katilimcilara temel guvenlik egitimi, ekipman checklist'i ve rol denemesi saglar.",
       pills: [
         'Ekipman rehberi',
         'Senaryo brifing',
@@ -259,7 +259,7 @@ let DEFAULT_SITE_CONFIG = {
       label: 'Hakkimizda',
       showInMenu: true,
       eyebrow: 'Kategori',
-      title: 'Reddevil Hakkinda',
+      title: 'Red Devil Hakkinda',
       intro: 'Takim kulturumuz disiplin, guvenlik ve surekli gelisim odaklidir.',
       ctaLabel: 'Basvuru Formuna Git',
       ctaHref: 'index.html#apply',
