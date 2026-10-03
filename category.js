@@ -415,7 +415,7 @@ function renderCategory(config) {
       blockGrid.innerHTML = category.blocks
         .map((block) => {
           const card = `
-            <article class="category-block${isEventsCategory ? ' category-block--event' : ''}">
+            <article class="category-block${isEventsCategory ? ' category-block--event' : category.slug === 'about' ? ' category-block--about' : ''}">
               ${block.imageUrl ? `<img class="category-block-media" src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.title)}">` : ''}
               <h3>${escapeHtml(block.title)}</h3>
               <p>${escapeHtml(block.text)}</p>

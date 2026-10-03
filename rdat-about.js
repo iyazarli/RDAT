@@ -16,7 +16,7 @@
       "title": "Bir oyundan daha fazlası",
       "text": "Hepimiz farklı hayatların içinden geliyoruz; farklı karakterlerimiz, deneyimlerimiz ve bakış açılarımız var. R.D.A.T.’ta bu farklılıklar, ortak bir bağın etrafında birleşir. 2022’den bu yana kurduğumuz ilişkiyi sahada birbirimize güvenerek, birbirimizi destekleyerek ve arkada kimseyi bırakmayarak güçlendiriyoruz.",
       "tag": "Takım ruhu",
-      "imageUrl": "https://images.unsplash.com/photo-1520975878803-a3b0f5f58f92?auto=format&fit=crop&w=1400&q=80",
+      "imageUrl": "assets/about/takim-bagi.jpg",
       "url": "",
       "gallery": []
     },
@@ -25,7 +25,7 @@
       "title": "İlk adımından itibaren yanında",
       "text": "Yeni oyunculara yalnızca nasıl oynanacağını değil, airsoftun felsefesini ve kurallarını da anlatıyoruz. Ekipman seçiminde mentorluk sağlıyor, saha stratejileri konusunda yol gösteriyoruz. Amacımız, oyuncunun hem oyunu tanıması hem de takımın içinde yerini bulması.",
       "tag": "Mentorluk",
-      "imageUrl": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1400&q=80",
+      "imageUrl": "assets/about/saha-deneyimi.jpg",
       "url": "",
       "gallery": []
     },
@@ -34,7 +34,7 @@
       "title": "Eskişehir’den dost sahalara",
       "text": "Ağırlıklı olarak Eskişehir’de, iki haftada bir pazar günleri oynuyoruz. Şehir dışından gelen dost takım ve oyuncularla buluşmalarımız ve bizim yaptığımız ziyaretlerle birlikte yılda yaklaşık 40 oyunda sahaya çıkıyoruz. Her buluşma, birlikte oynama deneyimimizi ve takımlar arasındaki dostluğu büyütüyor.",
       "tag": "Oyun düzeni",
-      "imageUrl": "",
+      "imageUrl": "assets/about/dost-takimlar.jpg",
       "url": "",
       "gallery": []
     },
@@ -43,7 +43,7 @@
       "title": "Aynı değerlerde buluşmak",
       "text": "R.D.A.T.’a katılımda temel şartlarımız saygı, dürüstlük, Türk milliyetçiliği ve bunun ayrılmaz bir bütünü olarak Atatürk ilke ve inkılaplarına tam bağlılıktır. Bu değerlerin takım içindeki ilişkilerimize ve sahadaki davranışlarımıza yansımasını bekleriz. Kurallara bağlılık, fair-play ve karşılıklı güven, birlikte oyun oynamamızın temelidir.",
       "tag": "Katılım değerleri",
-      "imageUrl": "",
+      "imageUrl": "assets/about/ortak-degerler.jpg",
       "url": "",
       "gallery": []
     }
@@ -184,6 +184,12 @@
         if (typeof item === 'string' && textFields.has(key)) value[key] = item.replace(/RDAT/g, 'R.D.A.T.');
         else if (item && typeof item === 'object') correctNames(item);
       }
+    }
+    const aboutCategory = next.categories?.find(item => item.slug === 'about');
+    for (const block of aboutCategory?.blocks || []) {
+      const replacement = category.blocks.find(item => item.id === block.id);
+      const previousImage = legacyCategories.flatMap(item => item.blocks).find(item => item.id === block.id)?.imageUrl;
+      if (replacement && (!block.imageUrl || block.imageUrl === previousImage)) block.imageUrl = replacement.imageUrl;
     }
     correctNames(next);
     return next;
