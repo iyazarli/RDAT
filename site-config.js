@@ -2,7 +2,7 @@
   const STORAGE_KEY = 'reddevil_site_config';
   const LEGACY_CONTENT_KEY = 'reddevil_site_content';
 
-  const DEFAULT_SITE_CONFIG = {
+  let DEFAULT_SITE_CONFIG = {
     version: 2,
     brand: {
       logoMode: 'image',
@@ -411,6 +411,8 @@
     ],
   };
 
+  DEFAULT_SITE_CONFIG = global.RdatAbout.apply(DEFAULT_SITE_CONFIG, true);
+
   const LEGACY_CATEGORY_CONTENT = {
     about: {
       id: 'cat_about',
@@ -597,7 +599,7 @@
   }
 
   function normalize(config) {
-    const source = config && typeof config === 'object' ? config : {};
+    const source = global.RdatAbout.apply(config && typeof config === 'object' ? config : {});
     const base = clone(DEFAULT_SITE_CONFIG);
 
     const brand = source.brand && typeof source.brand === 'object' ? source.brand : {};

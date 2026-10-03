@@ -97,7 +97,7 @@ const DEFAULT_TEAM_PROFILES = [
   }
 ];
 
-const DEFAULT_SITE_CONFIG = {
+let DEFAULT_SITE_CONFIG = {
   version: 2,
   brand: {
     logoMode: 'image',
@@ -508,6 +508,8 @@ const DEFAULT_SITE_CONFIG = {
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
+
+DEFAULT_SITE_CONFIG = require('../../rdat-about').apply(DEFAULT_SITE_CONFIG, true);
 
 function createDefaultState() {
   const now = new Date().toISOString();

@@ -63,7 +63,7 @@ async function saveState(nextState) {
 async function loadState() {
   const existingState = await readStoredState();
   if (existingState && typeof existingState === 'object') {
-    return existingState;
+    return { ...existingState, siteConfig: require('../../rdat-about').apply(existingState.siteConfig) };
   }
 
   const defaultState = createDefaultState();
