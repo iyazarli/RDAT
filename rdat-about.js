@@ -7,14 +7,14 @@
   "showInMenu": true,
   "eyebrow": "2022’DEN BERİ · ESKİŞEHİR",
   "title": "Farklı hayatlar. Tek bağ. Reddevil.",
-  "intro": "2022 yılında kurulan Reddevil Airsoft Takımı (RDAT), birbirinden farklı hayatları ve karakterleri airsoft tutkusu etrafında buluşturur. Bizi bir arada tutan, oyun günü kurulan koordinasyon kadar saha dışında da devam eden güçlü bağdır.",
-  "ctaLabel": "RDAT ile tanış",
+  "intro": "2022 yılında kurulan Reddevil Airsoft Takımı (R.D.A.T.), birbirinden farklı hayatları ve karakterleri airsoft tutkusu etrafında buluşturur. Bizi bir arada tutan, oyun günü kurulan koordinasyon kadar saha dışında da devam eden güçlü bağdır.",
+  "ctaLabel": "R.D.A.T. ile tanış",
   "ctaHref": "index.html#apply",
   "blocks": [
     {
       "id": "cat_about_block_1",
       "title": "Bir oyundan daha fazlası",
-      "text": "Hepimiz farklı hayatların içinden geliyoruz; farklı karakterlerimiz, deneyimlerimiz ve bakış açılarımız var. RDAT’ta bu farklılıklar, ortak bir bağın etrafında birleşir. 2022’den bu yana kurduğumuz ilişkiyi sahada birbirimize güvenerek, birbirimizi destekleyerek ve arkada kimseyi bırakmayarak güçlendiriyoruz.",
+      "text": "Hepimiz farklı hayatların içinden geliyoruz; farklı karakterlerimiz, deneyimlerimiz ve bakış açılarımız var. R.D.A.T.’ta bu farklılıklar, ortak bir bağın etrafında birleşir. 2022’den bu yana kurduğumuz ilişkiyi sahada birbirimize güvenerek, birbirimizi destekleyerek ve arkada kimseyi bırakmayarak güçlendiriyoruz.",
       "tag": "Takım ruhu",
       "imageUrl": "https://images.unsplash.com/photo-1520975878803-a3b0f5f58f92?auto=format&fit=crop&w=1400&q=80",
       "url": "",
@@ -41,7 +41,7 @@
     {
       "id": "cat_about_block_4",
       "title": "Aynı değerlerde buluşmak",
-      "text": "RDAT’a katılımda temel şartlarımız saygı, dürüstlük, Türk milliyetçiliği ve bunun ayrılmaz bir bütünü olarak Atatürk ilke ve inkılaplarına tam bağlılıktır. Bu değerlerin takım içindeki ilişkilerimize ve sahadaki davranışlarımıza yansımasını bekleriz. Kurallara bağlılık, fair-play ve karşılıklı güven, birlikte oyun oynamamızın temelidir.",
+      "text": "R.D.A.T.’a katılımda temel şartlarımız saygı, dürüstlük, Türk milliyetçiliği ve bunun ayrılmaz bir bütünü olarak Atatürk ilke ve inkılaplarına tam bağlılıktır. Bu değerlerin takım içindeki ilişkilerimize ve sahadaki davranışlarımıza yansımasını bekleriz. Kurallara bağlılık, fair-play ve karşılıklı güven, birlikte oyun oynamamızın temelidir.",
       "tag": "Katılım değerleri",
       "imageUrl": "",
       "url": "",
@@ -52,7 +52,7 @@
   const home = {
   "eyebrow": "2022’den beri · Eskişehir",
   "title": "Farklı hayatları aynı takım ruhunda buluşturuyoruz.",
-  "text": "Reddevil Airsoft Takımı (RDAT), 2022’den bu yana farklı karakterleri airsoft tutkusu etrafında bir araya getiriyor. Ağırlıklı olarak Eskişehir’de iki haftada bir pazar günleri oynuyor; dost takım buluşmaları ve şehir dışı ziyaretlerle yılda yaklaşık 40 oyuna katılıyoruz. Sahada birbirimize güveniyor, arkada kimseyi bırakmıyoruz.",
+  "text": "Reddevil Airsoft Takımı (R.D.A.T.), 2022’den bu yana farklı karakterleri airsoft tutkusu etrafında bir araya getiriyor. Ağırlıklı olarak Eskişehir’de iki haftada bir pazar günleri oynuyor; dost takım buluşmaları ve şehir dışı ziyaretlerle yılda yaklaşık 40 oyuna katılıyoruz. Sahada birbirimize güveniyor, arkada kimseyi bırakmıyoruz.",
   "pills": [
     "Oyun felsefesi ve kuralları",
     "Ekipman mentorluğu",
@@ -176,6 +176,16 @@
       next.categories[index] = { ...next.categories[index], ...copy(category), showInMenu: next.categories[index].showInMenu };
     }
     if (next.home?.about && (force || legacyHomes.some(old => equal(next.home.about, old)))) next.home.about = copy(home);
+    // Kayıtlı eski metinlerde de takımın resmi kısaltmasını göster.
+    const textFields = new Set(['title', 'text', 'intro', 'ctaLabel', 'lede', 'description', 'label', 'question', 'answer']);
+    function correctNames(value) {
+      if (!value || typeof value !== 'object') return;
+      for (const [key, item] of Object.entries(value)) {
+        if (typeof item === 'string' && textFields.has(key)) value[key] = item.replace(/RDAT/g, 'R.D.A.T.');
+        else if (item && typeof item === 'object') correctNames(item);
+      }
+    }
+    correctNames(next);
     return next;
   }
   const api = { category, home, apply };

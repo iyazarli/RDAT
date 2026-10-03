@@ -20,7 +20,7 @@
         eyebrow: 'Eskişehir • Türkiye • Airsoft',
         titleMain: 'Reddevil Airsoft',
         titleAccent: 'Eskişehir’de Airsoft',
-        lede: 'Reddevil Airsoft (RDAT), Eskişehir merkezli bir airsoft takımıdır. MilSim, fair-play ve güvenli oyun odağıyla Anadolu’daki oyuncuların katılımına açığız.',
+        lede: 'Reddevil Airsoft (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır. MilSim, fair-play ve güvenli oyun odağıyla Anadolu’daki oyuncuların katılımına açığız.',
         ctaPrimaryText: 'İlk oyunu sor',
         ctaPrimaryHref: '#apply',
         ctaSecondaryText: 'Takımı tanı',
@@ -44,7 +44,7 @@
       about: {
         eyebrow: 'Hakkimizda',
         title: 'Sahada koordinasyon ve guvenlige odakli, butik bir airsoft ekibiyiz.',
-        text: "Reddevil Airsoft (RDAT), Eskişehir merkezli bir airsoft takımıdır. MilSim ve senaryo temelli oyunlarda fair-play, güvenlik ve takım koordinasyonuna önem verir. Anadolu'daki oyuncular ilk oyun ve katılım bilgisi için ekiple iletişime geçebilir.",
+        text: "Reddevil Airsoft (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır. MilSim ve senaryo temelli oyunlarda fair-play, güvenlik ve takım koordinasyonuna önem verir. Anadolu'daki oyuncular ilk oyun ve katılım bilgisi için ekiple iletişime geçebilir.",
         pills: [
           'Ekipman rehberi',
           'Senaryo brifing',

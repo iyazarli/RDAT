@@ -101,9 +101,9 @@ const DEFAULT_TEAM_PROFILES = [
 
 function updateCategoryMetadata(brandName, category, titleSuffix = '') {
   const label = category.label || 'Reddevil Airsoft';
-  const title = `${label} | ${brandName} (RDAT)${titleSuffix}`;
+  const title = `${label} | ${brandName} (R.D.A.T.)${titleSuffix}`;
   const intro = String(category.intro || 'Takım, airsoft etkinlikleri ve katılım bilgileri.').trim();
-  const description = `${brandName} (RDAT), Eskişehir merkezli bir airsoft takımıdır. ${intro}`;
+  const description = `${brandName} (R.D.A.T.), Eskişehir merkezli bir airsoft takımıdır. ${intro}`;
   const descriptionNode = document.querySelector('meta[name="description"]');
   if (descriptionNode) descriptionNode.content = description;
   document.title = title;
