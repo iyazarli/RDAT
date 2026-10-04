@@ -1091,3 +1091,5 @@ textarea:disabled {
     transition-duration: 0.01ms !important;
   }
 }
+
+.tournament-frame{display:block;width:100%;height:calc(100dvh - 150px);min-height:700px;border:0;border-radius:10px;background:#f3f0e5}@media(max-width:700px){.tournament-frame{height:calc(100dvh - 170px);min-height:650px}}

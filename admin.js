@@ -343,6 +343,7 @@ function setSession(isActive) {
     return;
   }
   sessionStorage.removeItem(KEYS.session);
+  document.getElementById('tournament-frame')?.removeAttribute('src');
 }
 
 function isSessionActive() {
@@ -616,6 +617,10 @@ async function syncAdminChange(target, successMessage, errorMessage) {
 }
 
 function activatePanel(panelName) {
+  if (panelName === 'tournaments' && isSessionActive()) {
+    const frame = document.getElementById('tournament-frame');
+    if (frame && !frame.getAttribute('src')) frame.src = frame.dataset.src;
+  }
   el.panelNavButtons.forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.panelTarget === panelName);
   });
