@@ -43,4 +43,3 @@ Kullanıcının seçimi: tüm ölçütler eşitse grup içinde kura sırası, ü
 ## Excel'den gerekli farklılıklar
 
 Rastgele test skorları ve sabit takım isimleri içe aktarılmayacak. Berabere eleme maçında bayrak/tam eleme otomatik kazanan sayılmayacak; açık kazanan seçimi gerekecek. Oynanmamış maçlar sonuç üretmeyecek. Önceki sonuç değiştiğinde yeni eşleşmeyle uyumsuz sonraki skorlar temizlenip kayıtta açıklanacak.
-
