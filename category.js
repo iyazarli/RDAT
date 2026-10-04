@@ -355,9 +355,11 @@ function renderCategory(config) {
       blockGrid.classList.remove('category-block-grid--sponsors');
       blockGrid.innerHTML = category.blocks
         .map((block) => {
+          const eventInfo = isEventsCategory ? window.EventBlocks.presentation(block) : null;
           const card = `
             <article class="category-block${isEventsCategory ? ' category-block--event' : category.slug === 'about' ? ' category-block--about' : category.slug === 'blog' ? ' category-block--blog' : ''}">
               ${block.imageUrl ? `<img class="category-block-media" src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.title)}">` : ''}
+              ${eventInfo ? `<div class="event-card-meta"><span class="event-stamp event-stamp--${eventInfo.status}">${eventInfo.label}</span><time ${eventInfo.date ? `datetime="${eventInfo.date}"` : ''}>${escapeHtml(eventInfo.dateLabel)}</time></div>` : ''}
               <h3>${escapeHtml(block.title)}</h3>
               <p>${escapeHtml(category.slug === 'blog' ? block.text.split('\n')[0].slice(0, 220) : block.text)}</p>
               ${block.tag ? `<span class="category-badge">${escapeHtml(block.tag)}</span>` : ''}

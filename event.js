@@ -166,6 +166,8 @@ function renderEvent(config) {
     return;
   }
 
+  const eventInfo = window.EventBlocks.presentation(eventBlock);
+  document.querySelector('#event-status-date').innerHTML = `<span class="event-stamp event-stamp--${eventInfo.status}">${eventInfo.label}</span><time ${eventInfo.date ? `datetime="${eventInfo.date}"` : ''}>${escapeHtml(eventInfo.dateLabel)}</time>`;
   setText('event-eyebrow', category.eyebrow || 'Etkinlik');
   setText('event-title', eventBlock.title || 'Etkinlik');
   setText('event-summary', eventBlock.text || 'Etkinlik açıklaması bulunmuyor.');

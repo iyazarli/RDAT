@@ -28,3 +28,9 @@
   .category-team-grid { grid-template-columns: minmax(0, 1fr); }
   .category-block-grid--sponsors, .event-gallery-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
 }
+
+.event-card-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 14px; min-height: 32px; }
+.event-card-meta time { color: var(--muted); font-size: 13px; }
+.event-stamp { display: inline-flex; align-items: center; justify-content: center; padding: 6px 10px; border: 1px solid; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.event-stamp--completed { color: #b8d2a5; border-color: #668557; background: rgba(102,133,87,.12); }
+.event-stamp--upcoming { color: #e6ca8b; border-color: #a98a46; background: rgba(169,138,70,.12); }

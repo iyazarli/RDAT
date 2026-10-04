@@ -104,3 +104,13 @@ test('Mevcut kayıtların normalleştirilmesi tarih doğrulamasından geçer ve 
   assert.equal(events.validate(context.window.SiteConfig.normalize(stored.siteConfig), stored.siteConfig), '');
   assert.equal(JSON.stringify(stored), before);
 });
+
+test('Durum İstanbul tarihine göre belirlenir; tarih Türkçe gösterilir', () => {
+  const now = new Date('2026-10-03T22:00:00Z');
+  assert.equal(events.presentation({ event_date: '2026-10-03' }, now).label, 'Tamamlandı');
+  assert.equal(events.presentation({ event_date: '2026-10-04' }, now).label, 'Yakında');
+  assert.equal(events.presentation({ event_date: '2026-10-05' }, now).dateLabel, '5 Ekim 2026');
+  assert.equal(events.presentation({ id: 'block_c2560cee-e667-449b-9875-6399c199d3aa' }, now).label, 'Tamamlandı');
+  assert.equal(events.presentation({ id: 'block_c4f4f75d-063d-4d68-9713-20d41d921653' }, now).label, 'Yakında');
+  assert.equal(events.presentation({}, now).dateLabel, 'Tarih belirtilmemiş');
+});

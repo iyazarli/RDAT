@@ -228,6 +228,7 @@ function renderHomeEvents(config) {
 
   container.innerHTML = events
     .map((item, index) => {
+      const eventInfo = window.EventBlocks.presentation(item);
       const imageUrl = text(item.imageUrl, '');
       const showImage = imageUrl && !/images\.unsplash\.com/i.test(imageUrl);
       const image = showImage
@@ -238,6 +239,7 @@ function renderHomeEvents(config) {
         <article class="event-story reveal">
           <div class="event-cover">${image}</div>
           <div class="event-story-copy">
+            <div class="event-card-meta"><span class="event-stamp event-stamp--${eventInfo.status}">${eventInfo.label}</span><time ${eventInfo.date ? `datetime="${eventInfo.date}"` : ''}>${escapeHtml(eventInfo.dateLabel)}</time></div>
             <p class="eyebrow">${escapeHtml(text(item.tag, 'Etkinlik arşivi'))}</p>
             <h3>${escapeHtml(item.title)}</h3>
             <p>${escapeHtml(item.text)}</p>

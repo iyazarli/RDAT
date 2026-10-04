@@ -48,7 +48,25 @@
     }
     return next;
   }
-  const api = { validDate, sort, validate, prepare };
+  function presentation(block, now = new Date()) {
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Istanbul', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+    const date = validDate(block?.event_date) ? block.event_date : '';
+    // Tarihsiz arşivlerde yalnızca içeriği bilinen eski kayıtların durumu kullanılır.
+    const completedArchive = new Set([
+      'block_c2560cee-e667-449b-9875-6399c199d3aa', 'block_48977a44-57ef-4944-b479-c2e206025a22',
+      'block_23609bf0-9092-4071-9999-da0cea1e3387', 'block_f60974db-fe29-4b35-8ebd-81b482d4ad4f',
+      'block_72f03f70-f9a9-47aa-b915-64b70bd6521b', 'block_20e16223-f1ad-4eb9-bdc8-ec1a7a303d36',
+      'cat_events_block_1', 'cat_events_block_2', 'cat_events_block_3', 'cat_events_block_4',
+    ]);
+    const completed = date ? date < today : completedArchive.has(block?.id);
+    return {
+      status: completed ? 'completed' : 'upcoming',
+      label: completed ? 'Tamamlandı' : 'Yakında',
+      date,
+      dateLabel: date ? new Intl.DateTimeFormat('tr-TR', { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${date}T00:00:00Z`)) : 'Tarih belirtilmemiş',
+    };
+  }
+  const api = { validDate, sort, validate, prepare, presentation };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.EventBlocks = api;
 }(typeof window === 'object' ? window : globalThis));

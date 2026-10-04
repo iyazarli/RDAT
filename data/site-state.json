@@ -486,10 +486,10 @@
       {
         "id": "cat_events",
         "slug": "events",
-        "label": "Etkinlik Fotoları",
+        "label": "Turnuva - Organizasyon",
         "showInMenu": true,
         "eyebrow": "Kategori",
-        "title": "Etkinlik Fotoğrafları",
+        "title": "Turnuva - Organizasyon",
         "intro": "Katılınan oyunlardan ve organizasyonlardan seçilmiş anlar.",
         "ctaLabel": "Başvuruya Geç",
         "ctaHref": "index.html#apply",

@@ -14,7 +14,14 @@
   }
   function apply(value, key = '') {
     if (Array.isArray(value)) return value.map(item => apply(item, key));
-    if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([name, item]) => [name, apply(item, name)]));
+    if (value && typeof value === 'object') {
+      const result = Object.fromEntries(Object.entries(value).map(([name, item]) => [name, apply(item, name)]));
+      if (result.slug === 'events') {
+        result.label = 'Turnuva - Organizasyon';
+        result.title = 'Turnuva - Organizasyon';
+      }
+      return result;
+    }
     return typeof value === 'string' && fields.has(key) ? correct(value) : value;
   }
   const api = { correct, apply };
