@@ -413,6 +413,8 @@
 
   DEFAULT_SITE_CONFIG = global.RdatAbout.apply(DEFAULT_SITE_CONFIG, true);
 
+  DEFAULT_SITE_CONFIG = global.RdatBlog.apply(DEFAULT_SITE_CONFIG);
+
   const LEGACY_CATEGORY_CONTENT = {
     about: {
       id: 'cat_about',
@@ -599,7 +601,7 @@
   }
 
   function normalize(config) {
-    const source = global.RdatAbout.apply(config && typeof config === 'object' ? config : {});
+    const source = global.RdatBlog.apply(global.RdatAbout.apply(config && typeof config === 'object' ? config : {}));
     const base = clone(DEFAULT_SITE_CONFIG);
 
     const brand = source.brand && typeof source.brand === 'object' ? source.brand : {};
@@ -651,7 +653,7 @@
       );
 
       let mergedBlocks = currentBlocks;
-      if (currentBlocks.length === 0 || !hasMeaningfulContent) {
+      if (category.slug !== 'blog' && (currentBlocks.length === 0 || !hasMeaningfulContent)) {
         mergedBlocks = defaultBlocks.map((block, blockIndex) => normalizeCategoryBlock(block, blockIndex));
       } else if (defaultBlocks.length > 0) {
         mergedBlocks = currentBlocks.map((block, blockIndex) => {

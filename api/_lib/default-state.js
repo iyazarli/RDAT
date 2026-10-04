@@ -414,6 +414,8 @@ function clone(value) {
 
 DEFAULT_SITE_CONFIG = require('../../rdat-about').apply(DEFAULT_SITE_CONFIG, true);
 
+DEFAULT_SITE_CONFIG = require('../../blog-content').apply(DEFAULT_SITE_CONFIG);
+
 function createDefaultState() {
   const now = new Date().toISOString();
   return {

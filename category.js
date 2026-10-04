@@ -15,6 +15,8 @@ function updateCategoryMetadata(brandName, category, titleSuffix = '') {
   const canonicalOrigin = canonicalNode ? new URL(canonicalNode.href).origin : window.location.origin;
   const canonicalUrl = new URL('/category', canonicalOrigin);
   canonicalUrl.searchParams.set('slug', category.slug || 'about');
+  const post = new URLSearchParams(window.location.search).get('post');
+  if (category.slug === 'blog' && post) canonicalUrl.searchParams.set('post', post);
   if (canonicalNode) canonicalNode.href = canonicalUrl.href;
 
   const metadata = [
@@ -257,6 +259,40 @@ function renderNavigation(config) {
   }
 }
 
+function renderBlogText(value) {
+  const result = [];
+  let paragraph = [];
+  function flush() {
+    if (!paragraph.length) return;
+    const safe = escapeHtml(paragraph.join('\n')).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    result.push(`<p>${safe.replace(/\n/g, '<br>')}</p>`);
+    paragraph = [];
+  }
+  for (const line of String(value || '').split('\n')) {
+    if (line.startsWith('## ')) { flush(); result.push(`<h2>${escapeHtml(line.slice(3))}</h2>`); }
+    else if (!line.trim()) flush();
+    else paragraph.push(line);
+  }
+  flush();
+  return result.join('');
+}
+
+function renderBlogArticle(config, category, postId) {
+  const post = category.blocks.find(item => item.id === postId);
+  setText('category-eyebrow', 'RED DEVIL BLOG');
+  setText('category-title', post?.title || 'Yazı bulunamadı');
+  setText('category-intro', post ? post.tag : 'Bu yazı kaldırılmış veya bağlantısı değişmiş olabilir.');
+  const cta = document.querySelector('#category-cta');
+  cta.textContent = 'Tüm blog yazıları';
+  cta.href = 'category.html?slug=blog';
+  const grid = document.querySelector('#category-block-grid');
+  grid.className = 'blog-article';
+  grid.innerHTML = post ? `<article><img class="blog-cover" src="${escapeHtml(post.imageUrl)}" alt="${escapeHtml(post.title)}"><div class="blog-article-body">${renderBlogText(post.text)}</div><a class="btn ghost" href="category.html?slug=blog">Diğer yazılara dön</a></article>` : '';
+  document.querySelector('#category-empty').hidden = true;
+  updateCategoryMetadata(config.brand.name, { ...category, label: post?.title || 'Blog', intro: post?.text.split('\n')[0] || category.intro });
+}
+
 function renderCategory(config) {
   const slug = getSlugParam();
 
@@ -266,6 +302,8 @@ function renderCategory(config) {
   }
 
   const category = config.categories.find((item) => item.slug === slug) || config.categories[0];
+  const postId = new URLSearchParams(window.location.search).get('post');
+  if (category.slug === 'blog' && postId) { renderBlogArticle(config, category, postId); return; }
   const isSponsorCategory = category.slug === 'sponsors';
   const isEventsCategory = category.slug === 'events';
   if (isEventsCategory) category.blocks = window.EventBlocks.sort(category.blocks || []);
@@ -304,7 +342,7 @@ function renderCategory(config) {
                   : `<span class="category-sponsor-fallback">${escapeHtml(block.title)}</span>`}
               </a>
               <h3>${escapeHtml(block.title)}</h3>
-              <p>${escapeHtml(block.text)}</p>
+              <p>${escapeHtml(category.slug === 'blog' ? block.text.split('\n')[0].slice(0, 220) : block.text)}</p>
               <div class="category-sponsor-meta">
                 ${block.tag ? `<span class="category-badge">${escapeHtml(block.tag)}</span>` : ''}
                 ${sponsorUrl ? `<a class="category-sponsor-link" href="${escapeHtml(sponsorUrl)}" target="_blank" rel="noopener noreferrer">Web Sitesi</a>` : ''}
@@ -321,11 +359,14 @@ function renderCategory(config) {
             <article class="category-block${isEventsCategory ? ' category-block--event' : category.slug === 'about' ? ' category-block--about' : ''}">
               ${block.imageUrl ? `<img class="category-block-media" src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.title)}">` : ''}
               <h3>${escapeHtml(block.title)}</h3>
-              <p>${escapeHtml(block.text)}</p>
+              <p>${escapeHtml(category.slug === 'blog' ? block.text.split('\n')[0].slice(0, 220) : block.text)}</p>
               ${block.tag ? `<span class="category-badge">${escapeHtml(block.tag)}</span>` : ''}
             </article>
           `;
 
+          if (category.slug === 'blog') {
+            return `<a class="category-event-link" href="category.html?slug=blog&post=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} yazısını oku">${card}<span class="blog-read-more">Yazıyı oku →</span></a>`;
+          }
           if (isEventsCategory) {
             return `<a class="category-event-link" href="event.html?slug=${encodeURIComponent(category.slug)}&event=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} etkinlik detayina git">${card}</a>`;
           }

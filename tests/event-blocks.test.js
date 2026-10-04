@@ -38,7 +38,7 @@ test('Eski veri korunur; yeni ve düzenlenen blokta tarih zorunludur', () => {
   assert.equal(next.categories[0].blocks[1].event_date, undefined);
 });
 test('SiteConfig tarihleri normalleştirme ve kaydetme sırasında korur', () => {
-  const context = { window: { EventBlocks: events, RdatAbout: require('../rdat-about'), localStorage: { setItem() {}, getItem() { return null; } } } };
+  const context = { window: { EventBlocks: events, RdatAbout: require('../rdat-about'), RdatBlog: require('../blog-content'), localStorage: { setItem() {}, getItem() { return null; } } } };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../site-config.js'), 'utf8'), context);
   const source = config([{ id: 'a', event_date: '2026-09-01', created_at: '2026-10-03T12:00:00Z' }, { id: 'b', event_date: '2026-10-01' }]);
   const normalized = context.window.SiteConfig.save(source);
@@ -50,7 +50,7 @@ test('SiteConfig tarihleri normalleştirme ve kaydetme sırasında korur', () =>
 test('Oluşturma/düzenleme formu tarihi yükler, temizler ve kategoriye göre zorunlu kılar', () => {
   const source = fs.readFileSync(path.join(__dirname, '../admin.js'), 'utf8');
   const fields = ['Id', 'Title', 'Text', 'Tag', 'Image', 'Url', 'Gallery', 'EventDate', 'EventDateLabel', 'Category', 'ImageFile'];
-  const el = Object.fromEntries(fields.map(field => [`categoryBlock${field}`, { value: '' }]));
+  const el = Object.fromEntries(fields.map(field => [`categoryBlock${field}`, { value: '', parentElement: { firstChild: { textContent: '' } } }]));
   const category = { id: 'events', slug: 'events', blocks: [] };
   el.categoryBlockCategory.value = 'events';
   const ctx = { el, state: {}, getCategoryById: () => category, renderCategorySelect() {}, text: (v, d) => v || d, formatLineList: a => (a || []).join('\n') };
@@ -99,7 +99,7 @@ test('Admin API tarih eksikse 400 döner; geçerli kayıt damgalanır ve kaydedi
 test('Mevcut kayıtların normalleştirilmesi tarih doğrulamasından geçer ve dosya değişmez', () => {
   const stored = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/site-state.json'), 'utf8'));
   const before = JSON.stringify(stored);
-  const context = { window: { EventBlocks: events, RdatAbout: require('../rdat-about'), localStorage: { setItem() {}, getItem() { return null; } } } };
+  const context = { window: { EventBlocks: events, RdatAbout: require('../rdat-about'), RdatBlog: require('../blog-content'), localStorage: { setItem() {}, getItem() { return null; } } } };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../site-config.js'), 'utf8'), context);
   assert.equal(events.validate(context.window.SiteConfig.normalize(stored.siteConfig), stored.siteConfig), '');
   assert.equal(JSON.stringify(stored), before);

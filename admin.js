@@ -1463,6 +1463,10 @@ function refreshEventDateField() {
   el.categoryBlockEventDateLabel.hidden = !isEvent;
   el.categoryBlockEventDate.required = isEvent;
   el.categoryBlockEventDate.disabled = !isEvent;
+  const isBlog = getCategoryById(el.categoryBlockCategory.value)?.slug === 'blog';
+  el.categoryBlockText.rows = isBlog ? 18 : 3;
+  el.categoryBlockText.placeholder = isBlog ? 'Yazı metni. Ara başlıklar için ## Başlık, paragraflar arasında boş satır kullanın.' : '';
+  el.categoryBlockText.parentElement.firstChild.textContent = isBlog ? 'Blog Yazısı İçeriği' : 'Blok Açıklaması';
 }
 
 function clearCategoryBlockForm() {
@@ -1536,7 +1540,7 @@ function renderCategoryBlockList() {
             <button class="danger-btn" data-category-block-action="delete" data-category-id="${escapeHtml(category.id)}" data-id="${escapeHtml(block.id)}">Sil</button>
           </div>
         </div>
-        <p>${escapeHtml(block.text)}</p>
+        <p>${escapeHtml(category.slug === 'blog' ? block.text.slice(0, 180) + '…' : block.text)}</p>
         <small class="helper-note">${category.slug === 'events' ? `Etkinlik Tarihi: ${escapeHtml(block.event_date || 'Tarih belirtilmemiş')} | ` : ''}Etiket: ${escapeHtml(block.tag || '-')} | Link: ${escapeHtml(block.url || '-')} | Galeri: ${Array.isArray(block.gallery) ? block.gallery.length : 0}</small>
       </article>
     `)
@@ -1668,6 +1672,16 @@ function importAllData(raw) {
 }
 
 function bindEvents() {
+  document.querySelector('#blog-manager-nav')?.addEventListener('click', () => {
+    if (el.adminContent.hidden) return;
+    activatePanel('content');
+    const blog = state.siteConfig.categories.find(item => item.slug === 'blog');
+    if (!blog) return;
+    state.selectedCategoryId = blog.id;
+    renderCategoryManager();
+    clearCategoryBlockForm();
+    el.categoryBlockForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
   el.panelNavButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       if (el.adminContent.hidden) return;

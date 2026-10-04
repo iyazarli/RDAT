@@ -303,3 +303,11 @@
   object-fit: contain;
   background: #10120f;
 }
+
+.blog-read-more { display: block; margin: 12px 0 24px; color: var(--accent); font-size: 14px; }
+.blog-article { max-width: 850px; margin: 30px auto 70px; }
+.blog-cover { display: block; width: 100%; height: auto; border-radius: 8px; }
+.blog-article-body { max-width: 720px; margin: 30px auto; }
+.blog-article-body h2 { margin: 32px 0 12px; font-size: clamp(24px, 4vw, 32px); }
+.blog-article-body p { font-size: 16px; line-height: 1.85; color: var(--muted); overflow-wrap: anywhere; }
+.blog-article-body a { color: var(--accent); text-decoration: underline; }
