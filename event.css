@@ -1,6 +1,9 @@
 .event-hero {
   padding-top: 42px;
+  padding-bottom: 24px;
 }
+
+.event-hero + .section { padding-top: 20px; }
 
 .event-hero h1 {
   margin: 10px 0;

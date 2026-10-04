@@ -75,6 +75,25 @@ function uniqueUrls(urls) {
   });
 }
 
+function isPlaceholderEventPhoto(url) {
+  try {
+    return new URL(url, window.location.href).hostname.toLowerCase() === 'images.unsplash.com';
+  } catch {
+    return false;
+  }
+}
+
+function bindEventGalleryImageFallbacks(grid, emptyNode) {
+  grid.querySelectorAll('.event-photo-card img').forEach((image) => {
+    const removeUnavailablePhoto = () => {
+      image.closest('.event-photo-card')?.remove();
+      if (!grid.querySelector('.event-photo-card img') && emptyNode) emptyNode.hidden = false;
+    };
+    image.addEventListener('error', removeUnavailablePhoto, { once: true });
+    if (image.complete && image.naturalWidth === 0) removeUnavailablePhoto();
+  });
+}
+
 function renderBrand(config) {
   const brand = config.brand;
   document.querySelectorAll('[data-brand-name]').forEach((node) => {
@@ -191,11 +210,7 @@ function renderEvent(config) {
     });
   }
 
-  const sameTitlePhotos = category.blocks
-    .filter((item) => item.id !== eventBlock.id && text(item.title, '') === text(eventBlock.title, '') && text(item.imageUrl, ''))
-    .map((item) => item.imageUrl);
-
-  const finalGallery = uniqueUrls([...gallery, ...sameTitlePhotos]);
+  const finalGallery = uniqueUrls(gallery.filter((url) => !isPlaceholderEventPhoto(url)));
 
   if (!grid) return;
 
@@ -212,6 +227,7 @@ function renderEvent(config) {
         </figure>
       `)
       .join('');
+    bindEventGalleryImageFallbacks(grid, emptyNode);
   }
 
   updateEventMetadata(

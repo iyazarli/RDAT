@@ -195,6 +195,36 @@ function text(value, fallback = '') {
   return trimmed || fallback;
 }
 
+function isPlaceholderEventPhoto(url) {
+  try {
+    return new URL(url, window.location.href).hostname.toLowerCase() === 'images.unsplash.com';
+  } catch {
+    return false;
+  }
+}
+
+function createEventPhotoPlaceholder(label) {
+  const placeholder = document.createElement('div');
+  placeholder.className = 'category-block-media event-photo-placeholder';
+  placeholder.setAttribute('role', 'img');
+  placeholder.setAttribute('aria-label', 'Etkinlik fotoğrafı henüz eklenmedi');
+
+  const brand = document.createElement('span');
+  brand.textContent = 'R.D.A.T.';
+  const tag = document.createElement('strong');
+  tag.textContent = String(label || 'Etkinlik').trim().toLocaleUpperCase('tr-TR');
+  placeholder.append(brand, tag);
+  return placeholder;
+}
+
+function bindEventPhotoFallbacks(container) {
+  container.querySelectorAll('.category-block--event img.category-block-media').forEach((image) => {
+    image.addEventListener('error', () => {
+      image.replaceWith(createEventPhotoPlaceholder(image.dataset.placeholderLabel));
+    }, { once: true });
+  });
+}
+
 function sponsorUrlFallback(block) {
   const byTitle = text(block?.title, '').toLowerCase();
   const byTag = text(block?.tag, '').toLowerCase();
@@ -372,9 +402,15 @@ function renderCategory(config) {
       blockGrid.innerHTML = category.blocks
         .map((block) => {
           const eventInfo = isEventsCategory ? window.EventBlocks.presentation(block) : null;
+          const photoUrl = text(block.imageUrl, '');
+          const eventPhoto = isEventsCategory && photoUrl && !isPlaceholderEventPhoto(photoUrl)
+            ? `<img class="category-block-media" src="${escapeHtml(photoUrl)}" alt="${escapeHtml(block.title)}" data-placeholder-label="${escapeHtml(block.tag || 'Etkinlik')}">`
+            : isEventsCategory
+              ? `<div class="category-block-media event-photo-placeholder" role="img" aria-label="Etkinlik fotoğrafı henüz eklenmedi"><span>R.D.A.T.</span><strong>${escapeHtml((block.tag || 'Etkinlik').toLocaleUpperCase('tr-TR'))}</strong></div>`
+              : photoUrl ? `<img class="category-block-media" src="${escapeHtml(photoUrl)}" alt="${escapeHtml(block.title)}">` : '';
           const card = `
             <article class="category-block${isEventsCategory ? ' category-block--event' : category.slug === 'about' ? ' category-block--about' : category.slug === 'blog' ? ' category-block--blog' : ''}">
-              ${block.imageUrl ? `<img class="category-block-media" src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.title)}">` : ''}
+              ${eventPhoto}
               ${eventInfo ? `<div class="event-card-meta"><span class="event-stamp event-stamp--${eventInfo.status}">${eventInfo.label}</span><time ${eventInfo.date ? `datetime="${eventInfo.date}"` : ''}>${escapeHtml(eventInfo.dateLabel)}</time></div>` : ''}
               <h3>${escapeHtml(block.title)}</h3>
               <p>${escapeHtml(category.slug === 'blog' ? block.text.split('\n')[0].slice(0, 220) : block.text)}</p>
@@ -399,6 +435,7 @@ function renderCategory(config) {
           return card;
         })
         .join('');
+      if (isEventsCategory) bindEventPhotoFallbacks(blockGrid);
     }
   }
 
