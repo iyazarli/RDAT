@@ -44,7 +44,7 @@ test('Kategori kartları güncel kayıtlar gelmeden tıklamaya açılmaz', async
     window: {
       RdatTeam: { profiles: [] },
       SiteConfig: { normalize: value => value },
-      SiteDataClient: { loadPublicState: () => new Promise(resolve => { resolveState = resolve; }) },
+      SiteDataClient: { bindGlobalErrorTracking() {}, loadPublicState: () => new Promise(resolve => { resolveState = resolve; }) },
     },
     document: { documentElement: { classList: { remove: () => { revealed = true; } } } },
   };
