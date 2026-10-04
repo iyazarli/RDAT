@@ -463,11 +463,10 @@ async function init() {
     renderFooter(config);
     document.documentElement.classList.remove('page-pending');
   }
-  renderState(fallback);
-  bindMobileNav();
   const publicState = window.SiteDataClient?.loadPublicState
     ? await window.SiteDataClient.loadPublicState(() => fallback) : fallback;
   renderState(publicState);
+  bindMobileNav();
 }
 
 init();

@@ -36,3 +36,29 @@ test('Yanlış kategori altında bir blok etkinlik gibi açılmaz', () => {
   params = { slug: 'events', eventId: 'event-one' };
   assert.equal(context.resolveEvent(config).eventBlock.id, 'event-one');
 });
+test('Kategori kartları güncel kayıtlar gelmeden tıklamaya açılmaz', async () => {
+  let resolveState;
+  let revealed = false;
+  const renders = [];
+  const context = {
+    window: {
+      RdatTeam: { profiles: [] },
+      SiteConfig: { normalize: value => value },
+      SiteDataClient: { loadPublicState: () => new Promise(resolve => { resolveState = resolve; }) },
+    },
+    document: { documentElement: { classList: { remove: () => { revealed = true; } } } },
+  };
+  const source = fs.readFileSync('category.js', 'utf8').replace(/init\(\);\s*$/, '');
+  vm.runInNewContext(source, context);
+  context.getSlugParam = () => 'events';
+  context.getFallbackPublicState = () => ({ siteConfig: { source: 'fallback' } });
+  context.renderBrand = context.renderNavigation = context.renderFooter = context.bindMobileNav = () => {};
+  context.renderCategory = config => renders.push(config.source);
+  const pending = context.init();
+  assert.equal(revealed, false);
+  assert.equal(renders.length, 0);
+  resolveState({ siteConfig: { source: 'live' } });
+  await pending;
+  assert.equal(revealed, true);
+  assert.deepEqual(renders, ['live']);
+});
