@@ -80,12 +80,12 @@ function migrateLegacyTeamProfileCopy(profile) {
 function renderTeamCategory(config, teamProfiles) {
   const category = config.categories.find((c) => c.slug === 'team') || {};
   setText('category-eyebrow', category.eyebrow || 'Ekip');
-  setText('category-title', category.title || 'Takim Kadrosu');
+  setText('category-title', category.title || 'Takım Kadrosu');
   setText('category-intro', category.intro || '');
 
   const cta = document.querySelector('#category-cta');
   if (cta) {
-    cta.textContent = category.ctaLabel || 'Basvuruya Git';
+    cta.textContent = category.ctaLabel || 'Başvuruya Git';
     const href = category.ctaHref || 'index.html#apply';
     cta.href = href.startsWith('#') ? `index.html${href}` : href;
   }
@@ -95,7 +95,7 @@ function renderTeamCategory(config, teamProfiles) {
   if (!blockGrid) return;
 
   const profileSource = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
-  const profiles = profileSource.map(migrateLegacyTeamProfileCopy).filter((profile) => {
+  const profiles = window.RdatLanguage.apply(profileSource.map(migrateLegacyTeamProfileCopy)).filter((profile) => {
     if (!profile || typeof profile !== 'object') return false;
     const name = String(profile?.name ?? '').trim();
     const callsign = String(profile?.callsign ?? '').trim();
@@ -146,7 +146,7 @@ function renderTeamPortrait(profile) {
   const name = String(profile?.name ?? '').trim();
   const callsign = String(profile?.callsign ?? '').trim();
   const photo = String(profile?.photo ?? '').trim();
-  const initials = `${name.charAt(0)}${callsign.charAt(0)}`.toUpperCase() || 'RD';
+  const initials = `${name.charAt(0)}${callsign.charAt(0)}`.toLocaleUpperCase('tr-TR') || 'RD';
 
   if (!photo || /images\.unsplash\.com/i.test(photo)) {
     return `<div class="category-person-monogram" aria-hidden="true"><span>${escapeHtml(initials)}</span></div>`;
@@ -249,7 +249,7 @@ function renderNavigation(config) {
   const applyLink = document.createElement('a');
   applyLink.className = 'nav-cta';
   applyLink.href = navApplyHref;
-  applyLink.textContent = config.nav.applyLabel || 'Basvur';
+  applyLink.textContent = config.nav.applyLabel || 'Başvur';
   nav.appendChild(applyLink);
 
   if (footerLinks) {
@@ -369,13 +369,13 @@ function renderCategory(config) {
             return `<a class="category-event-link blog-preview-link" href="category.html?slug=blog&post=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} yazısını oku">${card}</a>`;
           }
           if (isEventsCategory) {
-            return `<a class="category-event-link" href="event.html?slug=${encodeURIComponent(category.slug)}&event=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} etkinlik detayina git">${card}</a>`;
+            return `<a class="category-event-link" href="event.html?slug=${encodeURIComponent(category.slug)}&event=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} etkinlik detayına git">${card}</a>`;
           }
 
           const blockUrl = text(block?.url, '');
           if (blockUrl) {
             const isExternal = /^https?:\/\//i.test(blockUrl);
-            return `<a class="category-event-link" href="${escapeHtml(blockUrl)}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} aria-label="${escapeHtml(block.title)} baglantisina git">${card}</a>`;
+            return `<a class="category-event-link" href="${escapeHtml(blockUrl)}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} aria-label="${escapeHtml(block.title)} bağlantısına git">${card}</a>`;
           }
 
           return card;

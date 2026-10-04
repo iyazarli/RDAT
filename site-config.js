@@ -413,7 +413,7 @@
 
   DEFAULT_SITE_CONFIG = global.RdatAbout.apply(DEFAULT_SITE_CONFIG, true);
 
-  DEFAULT_SITE_CONFIG = global.RdatBlog.apply(DEFAULT_SITE_CONFIG);
+  DEFAULT_SITE_CONFIG = global.RdatLanguage.apply(global.RdatBlog.apply(DEFAULT_SITE_CONFIG));
 
   const LEGACY_CATEGORY_CONTENT = {
     about: {
@@ -703,7 +703,7 @@
       ? 'image'
       : 'text';
 
-    return {
+    return global.RdatLanguage.apply({
       version: 2,
       brand: {
         logoMode: resolvedLogoMode,
@@ -782,7 +782,7 @@
       },
       categories: normalizedCategories.map(category => category.slug === 'events'
         ? { ...category, blocks: global.EventBlocks.sort(category.blocks) } : category),
-    };
+    });
   }
 
   function migrateFromLegacy(legacyContent) {

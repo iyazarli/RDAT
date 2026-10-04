@@ -24,7 +24,7 @@ test('Güncelleme tekrar uygulanabilir; özel içerik ve diğer kategoriler koru
   assert.deepEqual(About.apply(custom), custom);
 });
 test('Tarayıcı ve API varsayılanları aynı Hakkımızda içeriğini kullanır', () => {
-  const context = { window: { EventBlocks: Events, RdatAbout: About, RdatBlog: require('../blog-content') } };
+  const context = { window: { RdatLanguage: require('../rdat-language'), EventBlocks: Events, RdatAbout: About, RdatBlog: require('../blog-content') } };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../site-config.js'), 'utf8'), context);
   const browser = context.window.SiteConfig.DEFAULT_SITE_CONFIG;
   const server = require('../api/_lib/default-state').DEFAULT_SITE_CONFIG;

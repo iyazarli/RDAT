@@ -118,7 +118,7 @@ function renderNavigation(config) {
   const applyLink = document.createElement('a');
   applyLink.className = 'nav-cta';
   applyLink.href = navApplyHref;
-  applyLink.textContent = config.nav.applyLabel || 'Basvur';
+  applyLink.textContent = config.nav.applyLabel || 'Başvur';
   nav.appendChild(applyLink);
 
   if (footerLinks) {
@@ -150,8 +150,8 @@ function renderEvent(config) {
 
   if (!category || !eventBlock) {
     setText('event-eyebrow', 'Etkinlik');
-    setText('event-title', 'Etkinlik bulunamadi');
-    setText('event-summary', 'Secili etkinlik kaydi bulunamadi.');
+    setText('event-title', 'Etkinlik bulunamadı');
+    setText('event-summary', 'Seçili etkinlik kaydı bulunamadı.');
     if (grid) grid.innerHTML = '';
     if (emptyNode) emptyNode.hidden = false;
     if (tagNode) tagNode.hidden = true;
@@ -168,7 +168,7 @@ function renderEvent(config) {
 
   setText('event-eyebrow', category.eyebrow || 'Etkinlik');
   setText('event-title', eventBlock.title || 'Etkinlik');
-  setText('event-summary', eventBlock.text || 'Etkinlik aciklamasi bulunmuyor.');
+  setText('event-summary', eventBlock.text || 'Etkinlik açıklaması bulunmuyor.');
 
   if (tagNode) {
     const tag = text(eventBlock.tag, '');
@@ -205,7 +205,7 @@ function renderEvent(config) {
     grid.innerHTML = finalGallery
       .map((url, index) => `
         <figure class="event-photo-card">
-          <img src="${escapeHtml(url)}" alt="${escapeHtml(eventBlock.title)} fotograf ${index + 1}">
+          <img src="${escapeHtml(url)}" alt="${escapeHtml(eventBlock.title)} fotoğraf ${index + 1}">
           <figcaption>${escapeHtml(eventBlock.title)} • Kare ${index + 1}</figcaption>
         </figure>
       `)

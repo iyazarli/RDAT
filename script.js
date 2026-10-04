@@ -137,7 +137,7 @@ function renderNavigation(config) {
   applyLink.className = 'nav-cta';
   applyLink.href = config.nav.applyHref || '#apply';
   applyLink.id = 'nav-apply-link';
-  applyLink.textContent = config.nav.applyLabel || 'Basvur';
+  applyLink.textContent = config.nav.applyLabel || 'Başvur';
   navLinks.appendChild(applyLink);
 
   if (footerLinks) {
@@ -414,7 +414,7 @@ function renderSponsorsSection(config) {
   section.hidden = false;
   setText('sponsors-eyebrow', sponsorsCategory?.eyebrow || 'Sponsorlar');
   setText('sponsors-title', sponsorsCategory?.title || sponsorsCategory?.label || 'Sponsorlarimiz');
-  setText('sponsors-intro', sponsorsCategory?.intro || 'Takimimizi destekleyen sponsor markalar.');
+  setText('sponsors-intro', sponsorsCategory?.intro || 'Takımımızı destekleyen sponsor markalar.');
 
   const buildTiles = (hidden = false) => sponsors
     .map((sponsor) => {
@@ -547,7 +547,7 @@ function renderTeamProfiles(profilesInput) {
     }))
     : getLocalTeamProfiles();
 
-  const profiles = normalized.filter((profile) => {
+  const profiles = window.RdatLanguage.apply(normalized).filter((profile) => {
     const isPlaceholder = /^ad$/i.test(profile.name.trim())
       || /^callsign$/i.test(profile.callsign.trim())
       || /guncelleniyor|güncelleniyor/i.test(profile.title);
@@ -822,13 +822,13 @@ form?.addEventListener('submit', async (event) => {
       throw new Error(result.body?.error || 'Gonderim hatasi');
     }
 
-    setStatus('Basvurun iletildi ve admin paneline dustu.', 'success');
+    setStatus('Başvurun iletildi ve admin paneline düştü.', 'success');
     form.reset();
   } catch (error) {
     console.error(error);
     window.SiteDataClient?.reportError({
       type: 'form_submit_error',
-      message: error.message || 'Basvuru gonderimi basarisiz',
+      message: error.message || 'Başvuru gönderimi başarısız',
       stack: error.stack || '',
     });
     setStatus(error.message || 'Gonderilemedi. Lutfen tekrar dene.', 'error');

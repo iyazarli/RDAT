@@ -63,7 +63,7 @@ async function saveState(nextState) {
 async function loadState() {
   const existingState = await readStoredState();
   if (existingState && typeof existingState === 'object') {
-    return { ...existingState, teamProfiles: require('../../rdat-team').apply(existingState.teamProfiles), siteConfig: require('../../blog-content').apply(require('../../rdat-about').apply(existingState.siteConfig)) };
+    return { ...existingState, teamProfiles: require('../../rdat-language').apply(require('../../rdat-team').apply(existingState.teamProfiles)), siteConfig: require('../../rdat-language').apply(require('../../blog-content').apply(require('../../rdat-about').apply(existingState.siteConfig))) };
   }
 
   const defaultState = createDefaultState();

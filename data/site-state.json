@@ -5,10 +5,10 @@
       "id": "team_ghost",
       "name": "Şenol",
       "callsign": "Amca",
-      "title": "Takim Lideri",
+      "title": "Takım Lideri",
       "badge": "Lider",
       "photo": "https://images.unsplash.com/photo-1608064229007-dca149d32c4f?auto=format&fit=crop&w=900&q=80",
-      "bio": "Senaryo tasarimi, saha koordinasyonu ve telsiz protokollerinden sorumlu.",
+      "bio": "Senaryo tasarımı, saha koordinasyonu ve telsiz protokollerinden sorumlu.",
       "expertise": "DMR",
       "seasons": "5. sezon",
       "setup": "Hk416a5 - SSP18"
@@ -17,10 +17,10 @@
       "id": "team_mamba",
       "name": "Gökberk",
       "callsign": "İmer",
-      "title": "Safety Officer | Medic egitimi",
+      "title": "Safety Officer | Medic eğitimi",
       "badge": "Safety",
       "photo": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=80",
-      "bio": "Guvenlik brifingi, ilk yardim kiti ve saha ici risk kontrolunu yonetir.",
+      "bio": "Güvenlik brifingi, ilk yardım kiti ve saha içi risk kontrolünü yönetir.",
       "expertise": "Medic & Safety",
       "seasons": "5. sezon",
       "setup": "HK416a5 - SSP5"
@@ -96,7 +96,7 @@
       "logoUrl": "assets/brand/reddevil-logo.svg"
     },
     "nav": {
-      "applyLabel": "Basvur",
+      "applyLabel": "Başvur",
       "applyHref": "#apply"
     },
     "home": {
@@ -104,10 +104,10 @@
         "eyebrow": "Taktik disiplin • Başarı • Gerçek Ekip Ruhu",
         "titleMain": "Red Devil Airsoft",
         "titleAccent": "Sahada Görüşelim",
-        "lede": "Eskişehir bölgesinde aktif sahalarda oynayan, takim koordinasyonuna ve disipline önem veren bir airsoft topluluguyuz. Yeni oyunculara egitim, ekipman rehberi ve rol calismalari sunuyoruz.",
-        "ctaPrimaryText": "Takima Katıl",
+        "lede": "Eskişehir bölgesinde aktif sahalarda oynayan, takım koordinasyonuna ve disipline önem veren bir airsoft topluluguyuz. Yeni oyunculara eğitim, ekipman rehberi ve rol çalışmaları sunuyoruz.",
+        "ctaPrimaryText": "Takıma Katıl",
         "ctaPrimaryHref": "#apply",
-        "ctaSecondaryText": "Takimi Tanı",
+        "ctaSecondaryText": "Takımı Tanı",
         "ctaSecondaryHref": "category.html?slug=about"
       },
       "metrics": [
@@ -138,20 +138,20 @@
           {
             "id": "op_field",
             "label": "Ana saha",
-            "value": "Eskisehir"
+            "value": "Eskişehir"
           },
           {
             "id": "op_radio",
-            "label": "Takim frekansi",
+            "label": "Takım frekansı",
             "value": "444.222"
           },
           {
             "id": "op_priority",
-            "label": "Oncelik",
+            "label": "Öncelik",
             "value": "Takım Oyunu, Disiplin, Güven"
           }
         ],
-        "tag": "Yeni oyuncular icin oryantasyon"
+        "tag": "Yeni oyuncular için oryantasyon"
       },
       "about": {
         "eyebrow": "2022’den beri · Eskişehir",
@@ -174,25 +174,25 @@
       },
       "highlights": {
         "eyebrow": "Ne Sunuyoruz",
-        "title": "Takima katildiginda seni neler bekliyor?",
-        "subtitle": "Yeni baslayanlar icin hizlandirilmis adaptasyon, deneyimli oyuncular icin senaryo ve rol derinligi.",
+        "title": "Takıma katıldığında seni neler bekliyor?",
+        "subtitle": "Yeni başlayanlar için hızlandırılmış adaptasyon, deneyimli oyuncular için senaryo ve rol derinliği.",
         "cards": [
           {
             "id": "hl_safety",
             "title": "Ömür Boyu Sadakat",
-            "description": "Hem Sahada Hemde Saha Dışında Ömür Boyu Birbirinine Sırtını Dayabilecek Bir Ekip",
+            "description": "Hem Sahada Hem de Saha Dışında Ömür Boyu Birbirine Sırtını Dayayabilecek Bir Ekip",
             "chip": "Ekip"
           },
           {
             "id": "hl_roles",
-            "title": "Rol Calismalari",
-            "description": "Rifleman, DMR, destek ve medic rollerinde mini drill'ler; telsiz iletisim protokolleri.",
-            "chip": "Antreman"
+            "title": "Rol Çalışmaları",
+            "description": "Rifleman, DMR, destek ve medic rollerinde mini drill'ler; telsiz iletişim protokolleri.",
+            "chip": "Antrenman"
           },
           {
             "id": "hl_gear",
-            "title": "Ekipman Mentorluk",
-            "description": "Butcene gore setup onerisi, saha testleri ve bakim ipuclari. Kiralik set opsiyonu.",
+            "title": "Ekipman Mentorlüğü",
+            "description": "Bütçene göre setup önerisi, saha testleri ve bakım ipuçları. Kiralık set opsiyonu.",
             "chip": "Setup"
           },
           {
@@ -206,12 +206,12 @@
       "team": {
         "eyebrow": "Ekip",
         "title": "Kurucu Kadromuz",
-        "subtitle": "Her oyun oncesi oryantasyon ve saha guvenliginden sorumlu cekirdek ekip."
+        "subtitle": "Her oyun öncesi oryantasyon ve saha güvenliğinden sorumlu çekirdek ekip."
       },
       "field": {
         "eyebrow": "Saha & Takvim",
-        "title": "Eskisehir Milsim Airsoft Oyunları",
-        "subtitle": "Aylik takvim: her ay Ormanlık Arazi, Meskun Mahal Çatışmaları ve Savunma Hucum Senaryoları ve Ozel etkinlikler icin haftaici atolye duyurulari.",
+        "title": "Eskişehir Milsim Airsoft Oyunları",
+        "subtitle": "Aylık takvim: her ay Ormanlık Arazi, Meskûn Mahal Çatışmaları ve Savunma Hücum Senaryoları ve Özel etkinlikler için hafta içi atölye duyuruları.",
         "schedule": [
           {
             "id": "sch_meet",
@@ -220,59 +220,59 @@
           },
           {
             "id": "sch_start",
-            "label": "Oyun baslangici",
+            "label": "Oyun başlangıcı",
             "value": "09:00"
           }
         ],
-        "note": "Adres ve haftalik konum bilgisi basvuru onayi sonrasi paylasilir.",
-        "checklistTitle": "Hazirlik Kontrol Listesi",
+        "note": "Adres ve haftalık konum bilgisi başvuru onayı sonrası paylaşılır.",
+        "checklistTitle": "Hazırlık Kontrol Listesi",
         "checklist": [
           "Chrono limiti: 1.0J (Tabanca) / 1.4J (CQB) / 1.6J (Assault) / 2.0J (DMR) / 3.0J (Sniper)",
-          "Eye-pro yedek, kirilmaz lens",
-          "Su + enerji atistirmaligi",
-          "Kiyafet: woodland uyumlu, saglam ayakkabi"
+          "Eye-pro yedek, kırılmaz lens",
+          "Su + enerji atıştırmalığı",
+          "Kıyafet: woodland uyumlu, sağlam ayakkabı"
         ],
-        "checklistNote": "Kurallara uymayan oyuncular oyuna alinmaz."
+        "checklistNote": "Kurallara uymayan oyuncular oyuna alınmaz."
       },
       "faq": {
         "eyebrow": "SSS",
-        "title": "Sik sorulanlar",
+        "title": "Sık sorulanlar",
         "items": [
           {
             "id": "faq_gear",
-            "question": "Kendi ekipmanim yok, katilabilir miyim?",
-            "answer": "Evet, sinirli sayida yedek setimiz var. Temel gozluk/maske zorunlu. Kiralik set icin basvuru formunda belirt."
+            "question": "Kendi ekipmanım yok, katılabilir miyim?",
+            "answer": "Evet, sınırlı sayıda yedek setimiz var. Temel gözlük/maske zorunlu. Kiralık set için başvuru formunda belirt."
           },
           {
             "id": "faq_training",
-            "question": "Yeni baslayanlar icin egitim var mi?",
-            "answer": "Ilk oyundan once guvenlik brifingi, temel silah tutusu, kronograf ve iletisim protokolu saglanir."
+            "question": "Yeni başlayanlar için eğitim var mı?",
+            "answer": "İlk oyundan önce güvenlik brifingi, temel silah tutuşu, kronograf ve iletişim protokolü sağlanır."
           },
           {
             "id": "faq_age",
-            "question": "Yas siniri nedir?",
-            "answer": "18 yas ve uzeri. 16-17 icin yazili veli onayi ve saha onayi gerekir."
+            "question": "Yaş sınırı nedir?",
+            "answer": "18 yaş ve üzeri. 16-17 için yazılı veli onayı ve saha onayı gerekir."
           },
           {
             "id": "faq_fee",
-            "question": "Uyelik ucreti var mi?",
-            "answer": "Aidat yok. Oyun/organizasyon ucretleri sahaya gore paylasiliyor; ozel etkinliklerde on odeme alinabilir."
+            "question": "Üyelik ücreti var mı?",
+            "answer": "Aidat yok. Oyun/organizasyon ücretleri sahaya göre paylaşılıyor; özel etkinliklerde ön ödeme alınabilir."
           }
         ]
       },
       "apply": {
-        "eyebrow": "Basvuru",
-        "title": "Takima katilmak icin formu doldur",
-        "subtitle": "Basvurunuz incelendikten sonra e-posta veya Instagram uzerinden sizinle iletisime gecilecektir."
+        "eyebrow": "Başvuru",
+        "title": "Takıma katılmak için formu doldur",
+        "subtitle": "Başvurunuz incelendikten sonra e-posta veya Instagram üzerinden sizinle iletişime geçilecektir."
       },
       "footer": {
-        "blurb": "Guvenli, disiplinli ve eglenceli airsoft deneyimi. Basvurular inceleme sonrasi e-posta ile yanitlanir.",
+        "blurb": "Güvenli, disiplinli ve eğlenceli airsoft deneyimi. Başvurular inceleme sonrası e-posta ile yanıtlanır.",
         "instagram": "@reddevilairsoftteam",
         "email": "team@reddevilairsoft.com",
         "quickTags": [
-          "Guvenlik odakli",
-          "Duzenli etkinlik",
-          "Acik basvuru"
+          "Güvenlik odaklı",
+          "Düzenli etkinlik",
+          "Açık başvuru"
         ]
       }
     },
@@ -458,12 +458,12 @@
       {
         "id": "cat_events",
         "slug": "events",
-        "label": "Etkinlik Fotolari",
+        "label": "Etkinlik Fotoları",
         "showInMenu": true,
         "eyebrow": "Kategori",
-        "title": "Etkinlik Fotograflari",
-        "intro": "Katilinan oyunlardan ve organizasyonlardan secilmis anlar.",
-        "ctaLabel": "Basvuruya Gec",
+        "title": "Etkinlik Fotoğrafları",
+        "intro": "Katılınan oyunlardan ve organizasyonlardan seçilmiş anlar.",
+        "ctaLabel": "Başvuruya Geç",
         "ctaHref": "index.html#apply",
         "blocks": [
           {
@@ -562,18 +562,18 @@
       {
         "id": "cat_sponsors",
         "slug": "sponsors",
-        "label": "Sponsorlarimiz",
+        "label": "Sponsorlarımız",
         "showInMenu": true,
         "eyebrow": "Partnerler",
-        "title": "Sahadaki Guclu Partnerlerimiz",
-        "intro": "Takimimizi ekipman, organizasyon ve topluluk is birlikleriyle destekleyen sponsor markalar.",
-        "ctaLabel": "Basvuruya Gec",
+        "title": "Sahadaki Güçlü Partnerlerimiz",
+        "intro": "Takımımızı ekipman, organizasyon ve topluluk iş birlikleriyle destekleyen sponsor markalar.",
+        "ctaLabel": "Başvuruya Geç",
         "ctaHref": "index.html#apply",
         "blocks": [
           {
             "id": "cat_sponsors_block_1",
-            "title": "Izmir Av Market",
-            "text": "Airsoft ve outdoor ekipman tedarik destegi.",
+            "title": "İzmir Av Market",
+            "text": "Airsoft ve outdoor ekipman tedarik desteği.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/izmiravmarket.png",
             "url": "https://izmiravmarket.com",
@@ -582,7 +582,7 @@
           {
             "id": "cat_sponsors_block_2",
             "title": "Vector Optics",
-            "text": "Optik sistemler ve saha gorus ekipmanlari.",
+            "text": "Optik sistemler ve saha görüş ekipmanları.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/vector-optics.svg",
             "url": "https://www.vectoroptics.com",
@@ -591,7 +591,7 @@
           {
             "id": "cat_sponsors_block_3",
             "title": "ISG Airsoft",
-            "text": "Airsoft platformlari ve etkinlik katkisi.",
+            "text": "Airsoft platformları ve etkinlik katkısı.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/isgairsoft.png",
             "url": "https://isgairsoft.com",
@@ -600,7 +600,7 @@
           {
             "id": "cat_sponsors_block_4",
             "title": "Armorion",
-            "text": "Koruyucu ekipman ve taktik aksesuar destegi.",
+            "text": "Koruyucu ekipman ve taktik aksesuar desteği.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/armorion.png",
             "url": "https://www.armorion.com",
@@ -609,7 +609,7 @@
           {
             "id": "cat_sponsors_block_5",
             "title": "Poligun Store",
-            "text": "Yerel ekipman tedarik ve saha is birligi.",
+            "text": "Yerel ekipman tedarik ve saha iş birliği.",
             "tag": "Sponsor",
             "imageUrl": "assets/sponsors/poligunstore.png",
             "url": "https://poligunstore.com",
