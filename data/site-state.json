@@ -506,7 +506,7 @@
               "https://images.unsplash.com/photo-1509824227185-9c5a01ceba0d?auto=format&fit=crop&w=1600&q=80",
               "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80"
             ],
-            "event_date": "2025-10-11",
+            "event_date": "2026-06-13",
             "created_at": ""
           },
           {
@@ -823,6 +823,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-10-04T02:48:36.450Z"
+    "updatedAt": "2026-10-04T02:49:06.276Z"
   }
 }
