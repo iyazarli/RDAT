@@ -285,8 +285,8 @@
         "eyebrow": "2022’DEN BERİ · ESKİŞEHİR",
         "title": "Farklı hayatlar. Tek bağ. Red Devil.",
         "intro": "2022 yılında kurulan Red Devil Airsoft Takımı (R.D.A.T.), birbirinden farklı hayatları ve karakterleri airsoft tutkusu etrafında buluşturur. Bizi bir arada tutan, oyun günü kurulan koordinasyon kadar saha dışında da devam eden güçlü bağdır.",
-        "ctaLabel": "R.D.A.T. ile tanış",
-        "ctaHref": "index.html#apply",
+        "ctaLabel": "Ekibi tanı",
+        "ctaHref": "category.html?slug=team",
         "blocks": [
           {
             "id": "cat_about_block_1",
@@ -342,7 +342,7 @@
         "eyebrow": "ÇEKİRDEK KADRO",
         "title": "Her rol, ortak bir oyuna katkı sağlar.",
         "intro": "Oyun kurgusu, güvenlik, ekipman ve medya sorumlulukları çekirdek kadro içinde paylaşılır. Profil kartlarında ekip üyelerinin görev alanlarını ve uzmanlıklarını tanıyabilirsin.",
-        "ctaLabel": "İlk oyunu konuşalım",
+        "ctaLabel": "Takıma başvur",
         "ctaHref": "index.html#apply",
         "blocks": [
           {
@@ -491,8 +491,8 @@
         "eyebrow": "Kategori",
         "title": "Etkinlik Fotoğrafları",
         "intro": "Katılınan oyunlardan ve organizasyonlardan seçilmiş anlar.",
-        "ctaLabel": "Başvuruya Geç",
-        "ctaHref": "index.html#apply",
+        "ctaLabel": "Etkinlikleri incele",
+        "ctaHref": "category.html?slug=events#category-block-grid",
         "blocks": [
           {
             "id": "block_7a7662ef-4f45-4fa9-8ce6-eea5a35d0df9",
@@ -684,8 +684,8 @@
         "eyebrow": "Partnerler",
         "title": "Sahadaki Güçlü Partnerlerimiz",
         "intro": "Takımımızı ekipman, organizasyon ve topluluk iş birlikleriyle destekleyen sponsor markalar.",
-        "ctaLabel": "Başvuruya Geç",
-        "ctaHref": "index.html#apply",
+        "ctaLabel": "Sponsorları incele",
+        "ctaHref": "category.html?slug=sponsors#category-block-grid",
         "blocks": [
           {
             "id": "cat_sponsors_block_1",
@@ -752,8 +752,8 @@
         "eyebrow": "R.D.A.T. SAHA REHBERİ",
         "title": "Bilgiyle hazırlan. Takımla geliş.",
         "intro": "Airsofta ilk adımdan ekipman bakımına: Red Devil’in başlangıç, oyun ve bakım rehberleri.",
-        "ctaLabel": "Takımla tanış",
-        "ctaHref": "index.html#apply",
+        "ctaLabel": "Ekibi tanı",
+        "ctaHref": "category.html?slug=team",
         "blocks": [
           {
             "id": "airsoft-nedir",

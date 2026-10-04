@@ -32,7 +32,7 @@ test('Yazı metni başlık ve bağlantıya dönüşür; HTML veya javascript ça
   assert.ok(!rendered.includes('href="javascript:'));
 });
 test('Uzun metinler normalleştirmede korunur ve son yazı silinince geri gelmez', () => {
-  const context = { window: { RdatLanguage: require('../rdat-language'), RdatBlog: Blog, RdatAbout: require('../rdat-about'), EventBlocks: require('../event-blocks') } };
+  const context = { window: { CategoryLinks: require('../category-links'), RdatLanguage: require('../rdat-language'), RdatBlog: Blog, RdatAbout: require('../rdat-about'), EventBlocks: require('../event-blocks') } };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../site-config.js'), 'utf8'), context);
   const normalized = context.window.SiteConfig.normalize({ categories: [Blog.category] });
   const blog = normalized.categories.find(c => c.slug === 'blog');

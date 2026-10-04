@@ -10,6 +10,8 @@ function updateCategoryMetadata(brandName, category, titleSuffix = '') {
   const descriptionNode = document.querySelector('meta[name="description"]');
   if (descriptionNode) descriptionNode.content = description;
   document.title = title;
+  const robots = document.querySelector('meta[name="robots"]');
+  if (robots) robots.content = 'index, follow';
 
   const canonicalNode = document.querySelector('link[rel="canonical"]');
   const canonicalOrigin = canonicalNode ? new URL(canonicalNode.href).origin : window.location.origin;
@@ -87,7 +89,7 @@ function renderTeamCategory(config, teamProfiles) {
   if (cta) {
     cta.textContent = category.ctaLabel || 'Başvuruya Git';
     const href = category.ctaHref || 'index.html#apply';
-    cta.href = href.startsWith('#') ? `index.html${href}` : href;
+    cta.href = window.CategoryLinks.href(href);
   }
 
   const blockGrid = document.querySelector('#category-block-grid');
@@ -241,7 +243,7 @@ function renderNavigation(config) {
 
   const visibleCategories = config.categories.filter((item) => item.showInMenu);
   nav.innerHTML = visibleCategories
-    .map((category) => `<a href="category.html?slug=${encodeURIComponent(category.slug)}">${escapeHtml(category.label)}</a>`)
+    .map((category) => `<a ${category.slug === getSlugParam() ? 'aria-current="page"' : ''} href="category.html?slug=${encodeURIComponent(category.slug)}">${escapeHtml(category.label)}</a>`)
     .join('');
 
   const rawApplyHref = config.nav.applyHref || 'index.html#apply';
@@ -291,6 +293,7 @@ function renderBlogArticle(config, category, postId) {
   grid.innerHTML = post ? `<article><img class="blog-cover" src="${escapeHtml(post.imageUrl)}" alt="${escapeHtml(post.title)}"><div class="blog-article-body">${renderBlogText(post.text)}</div><a class="btn ghost" href="category.html?slug=blog">Diğer yazılara dön</a></article>` : '';
   document.querySelector('#category-empty').hidden = true;
   updateCategoryMetadata(config.brand.name, { ...category, label: post?.title || 'Blog', intro: post?.text.split('\n')[0] || category.intro });
+  if (!post) document.querySelector('meta[name="robots"]').content = 'noindex, follow';
 }
 
 function renderCategory(config) {
@@ -301,7 +304,20 @@ function renderCategory(config) {
     return;
   }
 
-  const category = config.categories.find((item) => item.slug === slug) || config.categories[0];
+  const category = config.categories.find((item) => item.slug === (slug || 'about'));
+  if (!category) {
+    setText('category-eyebrow', 'Kategori');
+    setText('category-title', 'Kategori bulunamadı');
+    setText('category-intro', 'Bu bağlantıya ait bir kategori yok. Menüden bir kategori seçebilirsin.');
+    const cta = document.querySelector('#category-cta');
+    cta.textContent = 'Ana sayfaya dön';
+    cta.href = 'index.html';
+    document.querySelector('#category-block-grid').innerHTML = '';
+    document.querySelector('#category-empty').hidden = true;
+    document.querySelector('meta[name="robots"]').content = 'noindex, follow';
+    document.title = `Kategori bulunamadı | ${config.brand.name}`;
+    return;
+  }
   const postId = new URLSearchParams(window.location.search).get('post');
   if (category.slug === 'blog' && postId) { renderBlogArticle(config, category, postId); return; }
   const isSponsorCategory = category.slug === 'sponsors';
@@ -315,7 +331,7 @@ function renderCategory(config) {
   const cta = document.querySelector('#category-cta');
   if (cta) {
     cta.textContent = category.ctaLabel;
-    cta.href = category.ctaHref.startsWith('#') ? `index.html${category.ctaHref}` : category.ctaHref;
+    cta.href = window.CategoryLinks.href(category.ctaHref);
   }
 
   const blockGrid = document.querySelector('#category-block-grid');
@@ -332,7 +348,7 @@ function renderCategory(config) {
       blockGrid.classList.add('category-block-grid--sponsors');
       blockGrid.innerHTML = category.blocks
         .map((block) => {
-          const sponsorUrl = sponsorUrlFallback(block) || text(block?.url, '');
+          const sponsorUrl = window.CategoryLinks.href(text(block?.url, '')) || sponsorUrlFallback(block);
           const isVector = /vector\s*optics/i.test(block?.title || '') || /vectoroptics/i.test(sponsorUrl);
           return `
             <article class="category-block category-sponsor-block">
@@ -374,7 +390,7 @@ function renderCategory(config) {
             return `<a class="category-event-link" href="event.html?slug=${encodeURIComponent(category.slug)}&event=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} etkinlik detayına git">${card}</a>`;
           }
 
-          const blockUrl = text(block?.url, '');
+          const blockUrl = window.CategoryLinks.href(text(block?.url, ''));
           if (blockUrl) {
             const isExternal = /^https?:\/\//i.test(blockUrl);
             return `<a class="category-event-link" href="${escapeHtml(blockUrl)}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} aria-label="${escapeHtml(block.title)} bağlantısına git">${card}</a>`;

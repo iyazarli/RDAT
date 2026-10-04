@@ -110,7 +110,7 @@ function renderNavigation(config) {
 
   const visibleCategories = config.categories.filter((item) => item.showInMenu);
   nav.innerHTML = visibleCategories
-    .map((category) => `<a href="category.html?slug=${encodeURIComponent(category.slug)}">${escapeHtml(category.label)}</a>`)
+    .map((category) => `<a ${category.slug === 'events' ? 'aria-current="page"' : ''} href="category.html?slug=${encodeURIComponent(category.slug)}">${escapeHtml(category.label)}</a>`)
     .join('');
 
   const rawApplyHref = config.nav.applyHref || 'index.html#apply';
@@ -130,8 +130,7 @@ function renderNavigation(config) {
 
 function resolveEvent(config) {
   const { slug, eventId } = getQueryParams();
-  const requestedCategory = config.categories.find((item) => item.slug === slug);
-  const eventsCategory = requestedCategory || config.categories.find((item) => item.slug === 'events');
+  const eventsCategory = slug === 'events' ? config.categories.find((item) => item.slug === 'events') : null;
 
   if (!eventsCategory || !Array.isArray(eventsCategory.blocks) || eventsCategory.blocks.length === 0) {
     return { category: null, eventBlock: null };
@@ -155,6 +154,7 @@ function renderEvent(config) {
     if (grid) grid.innerHTML = '';
     if (emptyNode) emptyNode.hidden = false;
     if (tagNode) tagNode.hidden = true;
+    document.querySelector('#event-status-date').innerHTML = '';
     if (backLink) backLink.href = 'category.html?slug=events';
     updateEventMetadata(
       `Etkinlik bulunamadı | ${config.brand.name} (R.D.A.T.)`,
