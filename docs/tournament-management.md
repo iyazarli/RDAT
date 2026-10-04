@@ -1,4 +1,25 @@
-# Turnuva yönetimi
+# Reddevil admin turnuva entegrasyonu
+
+Admin panelinde **Turnuva Yönetimi** menüsü bulunur. Mevcut yönetici girişi kullanılır. Ekran aynı kaynaklı `/tournament-app/` modülüdür; kayıtlar `/api/admin/tournaments` aracılığıyla özel Vercel Blob deposunda saklanır. Genel site içeriği kaydı ve GitHub site-state senkronu turnuva kayıtlarını etkilemez.
+
+## Kalıcılık ve güvenlik
+
+Oturumsuz istekler 401 döner. Yazmalar aynı kaynaklı JSON isteği gerektirir. Okumalar `useCache:false` ile özel Blob kaydını güncel okur. Kayıt sürümü ve Blob ETag `ifMatch` kontrolü eşzamanlı yazmada veri ezilmesini önler. Önceki sürümler `tournaments/history/` altında özel Blob olarak tutulur. Mevcut `BLOB_READ_WRITE_TOKEN`, `ADMIN_SESSION_SECRET` ve yönetici hesap ayarları kullanılır; yeni gizli anahtar gerekmez.
+
+## Test ve yeniden üretim
+
+```bash
+npm ci
+node --test tests/*.test.js
+cd tools/tournament
+npm ci
+npm test
+node scripts/integrate.mjs --reddevil ../..
+```
+
+Ortak TypeScript kaynakları `tools/tournament/src/` içindedir. Son komut statik ekranı ve sunucu hesaplama modülünü yeniden üretir. WD çıktısı için aynı komuta `--wd /WD/proje/yolu` eklenebilir. Mevcut Reddevil yayın akışı GitHub/Vercel'dir; modül bağımsız bir uygulama sunucusu gerektirmez.
+
+Yerel tarayıcı testi iki mevcut admin paneline giriş, menü, 89 maçlık demo, kayıt/aç, tek bronz, mobil ve oturumsuz taslak gizlemeyi doğruladı. Reddevil Blob testi enjekte edilen sağlayıcıyla yapıldı; canlı Blob yazması bu testin kanıtı değildir.
 
 ## Excel incelemesi
 
@@ -23,42 +44,3 @@ Kullanıcının seçimi: tüm ölçütler eşitse grup içinde kura sırası, ü
 
 Rastgele test skorları ve sabit takım isimleri içe aktarılmayacak. Berabere eleme maçında bayrak/tam eleme otomatik kazanan sayılmayacak; açık kazanan seçimi gerekecek. Oynanmamış maçlar sonuç üretmeyecek. Önceki sonuç değiştiğinde yeni eşleşmeyle uyumsuz sonraki skorlar temizlenip kayıtta açıklanacak.
 
-## Kurulum ve çalıştırma
-
-Node.js 24 gereklidir (doğrulanan sürüm: 24.14.0). SQLite için Node'un yerleşik `node:sqlite` modülü kullanılır; ek veritabanı kurulumu gerekmez.
-
-```bash
-npm ci
-npm run build
-npm start
-```
-
-Uygulama: http://127.0.0.1:4317. Geliştirme: `npm run dev` ardından http://127.0.0.1:5173. Sunucu yalnızca yerel bilgisayardan erişilir; internet yayını veya çok kullanıcılı kimlik doğrulama bu teslimin kapsamına dahil değildir.
-
-## Testler
-
-```bash
-npm test
-npx playwright install chromium
-npm run test:e2e
-```
-
-Tarayıcı testi için önce `npm run build` ve ayrı terminalde `npm start` çalışmalıdır. Bilgisayarda Google Chrome varsa alternatif: `BROWSER_CHANNEL=chrome npm run test:e2e`. Test ayrı ve açıkça demo olarak işaretlenen 89 maçlık bir turnuva oluşturur ve kaydeder. Masaüstü/mobil kanıt görüntüleri `evidence/` dizinine yazılır.
-
-23 otomatik test puanlama, her sıralama ölçütü, tam eşitlik, üçüncüler seçimi, her tur aktarımı, beraberlik seçimi, üçüncülük sırası, tek bronz, madalyalar, lider eşitlikleri, düzeltme zinciri, veri doğrulama, SQLite kayıt/açma, süreç yeniden başlatma ve kayıt çakışmasını kapsar. Tarayıcı testi takım/oyuncu/kaptan girişi, demo, 60/7/22 maç, kayıt/açma, beraberlik/düzeltme ve 390 px mobil görünümü denetler.
-
-## Kayıt ve düzeltme
-
-- **Kaydet:** tüm takımları, kurayı, maçları ve kayıt geçmişini SQLite'a kaydeder. Varsayılan veritabanı `data/turnuvalar.sqlite`.
-- **Taslak:** değişiklikler ayrıca tarayıcıda tutulur; arayüz kaydedilmemiş değişikliği bildirir. Kalıcı kayıt için Kaydet düğmesini kullanın.
-- **Tekrar aç:** üstteki kayıt listesinden turnuvayı seçin. Dışa aktar/Dosyadan aç ile JSON yedeği taşınabilir; içe aktarılan dosya ayrı bir turnuva olur.
-- **Kayıt çakışması:** eski bir sekme güncel kaydı sessizce ezemez; sunucu sürüm kontrolüyle reddeder. Taslağı dışa aktarıp güncel kaydı açın.
-- **Düzeltme:** önceki sonuç değişince yeni katılımcılar hesaplanır. Eşleşmesi değişen maçların tüm sonuç alanları temizlenir; etkilenmeyen sonuçlar korunur. Arayüz temizlenecek maç sayısıyla onay ister ve geçmişe kaydeder. Önceki kayıt sürümleri ayrıca SQLite `history` tablosunda tutulur.
-- **Kura:** takım kimlikleri sıralanır ve seed ile deterministik Fisher–Yates karıştırması uygulanır. Aynı takım kimlikleri ve seed aynı grupları üretir. Aynı kura yeniden istendiğinde sonuçlar korunur; değişen kura sonuç varsa onay ister.
-- **Boş maçlar:** iki skor olmadan bonus/istatistik hesaplanmaz. Elemede beraberlik, açık kazanan seçilene kadar bekler. Grup katılımcıları 60 maçın tamamından sonra kesinleşir.
-- **Takım silme:** kura ve sonuçları sıfırlayacağı açıkça bildirilip onay istenir. Takım adının veya oyuncuların düzenlenmesi kimlikleri ve maç sonuçlarını değiştirmez.
-- **Demo:** ayrı kayıt olarak açılır; Excel test skorları kullanılmaz. Sayfadaki DEMO işareti kaydedilir ve yeniden açılınca korunur.
-
-## Mimari ve dosyalar
-
-`src/engine.ts` saf turnuva hesapları ve doğrulama; `src/main.tsx` Türkçe yönetim arayüzü; `src/style.css` mobil/masaüstü düzen; `server/index.ts` SQLite API ve üretim dosyaları; `tests/engine.test.ts` turnuva testleri; `tests/server.test.ts` kalıcılık testleri; `tests/browser.mjs` uçtan uca tarayıcı testi. `package.json`, kilit dosyası, `tsconfig.json`, `vite.config.ts`, `index.html` kurulum ve derlemeyi tanımlar.
