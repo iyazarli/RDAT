@@ -1,0 +1,30 @@
+/* Kart gruplarında eşit ölçüler; tam içerik korunur. */
+.card-grid, .event-stories, .team-grid, .category-block-grid,
+.category-team-grid, .event-gallery-grid { grid-auto-rows: 1fr; align-items: stretch; }
+.feature-card, .event-story, .person-card, .category-person-card,
+.category-block, .event-photo-card { min-width: 0; height: 100%; display: flex; flex-direction: column; }
+.category-event-link { display: flex; min-width: 0; height: 100%; }
+.category-event-link > .category-block { width: 100%; }
+.category-block-media { display: block; flex-shrink: 0; height: auto; aspect-ratio: 16 / 9; }
+.category-block--about .category-block-media { aspect-ratio: 4 / 3; }
+.category-block > h3, .feature-card > h3 { min-height: 4.5em; line-height: 1.5; overflow-wrap: anywhere; }
+.category-block > p, .feature-card > p { overflow-wrap: anywhere; }
+.category-block > .category-badge, .feature-card > .chip { align-self: flex-start; margin-top: auto; }
+.category-block--blog > .category-badge { margin-top: 0; }
+.category-sponsor-logo-wrap { flex-shrink: 0; }
+.event-cover { flex-shrink: 0; }
+.event-story-copy { flex: 1; display: flex; flex-direction: column; }
+.event-story-copy h3 { min-height: 3.54em; }
+.event-story-copy > p:last-child { min-height: 6.6em; margin-top: 0; }
+.person-body, .category-person-body { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.person-header, .category-person-header { min-height: 5.5em; }
+.person-header h3, .category-person-header h3 { overflow-wrap: anywhere; }
+.person-header > div, .category-person-header > div { min-width: 0; }
+.person-meta, .category-person-meta { margin-top: auto; }
+.person-photo, .person-monogram, .category-person-photo, .category-person-monogram { flex-shrink: 0; }
+.event-photo-card img { flex-shrink: 0; height: auto; aspect-ratio: 4 / 3; }
+.event-photo-card figcaption { flex: 1; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .category-team-grid { grid-template-columns: minmax(0, 1fr); }
+  .category-block-grid--sponsors, .event-gallery-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+}
