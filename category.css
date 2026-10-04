@@ -304,7 +304,13 @@
   background: #10120f;
 }
 
-.blog-read-more { display: block; margin: 12px 0 24px; color: var(--accent); font-size: 14px; }
+.blog-preview-link { display: flex; min-width: 0; }
+.category-block--blog { display: flex; flex-direction: column; width: 100%; height: 100%; min-width: 0; }
+.category-block--blog .category-block-media { height: auto; aspect-ratio: 16 / 9; object-fit: contain; background: #10120f; }
+.category-block--blog h3 { height: 4.5em; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.category-block--blog p { height: 6em; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
+.category-block--blog .category-badge { align-self: flex-start; }
+.blog-read-more { display: block; margin-top: auto; padding-top: 18px; color: var(--accent); font-size: 14px; }
 .blog-article { max-width: 850px; margin: 30px auto 70px; }
 .blog-cover { display: block; width: 100%; height: auto; border-radius: 8px; }
 .blog-article-body { max-width: 720px; margin: 30px auto; }

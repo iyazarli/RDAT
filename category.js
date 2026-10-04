@@ -356,16 +356,17 @@ function renderCategory(config) {
       blockGrid.innerHTML = category.blocks
         .map((block) => {
           const card = `
-            <article class="category-block${isEventsCategory ? ' category-block--event' : category.slug === 'about' ? ' category-block--about' : ''}">
+            <article class="category-block${isEventsCategory ? ' category-block--event' : category.slug === 'about' ? ' category-block--about' : category.slug === 'blog' ? ' category-block--blog' : ''}">
               ${block.imageUrl ? `<img class="category-block-media" src="${escapeHtml(block.imageUrl)}" alt="${escapeHtml(block.title)}">` : ''}
               <h3>${escapeHtml(block.title)}</h3>
               <p>${escapeHtml(category.slug === 'blog' ? block.text.split('\n')[0].slice(0, 220) : block.text)}</p>
               ${block.tag ? `<span class="category-badge">${escapeHtml(block.tag)}</span>` : ''}
+              ${category.slug === 'blog' ? '<span class="blog-read-more">Yazıyı oku →</span>' : ''}
             </article>
           `;
 
           if (category.slug === 'blog') {
-            return `<a class="category-event-link" href="category.html?slug=blog&post=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} yazısını oku">${card}<span class="blog-read-more">Yazıyı oku →</span></a>`;
+            return `<a class="category-event-link blog-preview-link" href="category.html?slug=blog&post=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} yazısını oku">${card}</a>`;
           }
           if (isEventsCategory) {
             return `<a class="category-event-link" href="event.html?slug=${encodeURIComponent(category.slug)}&event=${encodeURIComponent(block.id)}" aria-label="${escapeHtml(block.title)} etkinlik detayina git">${card}</a>`;
