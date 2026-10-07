@@ -46,4 +46,16 @@ API destekli Vercel önizlemede `/`, `/category?slug=events`, `/category?slug=bl
 
 ## Yayın kanıtının sınırı
 
-Bu rapordaki kapsamlı tarayıcı sonuçları yerel değiştirilmiş uygulamaya aittir. Canlı üretimde ilk hata yeniden üretildi; değişikliğin main'e birleşmesi ve üretimde yayınlanması ayrı bir teslim adımıdır. PR/önizleme bilgisi sohbetin teslim mesajında ayrıca bildirilir. Kaynak kayıtlar, Blob verisi, localStorage ve W&D dosyaları silinmedi/değiştirilmedi.
+Yerel 108 kontrolün ardından, kullanıcının Chrome erişimi vermesiyle uzak önizleme ayrıca doğrulandı. Chrome kontrol erişimi çalışıyordu; önizleme normal Chrome sekmesinde hâlâ Vercel login sayfasına yönlendi. Bağlı Vercel hesabının mevcut geçici erişim bağlantısı yeniden kullanılarak uygulama içi gerçek tarayıcıda önizleme açıldı. Vercel koruma ayarları değiştirilmedi; erişim bağlantısı rapora kaydedilmedi.
+
+- PR: https://github.com/iyazarli/RDAT/pull/4 (taslak, açık).
+- Önizleme: https://reddevil-airsoft-git-fix-public-s-c53671-ihsanyazarlis-projects.vercel.app/ .
+- Doğrulanan dağıtım: `dpl_87SXXgEBN7ZstxSxHgm8TJGADgns`, `READY`, uygulama commit'i `48ef8d9d26a356d694034fe283fd5d3b7a57f2e5`.
+- Korumalı uzak HTML HTTP 200; `page-pending` ve yeni `site-data-client.js?v=20261008-1` mevcut.
+- Uzak tarayıcıda **39 ana akış** geçti: masaüstünde yedi kategori ve ana sayfaya dönüş, mobilde yedi kategori ve menü kapanması/yenileme/dönüş, 12 blog detayının tamamı ve listeye dönüş, 12 etkinlik detayının tamamı ve listeye dönüş, bir yavaş-ağ ilk çizim kontrolü. Etkinlikte ayrıca yenileme ve geri–ileri testi geçti.
+- Mobil 390×844 ve masaüstü 1440×900 kategorilerde yatay taşma 0 piksel.
+- Yavaş-ağ testinde başlık, main ve footer `visibility:hidden` ve `inert` iken yalnız güncel yükleme mesajı görünüyordu; ardından güncel içerik açıldı.
+- Uzak tarayıcı console error/warn listesi boş; izlenen ağ yanıtlarında HTTP 4xx/5xx bulunmadı. Navigasyon sırasında iptal edilen altı istek `ERR_ABORTED` olarak ayrı değerlendirildi.
+- Ağ yavaşlatma ve viewport override test sonunda sıfırlandı.
+
+Gerçek telefon, Safari/Firefox ve üretimde düzeltilmiş sürüm ayrıca test edilmiş sayılmaz. Main'e birleşme ve üretim yayını yapılmadı. Kaynak kayıtlar, Blob verisi, localStorage ve W&D dosyaları bu doğrulamada değiştirilmedi.
