@@ -1,7 +1,3 @@
-const TEAM_STORAGE_KEY = 'reddevil_team_profiles';
-
-const DEFAULT_TEAM_PROFILES = window.RdatTeam.profiles;
-
 function updateCategoryMetadata(brandName, category, titleSuffix = '') {
   const label = category.label || 'Red Devil Airsoft';
   const title = `${label} | ${brandName} (R.D.A.T.)${titleSuffix}`;
@@ -32,14 +28,6 @@ function updateCategoryMetadata(brandName, category, titleSuffix = '') {
     const node = document.querySelector(selector);
     if (node) node.content = content;
   });
-}
-
-function loadTeamProfiles() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(TEAM_STORAGE_KEY));
-    if (Array.isArray(raw) && raw.length > 0) return raw;
-  } catch {}
-  return DEFAULT_TEAM_PROFILES;
 }
 
 const LEGACY_TEAM_PROFILE_COPY = {
@@ -81,6 +69,7 @@ function migrateLegacyTeamProfileCopy(profile) {
 
 function renderTeamCategory(config, teamProfiles) {
   const category = config.categories.find((c) => c.slug === 'team') || {};
+  updateCategoryMetadata(config.brand.name, category, ' | Eskişehir Airsoft Takımı');
   setText('category-eyebrow', category.eyebrow || 'Ekip');
   setText('category-title', category.title || 'Takım Kadrosu');
   setText('category-intro', category.intro || '');
@@ -96,7 +85,7 @@ function renderTeamCategory(config, teamProfiles) {
   const emptyNode = document.querySelector('#category-empty');
   if (!blockGrid) return;
 
-  const profileSource = Array.isArray(teamProfiles) && teamProfiles.length ? teamProfiles : loadTeamProfiles();
+  const profileSource = Array.isArray(teamProfiles) ? teamProfiles : [];
   const profiles = window.RdatLanguage.apply(profileSource.map(migrateLegacyTeamProfileCopy)).filter((profile) => {
     if (!profile || typeof profile !== 'object') return false;
     const name = String(profile?.name ?? '').trim();
@@ -108,6 +97,7 @@ function renderTeamCategory(config, teamProfiles) {
   });
 
   if (!profiles.length) {
+    blockGrid.innerHTML = '';
     if (emptyNode) emptyNode.hidden = false;
     return;
   }
@@ -141,7 +131,6 @@ function renderTeamCategory(config, teamProfiles) {
     }, { once: true });
   });
 
-  updateCategoryMetadata(config.brand.name, category, ' | Eskişehir Airsoft Takımı');
 }
 
 function renderTeamPortrait(profile) {
@@ -225,19 +214,6 @@ function bindEventPhotoFallbacks(container) {
   });
 }
 
-function sponsorUrlFallback(block) {
-  const byTitle = text(block?.title, '').toLowerCase();
-  const byTag = text(block?.tag, '').toLowerCase();
-  const source = `${byTitle} ${byTag}`;
-
-  if (source.includes('vector')) return 'https://www.vectoroptics.com';
-  if (source.includes('izmir') || source.includes('av market')) return 'https://izmiravmarket.com';
-  if (source.includes('isg')) return 'https://isgairsoft.com';
-  if (source.includes('armorion')) return 'https://www.armorion.com';
-  if (source.includes('poligun')) return 'https://poligunstore.com';
-  return '';
-}
-
 function renderBrand(config) {
   const brand = config.brand;
   document.querySelectorAll('[data-brand-name]').forEach((node) => {
@@ -297,7 +273,7 @@ function renderBlogText(value) {
   function flush() {
     if (!paragraph.length) return;
     const safe = escapeHtml(paragraph.join('\n')).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      (_match, label, href) => `<a href="${window.CategoryLinks.href(href)}" target="_blank" rel="noopener noreferrer">${label}</a>`);
     result.push(`<p>${safe.replace(/\n/g, '<br>')}</p>`);
     paragraph = [];
   }
@@ -328,11 +304,6 @@ function renderBlogArticle(config, category, postId) {
 
 function renderCategory(config) {
   const slug = getSlugParam();
-
-  if (slug === 'team') {
-    renderTeamCategory(config);
-    return;
-  }
 
   const category = config.categories.find((item) => item.slug === (slug || 'about'));
   if (!category) {
@@ -378,7 +349,7 @@ function renderCategory(config) {
       blockGrid.classList.add('category-block-grid--sponsors');
       blockGrid.innerHTML = category.blocks
         .map((block) => {
-          const sponsorUrl = window.CategoryLinks.href(text(block?.url, '')) || sponsorUrlFallback(block);
+          const sponsorUrl = window.CategoryLinks.href(text(block?.url, ''));
           const isVector = /vector\s*optics/i.test(block?.title || '') || /vectoroptics/i.test(sponsorUrl);
           return `
             <article class="category-block category-sponsor-block">
@@ -454,11 +425,10 @@ function bindMobileNav() {
     });
   }
 
-  navLinks?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      navToggle?.setAttribute('aria-expanded', 'false');
-    });
+  navLinks?.addEventListener('click', (event) => {
+    if (!event.target.closest('a')) return;
+    navLinks.classList.remove('open');
+    navToggle?.setAttribute('aria-expanded', 'false');
   });
 }
 
@@ -474,36 +444,20 @@ function renderFooter(config) {
   }
 }
 
-function getFallbackPublicState() {
-  if (!window.SiteConfig) return null;
-  return {
-    ok: false,
-    siteConfig: window.SiteConfig.load(),
-    teamProfiles: loadTeamProfiles(),
-  };
-}
-
 async function init() {
-  window.SiteDataClient?.bindGlobalErrorTracking();
-  if (!window.SiteConfig) return;
   if (getSlugParam() === 'highlights') {
     window.location.replace('index.html#highlights');
     return;
   }
-  const fallback = getFallbackPublicState();
-  function renderState(publicState) {
-    const config = window.SiteConfig.normalize(publicState?.siteConfig || fallback?.siteConfig || {});
+  bindMobileNav();
+  return window.SiteDataClient.mount((publicState) => {
+    const config = window.SiteConfig.normalize(publicState.siteConfig, { authoritative: true });
     renderBrand(config);
     renderNavigation(config);
-    if (getSlugParam() === 'team') renderTeamCategory(config, window.RdatTeam.apply(publicState?.teamProfiles));
+    if (getSlugParam() === 'team' && config.categories.some(category => category.slug === 'team')) renderTeamCategory(config, publicState.teamProfiles);
     else renderCategory(config);
     renderFooter(config);
-    document.documentElement.classList.remove('page-pending');
-  }
-  const publicState = window.SiteDataClient?.loadPublicState
-    ? await window.SiteDataClient.loadPublicState(() => fallback) : fallback;
-  renderState(publicState);
-  bindMobileNav();
+  });
 }
 
 init();

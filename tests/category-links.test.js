@@ -44,7 +44,7 @@ test('Kategori kartları güncel kayıtlar gelmeden tıklamaya açılmaz', async
     window: {
       RdatTeam: { profiles: [] },
       SiteConfig: { normalize: value => value },
-      SiteDataClient: { bindGlobalErrorTracking() {}, loadPublicState: () => new Promise(resolve => { resolveState = resolve; }) },
+      SiteDataClient: { mount: render => new Promise(resolve => { resolveState = resolve; }).then(state => { render(state); revealed = true; }) },
     },
     document: { documentElement: { classList: { remove: () => { revealed = true; } } } },
   };
@@ -61,4 +61,8 @@ test('Kategori kartları güncel kayıtlar gelmeden tıklamaya açılmaz', async
   await pending;
   assert.equal(revealed, true);
   assert.deepEqual(renders, ['live']);
+});
+test('Kaldırılmış dış kaynak güncel 5v5 arşivine gider; özel adres korunur', () => {
+  assert.equal(Links.href('https://www.speedqb.com/products/speedqb-regionals-season-1-tac-city'), 'https://www.speedqb.com/pages/speedqb-2024-season-updates');
+  assert.equal(Links.href('https://example.com/custom'), 'https://example.com/custom');
 });

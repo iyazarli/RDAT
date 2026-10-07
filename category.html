@@ -2,6 +2,15 @@
 <html lang="tr" class="page-pending">
 <head>
   <meta charset="UTF-8">
+  <style>
+    html.page-pending { background: #0b0e09; }
+    html.page-pending header.nav, html.page-pending main, html.page-pending footer { visibility: hidden; pointer-events: none; }
+    .public-state-status { position: fixed; inset: 0; z-index: 100; display: grid; place-content: center; gap: 16px; padding: 24px; text-align: center; background: #0b0e09; color: #f0f2eb; font: 16px/1.6 system-ui, sans-serif; }
+    .public-state-status[hidden], .public-state-status button[hidden] { display: none; }
+    .public-state-status button { padding: 12px 20px; border: 1px solid #a3a77c; border-radius: 8px; background: #151a11; color: inherit; cursor: pointer; }
+  </style>
+  <script src="site-data-client.js?v=20261008-1"></script>
+
   <meta name="robots" content="index, follow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Red Devil Airsoft Takımı | Eskişehir ve Anadolu</title>
@@ -22,16 +31,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260928-olive5">
+  <link rel="stylesheet" href="styles.css?v=20261008-1">
   <link rel="stylesheet" href="category.css?v=20261004-5">
   <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap">
   <link rel="stylesheet" href="typography.css?v=20261004-1">
-  <noscript><style>html.page-pending main, html.page-pending footer, html.page-pending .nav-links { visibility: visible; }</style></noscript>
   <link rel="stylesheet" href="card-layout.css?v=20261004-5">
 </head>
 <body>
+  <div class="public-state-status" id="public-state-status" role="status" aria-live="polite" aria-busy="true">
+    <p id="public-state-message">Güncel içerik yükleniyor…</p>
+    <button id="public-state-retry" type="button" hidden>Yeniden dene</button>
+  </div>
+  <noscript><style>#public-state-status { display: none; }</style><div class="public-state-status">Güncel içerikleri görmek için JavaScript’i etkinleştirin.</div></noscript>
+
   <div class="background-veil"></div>
-  <header class="nav">
+  <header class="nav" inert>
     <a class="brand" href="index.html" aria-label="Ana sayfaya dön">
       <span class="brand-mark logo-image" data-brand-mark style="background-image: url('assets/brand/reddevil-logo.svg');">RD</span>
       <div class="brand-text">
@@ -43,7 +57,7 @@
     <nav class="nav-links" id="category-nav-links" aria-label="Ana menu"></nav>
   </header>
 
-  <main>
+  <main inert>
     <section class="section category-hero">
       <p class="eyebrow" id="category-eyebrow">Kategori</p>
       <h1 id="category-title">Kategori Başlığı</h1>
@@ -60,7 +74,7 @@
     </section>
   </main>
 
-  <footer class="footer home-footer">
+  <footer inert class="footer home-footer">
     <div class="footer-shell">
       <section class="footer-card footer-brand-card">
         <div class="brand">
@@ -100,13 +114,12 @@
 
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <script src="rdat-team.js?v=20261003-1"></script>
-  <script src="site-data-client.js?v=20261003-1"></script>
   <script src="event-blocks.js?v=20261004-5"></script>
   <script src="rdat-about.js?v=20261004-1"></script>
   <script src="blog-content.js?v=20261004-1"></script>
   <script src="rdat-language.js?v=20261004-5"></script>
-  <script src="category-links.js?v=20261004-6"></script>
-  <script src="site-config.js?v=20261004-7"></script>
-  <script src="category.js?v=20261004-8"></script>
+  <script src="category-links.js?v=20261008-1"></script>
+  <script src="site-config.js?v=20261008-1"></script>
+  <script src="category.js?v=20261008-1"></script>
 </body>
 </html>
