@@ -247,7 +247,7 @@ function renderNavigation(config) {
   const footerLinks = document.querySelector('#category-footer-links');
   if (!nav) return;
 
-  const visibleCategories = config.categories.filter((item) => item.showInMenu);
+  const visibleCategories = config.categories.filter((item) => item.showInMenu && item.slug !== 'faq');
   nav.innerHTML = visibleCategories
     .map((category) => `<a ${category.slug === getSlugParam() ? 'aria-current="page"' : ''} href="category.html?slug=${encodeURIComponent(category.slug)}">${escapeHtml(category.label)}</a>`)
     .join('');

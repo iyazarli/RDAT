@@ -63,7 +63,7 @@ function renderNavigation(config) {
   const footerLinks = document.querySelector('#footer-category-links');
   if (!navLinks) return;
 
-  const categories = config.categories.filter((item) => item.showInMenu);
+  const categories = config.categories.filter((item) => item.showInMenu && item.slug !== 'faq');
 
   navLinks.innerHTML = categories
     .map((category) => `<a href="category.html?slug=${encodeURIComponent(category.slug)}">${escapeHtml(category.label)}</a>`)
