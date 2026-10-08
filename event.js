@@ -250,11 +250,10 @@ function bindMobileNav() {
     });
   }
 
-  navLinks?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      navToggle?.setAttribute('aria-expanded', 'false');
-    });
+  navLinks?.addEventListener('click', (event) => {
+    if (!event.target.closest('a')) return;
+    navLinks.classList.remove('open');
+    navToggle?.setAttribute('aria-expanded', 'false');
   });
 }
 
@@ -270,30 +269,15 @@ function renderFooter(config) {
   }
 }
 
-function getFallbackPublicState() {
-  if (!window.SiteConfig) return null;
-  return {
-    ok: false,
-    siteConfig: window.SiteConfig.load(),
-  };
-}
-
 async function init() {
-  window.SiteDataClient?.bindGlobalErrorTracking();
-  if (!window.SiteConfig) return;
-  const fallback = getFallbackPublicState();
-  function renderState(publicState) {
-    const config = window.SiteConfig.normalize(publicState?.siteConfig || fallback?.siteConfig || {});
+  bindMobileNav();
+  return window.SiteDataClient.mount((publicState) => {
+    const config = window.SiteConfig.normalize(publicState.siteConfig, { authoritative: true });
     renderBrand(config);
     renderNavigation(config);
     renderEvent(config);
     renderFooter(config);
-    document.documentElement.classList.remove('page-pending');
-  }
-  bindMobileNav();
-  const publicState = window.SiteDataClient?.loadPublicState
-    ? await window.SiteDataClient.loadPublicState(() => fallback) : fallback;
-  renderState(publicState);
+  });
 }
 
 init();

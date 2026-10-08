@@ -23,6 +23,10 @@
   }
   function href(value) {
     const target = typeof value === 'string' ? value.trim() : '';
+    // Kaldırılan etkinlik kaynağını aynı kuruluşun erişilebilir 5v5 arşivine yönlendir.
+    if (target === 'https://www.speedqb.com/products/speedqb-regionals-season-1-tac-city') {
+      return 'https://www.speedqb.com/pages/speedqb-2024-season-updates';
+    }
     const homeSections = new Set(['#top', '#about', '#team', '#field', '#faq', '#apply', '#highlights', '#sponsors', '#first-game', '#events-preview']);
     return homeSections.has(target) ? `index.html${target}` : target;
   }

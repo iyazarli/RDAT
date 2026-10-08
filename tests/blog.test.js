@@ -23,7 +23,7 @@ test('Blog geçişi tekrar uygulanabilir; düzenlenen ve silinen yazılar korunu
 });
 test('Yazı metni başlık ve bağlantıya dönüşür; HTML veya javascript çalıştırılmaz', () => {
   const source = fs.readFileSync(path.join(__dirname, '../category.js'), 'utf8');
-  const context = { escapeHtml: value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;') };
+  const context = { window: { CategoryLinks: require('../category-links') }, escapeHtml: value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;') };
   vm.runInNewContext(source.slice(source.indexOf('function renderBlogText'), source.indexOf('function renderBlogArticle')), context);
   const rendered = context.renderBlogText('## Başlık\nParagraf\n\n[Üretici](https://example.com)\n<img onerror="bad">\n[Zararlı](javascript:alert)');
   assert.ok(rendered.includes('<h2>Başlık</h2><p>Paragraf</p>'));

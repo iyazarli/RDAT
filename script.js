@@ -1,41 +1,3 @@
-const STORAGE_KEYS = {
-  applications: 'reddevil_applications',
-  teamProfiles: 'reddevil_team_profiles',
-};
-
-const DEFAULT_SPONSORS = [
-  {
-    title: 'Izmir Av Market',
-    text: 'Airsoft ve outdoor ekipman tedarik destegi.',
-    imageUrl: 'assets/sponsors/izmiravmarket.png',
-    url: 'https://izmiravmarket.com',
-  },
-  {
-    title: 'Vector Optics',
-    text: 'Optik sistemler ve saha gorus ekipmanlari.',
-    imageUrl: 'assets/sponsors/vector-optics.svg',
-    url: 'https://www.vectoroptics.com',
-  },
-  {
-    title: 'ISG Airsoft',
-    text: 'Airsoft platformlari ve etkinlik katkisi.',
-    imageUrl: 'assets/sponsors/isgairsoft.png',
-    url: 'https://isgairsoft.com',
-  },
-  {
-    title: 'Armorion',
-    text: 'Koruyucu ekipman ve taktik aksesuar destegi.',
-    imageUrl: 'assets/sponsors/armorion.png',
-    url: 'https://www.armorion.com',
-  },
-  {
-    title: 'Poligun Store',
-    text: 'Yerel ekipman tedarik ve saha is birligi.',
-    imageUrl: 'assets/sponsors/poligunstore.png',
-    url: 'https://poligunstore.com',
-  },
-];
-
 const sponsorTickerState = {
   rafId: 0,
   cleanup: null,
@@ -44,32 +6,6 @@ const sponsorTickerState = {
   paused: false,
   groupWidth: 0,
 };
-
-function sponsorUrlFromName(name) {
-  const key = text(name, '').toLowerCase();
-  if (!key) return '';
-  if (key.includes('vector')) return 'https://www.vectoroptics.com';
-  if (key.includes('izmir') || key.includes('av market')) return 'https://izmiravmarket.com';
-  if (key.includes('isg')) return 'https://isgairsoft.com';
-  if (key.includes('armorion')) return 'https://www.armorion.com';
-  if (key.includes('poligun')) return 'https://poligunstore.com';
-  return '';
-}
-
-function safeParse(raw, fallback) {
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return fallback;
-  }
-}
-
-function uid(prefix) {
-  if (window.crypto?.randomUUID) {
-    return `${prefix}_${window.crypto.randomUUID()}`;
-  }
-  return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
-}
 
 function text(value, fallback = '') {
   if (typeof value !== 'string') return fallback;
@@ -394,18 +330,7 @@ function renderSponsorsSection(config) {
     }))
     : [];
 
-  const hasMeaningfulCategoryItems = categoryItems.some(
-    (item) => item.title || item.text || item.imageUrl,
-  );
-
-  const sponsors = hasMeaningfulCategoryItems
-    ? categoryItems.map((item, index) => ({
-      title: item.title || DEFAULT_SPONSORS[Math.min(index, DEFAULT_SPONSORS.length - 1)].title,
-      text: item.text || DEFAULT_SPONSORS[Math.min(index, DEFAULT_SPONSORS.length - 1)].text,
-      imageUrl: item.imageUrl || DEFAULT_SPONSORS[Math.min(index, DEFAULT_SPONSORS.length - 1)].imageUrl,
-      url: sponsorUrlFromName(item.title) || item.url || DEFAULT_SPONSORS[Math.min(index, DEFAULT_SPONSORS.length - 1)].url,
-    }))
-    : DEFAULT_SPONSORS;
+  const sponsors = categoryItems.filter(item => item.title || item.text || item.imageUrl);
 
   if (!sponsors.length) {
     stopSponsorTicker();
@@ -509,32 +434,12 @@ function renderHomeContent(config) {
   renderSponsorsSection(config);
 }
 
-function getLocalTeamProfiles() {
-  const raw = safeParse(localStorage.getItem(STORAGE_KEYS.teamProfiles), []);
-  if (!Array.isArray(raw) || raw.length === 0) {
-    return [];
-  }
-
-  return raw.map((item, index) => ({
-    id: String(item.id || `team_${index}`),
-    name: String(item.name || `Oyuncu ${index + 1}`),
-    callsign: String(item.callsign || ''),
-    title: String(item.title || 'Rol'),
-    badge: String(item.badge || 'Member'),
-    photo: String(item.photo || ''),
-    bio: String(item.bio || ''),
-    expertise: String(item.expertise || '-'),
-    seasons: String(item.seasons || '-'),
-    setup: String(item.setup || '-'),
-  }));
-}
-
 function renderTeamProfiles(profilesInput) {
   const teamGrid = document.querySelector('#team-grid');
   if (!teamGrid) return;
   const emptyMessage = document.querySelector('#team-empty');
 
-  const normalized = Array.isArray(profilesInput) && profilesInput.length
+  const normalized = Array.isArray(profilesInput)
     ? profilesInput.map((item, index) => ({
       id: String(item.id || `team_${index}`),
       name: String(item.name || `Oyuncu ${index + 1}`),
@@ -547,7 +452,7 @@ function renderTeamProfiles(profilesInput) {
       seasons: String(item.seasons || '-'),
       setup: String(item.setup || '-'),
     }))
-    : getLocalTeamProfiles();
+    : [];
 
   const profiles = window.RdatLanguage.apply(normalized).filter((profile) => {
     const isPlaceholder = /^ad$/i.test(profile.name.trim())
@@ -557,6 +462,7 @@ function renderTeamProfiles(profilesInput) {
   });
 
   if (!profiles.length) {
+    teamGrid.innerHTML = '';
     if (emptyMessage) emptyMessage.hidden = false;
     return;
   }
@@ -600,11 +506,10 @@ function bindMobileNav() {
     });
   }
 
-  navLinks?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navLinks.classList.remove('open');
-      navToggle?.setAttribute('aria-expanded', 'false');
-    });
+  navLinks?.addEventListener('click', (event) => {
+    if (!event.target.closest('a')) return;
+    navLinks.classList.remove('open');
+    navToggle?.setAttribute('aria-expanded', 'false');
   });
 }
 
@@ -631,18 +536,6 @@ function bindScrollReveals() {
   }, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
 
   targets.forEach((target) => observer.observe(target));
-}
-
-function getFallbackPublicState() {
-  if (!window.SiteConfig) {
-    return null;
-  }
-
-  return {
-    ok: false,
-    siteConfig: window.SiteConfig.load(),
-    teamProfiles: getLocalTeamProfiles(),
-  };
 }
 
 function applyDraftContent(config) {
@@ -749,32 +642,16 @@ function applyDraftContent(config) {
 }
 
 async function initContent() {
-  window.SiteDataClient?.bindGlobalErrorTracking();
-
-  const fallback = getFallbackPublicState();
-  const publicState = window.SiteDataClient?.loadPublicState
-    ? await window.SiteDataClient.loadPublicState(() => fallback)
-    : fallback;
-  const configSource = publicState?.siteConfig || fallback?.siteConfig;
-  const normalizedConfig = window.SiteConfig && configSource
-    ? window.SiteConfig.normalize(configSource)
-    : configSource;
-  const config = normalizedConfig ? applyDraftContent(normalizedConfig) : null;
-
-  if (!config) {
-    startSponsorTicker();
-    bindFaqAccordion();
-    bindMobileNav();
-    return;
-  }
-
-  renderBrand(config);
-  renderNavigation(config);
-  renderHomeContent(config);
-  renderTeamProfiles(publicState?.teamProfiles);
-  bindFaqAccordion();
   bindMobileNav();
-  bindScrollReveals();
+  return window.SiteDataClient.mount((publicState) => {
+    const config = applyDraftContent(window.SiteConfig.normalize(publicState.siteConfig, { authoritative: true }));
+    renderBrand(config);
+    renderNavigation(config);
+    renderHomeContent(config);
+    renderTeamProfiles(publicState.teamProfiles);
+    bindFaqAccordion();
+    bindScrollReveals();
+  });
 }
 
 initContent();

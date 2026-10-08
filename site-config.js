@@ -584,8 +584,9 @@
     return { ...defaultCategory, showInMenu: category.showInMenu };
   }
 
-  function normalize(config) {
-    const source = global.RdatBlog.apply(global.RdatAbout.apply(config && typeof config === 'object' ? config : {}));
+  function normalize(config, { authoritative = false } = {}) {
+    const input = config && typeof config === 'object' ? config : {};
+    const source = authoritative ? input : global.RdatBlog.apply(global.RdatAbout.apply(input));
     const base = clone(DEFAULT_SITE_CONFIG);
 
     const brand = source.brand && typeof source.brand === 'object' ? source.brand : {};
@@ -617,7 +618,8 @@
       .filter((category) => category.slug !== 'highlights');
 
     const defaultCategorySlugs = base.categories.map((item) => item.slug);
-    defaultCategorySlugs.forEach((slug) => {
+    // Sunucunun güncel kategorileri, boş listeleri ve görsel alanları aynen korunur.
+    if (!authoritative) defaultCategorySlugs.forEach((slug) => {
       const defaultCategorySource = base.categories.find((item) => item.slug === slug);
       if (!defaultCategorySource) return;
 
