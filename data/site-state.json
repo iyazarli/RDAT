@@ -486,10 +486,10 @@
       {
         "id": "cat_events",
         "slug": "events",
-        "label": "Etkinlik Fotoları",
+        "label": "Turnuva - Organizasyon",
         "showInMenu": true,
         "eyebrow": "Kategori",
-        "title": "Etkinlik Fotoğrafları",
+        "title": "Turnuva - Organizasyon",
         "intro": "Katılınan oyunlardan ve organizasyonlardan seçilmiş anlar.",
         "ctaLabel": "Etkinlikleri incele",
         "ctaHref": "category.html?slug=events#category-block-grid",
@@ -679,7 +679,7 @@
       {
         "id": "cat_sponsors",
         "slug": "sponsors",
-        "label": "Sponsorlarımız",
+        "label": "Çözüm Ortaklarımız",
         "showInMenu": true,
         "eyebrow": "Partnerler",
         "title": "Sahadaki Güçlü Partnerlerimiz",
@@ -898,6 +898,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-10-04T03:30:26.717Z"
+    "updatedAt": "2026-10-08T00:36:57.905Z"
   }
 }
