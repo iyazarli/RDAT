@@ -205,7 +205,7 @@
       },
       "team": {
         "eyebrow": "Ekip",
-        "title": "Kurucu Kadromuz",
+        "title": "Takım Üyelerimiz",
         "subtitle": "Her oyun öncesi oryantasyon ve saha güvenliğinden sorumlu çekirdek ekip."
       },
       "field": {
@@ -898,6 +898,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-10-08T00:36:57.905Z"
+    "updatedAt": "2026-10-09T10:25:15.468Z"
   }
 }
