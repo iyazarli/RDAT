@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="admin.css?v=20260928-1">
+  <link rel="stylesheet" href="admin.css?v=20261114-upload-1">
   <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap">
   <link rel="stylesheet" href="typography.css?v=20261004-1">
 </head>
@@ -243,7 +243,7 @@
                 <input id="team-badge" type="text" placeholder="Lider, Safety, Tech..." required>
               </label>
               <label>Foto URL
-                <input id="team-photo" type="url" required placeholder="https://...">
+                <input id="team-photo" type="url" data-image-upload="single" required placeholder="https://...">
               </label>
               <label>Kisa Biyografi
                 <textarea id="team-bio" rows="3" required></textarea>
@@ -270,6 +270,7 @@
             <header class="card-header">
               <h3>Mevcut Ekip Kartları</h3>
             </header>
+            <p class="helper-note team-order-note">Sıralama, sitedeki kadro bölümünde de aynı şekilde görüntülenir.</p>
             <div id="team-list" class="team-list"></div>
           </article>
         </section>
@@ -489,7 +490,7 @@
                 <input id="brand-tagline" type="text" required>
               </label>
               <label>Logo Gorsel URL
-                <input id="brand-logo-url" type="text" placeholder="assets/brand/reddevil-logo.svg veya https://...">
+                <input id="brand-logo-url" type="text" data-image-upload="single" placeholder="assets/brand/reddevil-logo.svg veya https://...">
               </label>
               <label>Nav Basvuru Butonu
                 <input id="nav-apply-label" type="text" required>
@@ -571,16 +572,13 @@
                 <input id="category-block-tag" type="text">
               </label>
               <label>Gorsel URL
-                <input id="category-block-image" type="url" placeholder="https://... veya bos">
+                <input id="category-block-image" type="url" data-image-upload="single" placeholder="https://... veya bos">
               </label>
               <label>Blok Link URL (Opsiyonel)
                 <input id="category-block-url" type="text" placeholder="https://... veya /sayfa">
               </label>
               <label>Galeri Gorselleri (Satir bazli URL)
-                <textarea id="category-block-gallery" rows="4" placeholder="https://...&#10;https://..."></textarea>
-              </label>
-              <label>Dosyadan Gorsel Yukle
-                <input id="category-block-image-file" type="file" accept="image/*">
+                <textarea id="category-block-gallery" data-image-upload="gallery" rows="4" placeholder="https://...&#10;https://..."></textarea>
               </label>
               <div class="detail-actions">
                 <button type="submit" class="primary-btn">Blok Kaydet</button>
@@ -649,6 +647,6 @@
   <script src="rdat-language.js?v=20261004-5"></script>
   <script src="category-links.js?v=20261004-6"></script>
   <script src="site-config.js?v=20261004-6"></script>
-  <script src="admin.js?v=20261004-turnuva-1"></script>
+  <script src="admin.js?v=20261114-upload-1"></script>
 </body>
 </html>

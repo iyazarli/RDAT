@@ -819,6 +819,10 @@ textarea:disabled {
   gap: 11px;
 }
 
+.team-order-note {
+  margin: -4px 0 14px;
+}
+
 .team-mini-card {
   min-width: 0;
   overflow: hidden;
@@ -835,6 +839,19 @@ textarea:disabled {
   border-bottom: 1px solid rgba(163, 167, 124, 0.17);
 }
 
+.team-mini-monogram {
+  display: grid;
+  width: 100%;
+  height: 176px;
+  place-items: center;
+  border-bottom: 1px solid rgba(163, 167, 124, 0.17);
+  background: linear-gradient(145deg, rgba(163, 167, 124, 0.15), rgba(16, 20, 14, 0.96));
+  color: #dedbbd;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 42px;
+  letter-spacing: -0.06em;
+}
+
 .team-mini-body {
   display: grid;
   gap: 6px;
@@ -848,11 +865,51 @@ textarea:disabled {
   font-weight: 500;
 }
 
+.team-mini-heading {
+  display: grid;
+  gap: 3px;
+}
+
+.team-mini-rank {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .team-mini-body small,
 .team-mini-body p {
   margin: 0;
   color: var(--muted);
   font-size: 11px;
+}
+
+.team-mini-actions,
+.team-order-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.team-mini-actions {
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.team-order-actions {
+  margin-right: auto;
+}
+
+.team-move-btn {
+  min-width: 34px;
+  padding-inline: 9px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.team-move-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
 }
 
 .team-mini-body p {
@@ -869,6 +926,22 @@ textarea:disabled {
   color: var(--muted);
   font-size: 12px;
   line-height: 1.6;
+}
+
+.image-upload-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.image-upload-controls .helper-note {
+  font-size: 11px;
+}
+
+.image-upload-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 #site-config-json {

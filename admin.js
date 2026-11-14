@@ -191,7 +191,6 @@ const el = {
   categoryBlockImage: document.querySelector('#category-block-image'),
   categoryBlockUrl: document.querySelector('#category-block-url'),
   categoryBlockGallery: document.querySelector('#category-block-gallery'),
-  categoryBlockImageFile: document.querySelector('#category-block-image-file'),
   clearCategoryBlockForm: document.querySelector('#clear-category-block-form'),
   categoryBlockStatus: document.querySelector('#category-block-status'),
   categoryBlockList: document.querySelector('#category-block-list'),
@@ -957,17 +956,26 @@ function renderTeamList() {
   }
 
   el.teamList.innerHTML = state.teamProfiles
-    .map((profile) => `
+    .map((profile, index) => `
       <article class="team-mini-card">
-        <img src="${escapeHtml(profile.photo)}" alt="${escapeHtml(profile.name)} ${escapeHtml(profile.callsign)}">
+        ${profile.photo && !/images\.unsplash\.com/i.test(profile.photo)
+          ? `<img src="${escapeHtml(profile.photo)}" alt="${escapeHtml(profile.name)} ${escapeHtml(profile.callsign)}">`
+          : `<div class="team-mini-monogram" aria-hidden="true">${escapeHtml(profile.name.trim().charAt(0))}${escapeHtml(profile.callsign.trim().charAt(0))}</div>`}
         <div class="team-mini-body">
-          <h4>${escapeHtml(profile.name)} "${escapeHtml(profile.callsign)}"</h4>
-          <small>${escapeHtml(profile.title)}</small>
+          <div class="team-mini-heading">
+            <small class="team-mini-rank">${index + 1}. sırada</small>
+            <small>${escapeHtml(profile.title)}</small>
+            <h4>${escapeHtml(profile.name)}${profile.callsign ? ` "${escapeHtml(profile.callsign)}"` : ''}</h4>
+          </div>
           <p>${escapeHtml(profile.bio)}</p>
           <small><strong>Uzmanlik:</strong> ${escapeHtml(profile.expertise)}</small>
           <small><strong>Takimda:</strong> ${escapeHtml(profile.seasons)}</small>
           <small><strong>Setup:</strong> ${escapeHtml(profile.setup)}</small>
           <div class="team-mini-actions">
+            <div class="team-order-actions" aria-label="Oyuncu sıralaması">
+              <button class="ghost-btn team-move-btn" data-team-action="move-up" data-id="${escapeHtml(profile.id)}" aria-label="${escapeHtml(profile.name)} oyuncusunu yukarı taşı" title="Yukarı taşı" ${index === 0 || teamOrderSaving ? 'disabled' : ''}>↑</button>
+              <button class="ghost-btn team-move-btn" data-team-action="move-down" data-id="${escapeHtml(profile.id)}" aria-label="${escapeHtml(profile.name)} oyuncusunu aşağı taşı" title="Aşağı taşı" ${index === state.teamProfiles.length - 1 || teamOrderSaving ? 'disabled' : ''}>↓</button>
+            </div>
             <button class="ghost-btn" data-team-action="edit" data-id="${escapeHtml(profile.id)}">Duzenle</button>
             <button class="danger-btn" data-team-action="delete" data-id="${escapeHtml(profile.id)}">Sil</button>
           </div>
@@ -1032,6 +1040,21 @@ function deleteTeamProfile(id) {
   state.teamProfiles = state.teamProfiles.filter((item) => item.id !== id);
   saveTeamProfiles();
   renderTeamList();
+}
+
+let teamOrderSaving = false;
+
+function moveTeamProfile(id, direction) {
+  const currentIndex = state.teamProfiles.findIndex((item) => item.id === id);
+  const nextIndex = currentIndex + direction;
+  if (currentIndex < 0 || nextIndex < 0 || nextIndex >= state.teamProfiles.length) return false;
+
+  const profiles = [...state.teamProfiles];
+  [profiles[currentIndex], profiles[nextIndex]] = [profiles[nextIndex], profiles[currentIndex]];
+  state.teamProfiles = profiles;
+  saveTeamProfiles();
+  renderTeamList();
+  return true;
 }
 
 function fillContentTextForm() {
@@ -1484,9 +1507,6 @@ function clearCategoryBlockForm() {
   el.categoryBlockImage.value = '';
   el.categoryBlockUrl.value = '';
   el.categoryBlockGallery.value = '';
-  if (el.categoryBlockImageFile) {
-    el.categoryBlockImageFile.value = '';
-  }
 }
 
 function fillCategoryBlockForm(block, categoryId) {
@@ -1501,9 +1521,6 @@ function fillCategoryBlockForm(block, categoryId) {
   el.categoryBlockImage.value = text(block.imageUrl, '');
   el.categoryBlockUrl.value = text(block.url, '');
   el.categoryBlockGallery.value = formatLineList(block.gallery);
-  if (el.categoryBlockImageFile) {
-    el.categoryBlockImageFile.value = '';
-  }
 }
 
 function collectCategoryBlockForm() {
@@ -1552,8 +1569,14 @@ function renderCategoryBlockList() {
     .join('');
 }
 
-function fileToOptimizedDataUrl(file, maxSize = 1600, quality = 0.8) {
+function fileToOptimizedDataUrl(file, maxSize = 1600, quality = 0.82) {
   return new Promise((resolve, reject) => {
+    const acceptedTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml']);
+    if (!acceptedTypes.has(file.type)) {
+      reject(new Error('JPG, PNG, WebP, GIF veya SVG biçiminde bir görsel seçin.'));
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
       const image = new Image();
@@ -1571,13 +1594,96 @@ function fileToOptimizedDataUrl(file, maxSize = 1600, quality = 0.8) {
         }
 
         ctx.drawImage(image, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', quality));
+        const outputType = file.type === 'image/jpeg' || file.type === 'image/gif' ? 'image/jpeg' : 'image/webp';
+        resolve(canvas.toDataURL(outputType, quality));
       };
       image.onerror = () => reject(new Error('Gorsel dosyasi okunamadi.'));
       image.src = String(reader.result || '');
     };
     reader.onerror = () => reject(new Error('Dosya okunamadi.'));
     reader.readAsDataURL(file);
+  });
+}
+
+async function uploadImageFile(file) {
+  const dataUrl = await fileToOptimizedDataUrl(file);
+  const base64 = dataUrl.slice(dataUrl.indexOf(',') + 1);
+  if (!base64 || base64.length > 4_194_304) {
+    throw new Error('Görsel yükleme sınırını aşıyor. Daha küçük bir dosya seçin.');
+  }
+
+  const response = await fetch('/api/admin/upload-image', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ dataUrl }),
+  });
+  const result = await response.json().catch(() => null);
+  if (!response.ok || !result?.ok || typeof result.url !== 'string') {
+    throw new Error(result?.error || 'Görsel yüklenemedi.');
+  }
+  return result.url;
+}
+
+function setupImageUploadControls() {
+  document.querySelectorAll('[data-image-upload]').forEach((target) => {
+    if (target.dataset.imageUploadReady === 'true') return;
+    target.dataset.imageUploadReady = 'true';
+
+    const isGallery = target.dataset.imageUpload === 'gallery';
+    const controls = document.createElement('div');
+    controls.className = 'image-upload-controls';
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/jpeg,image/png,image/webp,image/gif,image/svg+xml';
+    fileInput.multiple = isGallery;
+    fileInput.hidden = true;
+
+    const uploadButton = document.createElement('button');
+    uploadButton.type = 'button';
+    uploadButton.className = 'ghost-btn image-upload-button';
+    uploadButton.textContent = isGallery ? 'Bilgisayardan görsel ekle' : 'Bilgisayardan yükle';
+    uploadButton.addEventListener('click', () => fileInput.click());
+
+    const hint = document.createElement('small');
+    hint.className = 'helper-note';
+    hint.textContent = isGallery
+      ? 'URL yapıştırabilir veya birden fazla görsel seçebilirsiniz. JPG, PNG, WebP, GIF ve SVG desteklenir.'
+      : 'Görsel URL’si yapıştırabilir veya JPG, PNG, WebP, GIF ya da SVG dosyası seçebilirsiniz.';
+
+    controls.append(uploadButton, fileInput, hint);
+    target.insertAdjacentElement('afterend', controls);
+
+    fileInput.addEventListener('change', async () => {
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
+      const status = target.closest('form')?.querySelector('.inline-status');
+      const originalLabel = uploadButton.textContent;
+      uploadButton.disabled = true;
+      uploadButton.textContent = 'Yükleniyor…';
+      setInlineStatus(status, `${files.length} görsel yükleniyor…`, 'muted');
+
+      try {
+        const uploadedUrls = [];
+        for (const file of files) uploadedUrls.push(await uploadImageFile(file));
+
+        if (isGallery) {
+          target.value = [...parseLineList(target.value), ...uploadedUrls].join('\n');
+        } else {
+          target.value = uploadedUrls[0];
+        }
+        target.dispatchEvent(new Event('input', { bubbles: true }));
+        target.dispatchEvent(new Event('change', { bubbles: true }));
+        setInlineStatus(status, `${uploadedUrls.length} görsel eklendi. Değişikliği kaydetmeyi unutmayın.`, 'success');
+      } catch (error) {
+        console.error(error);
+        setInlineStatus(status, error.message || 'Görsel yüklenemedi.', 'error');
+      } finally {
+        fileInput.value = '';
+        uploadButton.disabled = false;
+        uploadButton.textContent = originalLabel;
+      }
+    });
   });
 }
 
@@ -1677,6 +1783,8 @@ function importAllData(raw) {
 }
 
 function bindEvents() {
+  setupImageUploadControls();
+
   document.querySelector('#blog-manager-nav')?.addEventListener('click', () => {
     if (el.adminContent.hidden) return;
     activatePanel('content');
@@ -1873,6 +1981,19 @@ function bindEvents() {
     const id = target.dataset.id;
     if (!id) return;
 
+    if (target.dataset.teamAction === 'move-up' || target.dataset.teamAction === 'move-down') {
+      if (teamOrderSaving) return;
+      const direction = target.dataset.teamAction === 'move-up' ? -1 : 1;
+      if (!moveTeamProfile(id, direction)) return;
+
+      teamOrderSaving = true;
+      renderTeamList();
+      await syncAdminChange(el.teamStatus, 'Oyuncu sıralaması kaydedildi.', 'Oyuncu sıralaması kaydedilemedi.');
+      teamOrderSaving = false;
+      renderTeamList();
+      return;
+    }
+
     if (target.dataset.teamAction === 'edit') {
       const profile = state.teamProfiles.find((item) => item.id === id);
       if (!profile) return;
@@ -2059,24 +2180,6 @@ function bindEvents() {
   el.categoryBlockCategory?.addEventListener('change', () => {
     state.selectedCategoryId = el.categoryBlockCategory.value;
     renderCategoryBlockList();
-  });
-
-  el.categoryBlockImageFile?.addEventListener('change', async () => {
-    const file = el.categoryBlockImageFile.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      setInlineStatus(el.categoryBlockStatus, 'Yuklenen dosya bir gorsel degil.', 'error');
-      el.categoryBlockImageFile.value = '';
-      return;
-    }
-    try {
-      const optimizedDataUrl = await fileToOptimizedDataUrl(file);
-      el.categoryBlockImage.value = optimizedDataUrl;
-      setInlineStatus(el.categoryBlockStatus, 'Gorsel optimize edildi ve eklendi.', 'success');
-    } catch (error) {
-      console.error(error);
-      setInlineStatus(el.categoryBlockStatus, 'Gorsel okunamadi.', 'error');
-    }
   });
 
   el.categoryBlockForm?.addEventListener('submit', async (event) => {
