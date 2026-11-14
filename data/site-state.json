@@ -2,18 +2,6 @@
   "applications": [],
   "teamProfiles": [
     {
-      "id": "team_67f6828f-36c4-4f3a-8914-59842325bd23",
-      "name": "Görkem Baybora",
-      "callsign": "Baybora",
-      "title": "Oyuncu1",
-      "badge": "Oyuncu2",
-      "photo": "https://hizliresim.com/gaadm7zp",
-      "bio": "-",
-      "expertise": "-",
-      "seasons": "5",
-      "setup": "-"
-    },
-    {
       "id": "team_ghost",
       "name": "Şenol",
       "callsign": "Amca",
@@ -24,6 +12,18 @@
       "expertise": "DMR",
       "seasons": "5. sezon",
       "setup": "Hk416a5 - SSP18"
+    },
+    {
+      "id": "team_67f6828f-36c4-4f3a-8914-59842325bd23",
+      "name": "Görkem Baybora",
+      "callsign": "Baybora",
+      "title": "Oyuncu1",
+      "badge": "Oyuncu2",
+      "photo": "https://hizliresim.com/gaadm7zp",
+      "bio": "-",
+      "expertise": "-",
+      "seasons": "5",
+      "setup": "-"
     },
     {
       "id": "team_mamba",
@@ -910,6 +910,6 @@
   },
   "meta": {
     "createdAt": "2026-04-09T08:58:09.105Z",
-    "updatedAt": "2026-11-14T00:41:18.422Z"
+    "updatedAt": "2026-11-14T01:21:29.847Z"
   }
 }
